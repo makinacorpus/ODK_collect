@@ -116,8 +116,8 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
     private Button mLaunchIntentButton;
 
-    public ExPrinterWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public ExPrinterWidget(Activity activity, FormEntryPrompt prompt) {
+        super(activity, prompt);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
@@ -128,12 +128,12 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
         final String buttonText;
         final String errorString;
     	String v = mPrompt.getSpecialFormQuestionText("buttonText");
-    	buttonText = (v != null) ? v : context.getString(R.string.launch_printer);
+    	buttonText = (v != null) ? v : activity.getString(R.string.launch_printer);
     	v = mPrompt.getSpecialFormQuestionText("noPrinterErrorString");
-    	errorString = (v != null) ? v : context.getString(R.string.no_printer);
+    	errorString = (v != null) ? v : activity.getString(R.string.no_printer);
 
         // set button formatting
-        mLaunchIntentButton = new Button(getContext());
+        mLaunchIntentButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
         mLaunchIntentButton.setId(QuestionWidget.newUniqueId());
         mLaunchIntentButton.setText(buttonText);
         mLaunchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);

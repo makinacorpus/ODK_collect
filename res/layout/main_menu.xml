@@ -10,8 +10,7 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    style="@style/Collect.MainLayout"
     android:layout_marginBottom="0dp"
     android:layout_marginLeft="0dp"
     android:layout_marginRight="0dp"
@@ -50,61 +49,39 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp" >
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="10dp" />
-
             <Button
                 android:id="@+id/enter_data"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
+                style="@style/Collect.Button1"
                 android:drawableLeft="@android:drawable/ic_menu_add"/>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="5dp" />
 
             <Button
                 android:id="@+id/review_data"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
+				style="@style/Collect.Button1"
                 android:drawableLeft="@android:drawable/ic_menu_edit"/>
-
-            <View
+            
+			<View
                 android:layout_width="fill_parent"
                 android:layout_height="5dp"
                 android:id="@+id/review_spacer" />
-
+			
             <Button
                 android:id="@+id/send_data"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
+                style="@style/Collect.Button1"
                 android:drawableLeft="@android:drawable/ic_menu_save"/>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="5dp" />
 
             <Button
                 android:id="@+id/get_forms"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
+                style="@style/Collect.Button1"
                 android:drawableLeft="@android:drawable/ic_input_get"/>
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="5dp"
                 android:id="@+id/get_forms_spacer" />
-
+            
             <Button
                 android:id="@+id/manage_forms"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:padding="15dp"
+                style="@style/Collect.Button1"
                 android:drawableLeft="@android:drawable/ic_menu_send"/>
 				
         </LinearLayout>

@@ -58,8 +58,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	private String mAppearance;
 	private double mAccuracyThreshold;
 
-	public GeoPointWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
+	public GeoPointWidget(Activity activity, FormEntryPrompt prompt) {
+		super(activity, prompt);
 
 		mUseMaps = false;
 		mAppearance = prompt.getAppearanceHint();
@@ -75,7 +75,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
 
-		mGetLocationButton = new Button(getContext());
+		mGetLocationButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
 		mGetLocationButton.setId(QuestionWidget.newUniqueId());
 		mGetLocationButton.setPadding(20, 20, 20, 20);
 		mGetLocationButton.setText(getContext()
@@ -89,13 +89,12 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		}
 
 		// setup play button
-		mViewButton = new Button(getContext());
+		mViewButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
 		mViewButton.setId(QuestionWidget.newUniqueId());
 		mViewButton.setText(getContext().getString(R.string.show_location));
 		mViewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mViewButton.setPadding(20, 20, 20, 20);
 		mViewButton.setLayoutParams(params);
-
 		// on play, launch the appropriate viewer
 		mViewButton.setOnClickListener(new View.OnClickListener() {
 			@Override

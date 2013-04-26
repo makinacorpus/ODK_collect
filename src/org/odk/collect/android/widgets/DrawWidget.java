@@ -63,10 +63,10 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 	private ImageView mImageView;
 	private TextView mErrorTextView;
 
-	public DrawWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
+	public DrawWidget(Activity activity, FormEntryPrompt prompt) {
+		super(activity, prompt);
 
-		mErrorTextView = new TextView(context);
+		mErrorTextView = new TextView(activity);
 		mErrorTextView.setId(QuestionWidget.newUniqueId());
 		mErrorTextView.setText("Selected file is not a valid image");
 
@@ -77,14 +77,13 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
 		// setup Blank Image Button
-		mDrawButton = new Button(getContext());
+		mDrawButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
 		mDrawButton.setId(QuestionWidget.newUniqueId());
 		mDrawButton.setText(getContext().getString(R.string.draw_image));
 		mDrawButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mDrawButton.setPadding(20, 20, 20, 20);
 		mDrawButton.setEnabled(!prompt.isReadOnly());
 		mDrawButton.setLayoutParams(params);
-		mDrawButton.setBackgroundColor(Color.WHITE);
 		mDrawButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_edit, 0, 0, 0);
 		
 		// launch capture intent on click

@@ -88,14 +88,14 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     
     protected EditText mAnswer;
 
-    public ExStringWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public ExStringWidget(Activity activity, FormEntryPrompt prompt) {
+        super(activity, prompt);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
 
         // set text formatting
-        mAnswer = new EditText(context);
+        mAnswer = new EditText(activity);
         mAnswer.setId(QuestionWidget.newUniqueId());
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mAnswer.setLayoutParams(params);
@@ -129,12 +129,12 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
         final String buttonText;
         final String errorString;
     	String v = mPrompt.getSpecialFormQuestionText("buttonText");
-    	buttonText = (v != null) ? v : context.getString(R.string.launch_app);
+    	buttonText = (v != null) ? v : activity.getString(R.string.launch_app);
     	v = mPrompt.getSpecialFormQuestionText("noAppErrorString");
-    	errorString = (v != null) ? v : context.getString(R.string.no_app);
+    	errorString = (v != null) ? v : activity.getString(R.string.no_app);
         
         // set button formatting
-        mLaunchIntentButton = new Button(getContext());
+        mLaunchIntentButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
         mLaunchIntentButton.setId(QuestionWidget.newUniqueId());
         mLaunchIntentButton.setText(buttonText);
         mLaunchIntentButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);

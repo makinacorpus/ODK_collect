@@ -16,9 +16,7 @@ the License.
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:background="@drawable/background" >
+	style="@style/Collect.MainLayout">
 		<TextView
 			android:id="@+id/status_text"
 			android:layout_width="fill_parent"
@@ -32,8 +30,7 @@ the License.
 			android:background="#DDDDDD"/>
 		<ListView
 			android:id="@id/android:list"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"/>
+			style="@style/Collect.List"/>
 		<TextView
 			android:id="@android:id/empty"
 			android:layout_width="fill_parent"

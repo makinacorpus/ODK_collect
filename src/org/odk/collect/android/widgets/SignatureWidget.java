@@ -63,8 +63,8 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
     private ImageView mImageView;
     private TextView mErrorTextView;
 
-	public SignatureWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
+	public SignatureWidget(Activity activity, FormEntryPrompt prompt) {
+		super(activity, prompt);
 		
 		mInstanceFolder = 
 				Collect.getInstance().getFormController().getInstancePath().getParent();
@@ -74,19 +74,18 @@ public class SignatureWidget extends QuestionWidget implements IBinaryWidget {
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);
 		
-        mErrorTextView = new TextView(context);
+        mErrorTextView = new TextView(activity);
         mErrorTextView.setId(QuestionWidget.newUniqueId());
         mErrorTextView.setText("Selected file is not a valid image");
 
         // setup Blank Image Button
-		mSignButton = new Button(getContext());
+		mSignButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
 		mSignButton.setId(QuestionWidget.newUniqueId());
         mSignButton.setText(getContext().getString(R.string.sign_button));
         mSignButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mSignButton.setPadding(20, 20, 20, 20);
         mSignButton.setEnabled(!prompt.isReadOnly());
         mSignButton.setLayoutParams(params);
-        mSignButton.setBackgroundColor(Color.WHITE);
         mSignButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_edit, 0, 0, 0);
         // launch capture intent on click
         mSignButton.setOnClickListener(new View.OnClickListener() {

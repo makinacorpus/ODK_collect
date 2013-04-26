@@ -15,8 +15,10 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <resources>
-
+	<drawable name="black">#ff000000</drawable>
     <drawable name="white">#ffffffff</drawable>
-    <drawable name="black">#ff000000</drawable>
-
+    <!-- <drawable name="btn_normal">#4f0044aa</drawable> -->
+    <drawable name="btn_normal">#4f000000</drawable>
+    <drawable name="red">#ffff0000</drawable>
+    <drawable name="list_normal">#80ffffff</drawable>
 </resources>

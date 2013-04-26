@@ -16,13 +16,10 @@ the License.
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
+	style="@style/Collect.MainLayout">
 	<ListView
 		android:id="@id/android:list"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-/>
+		style="@style/Collect.List"/>
 	<Button
 		android:id="@+id/button"
 		android:text="@string/add_more"

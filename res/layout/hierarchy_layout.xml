@@ -14,9 +14,7 @@ the License.
 -->
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-    android:background="@drawable/background">
+	style="@style/Collect.MainLayout">
 	<TextView
 		android:id="@+id/pathtext"
 		android:layout_width="fill_parent"
@@ -34,37 +32,21 @@ the License.
 		android:layout_marginTop="3dp">
 		<Button
 			android:id="@+id/jumpPreviousButton"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
 			android:text="@string/jump_to_previous"
-			android:padding="12dp"
-			android:textSize="16sp"
 			android:layout_weight="1" 
-			android:background="#ffffff"/>
-		<View
-        	android:layout_width="3dp"
-        	android:layout_height="fill_parent" />
+			style="@style/Collect.Button2"/>
+		
 		<Button
 			android:id="@+id/jumpBeginningButton"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
 			android:text="@string/jump_to_beginning"
-			android:padding="12dp"
-			android:textSize="16sp"
 			android:layout_weight="1" 
-			android:background="#ffffff"/>
-		<View
-        	android:layout_width="3dp"
-        	android:layout_height="fill_parent" />
+			style="@style/Collect.Button2"/>
+		
 		<Button
 			android:id="@+id/jumpEndButton"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
 			android:text="@string/jump_to_end"
-			android:padding="12dp"
-			android:textSize="16sp"
 			android:layout_weight="1" 
-			android:background="#ffffff"/>
+			style="@style/Collect.Button2"/>
 	</LinearLayout>
 	<ListView
 		android:id="@android:id/list"

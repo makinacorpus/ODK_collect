@@ -11,12 +11,13 @@
 	android:orientation="horizontal"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
+	android:layout_margin="1dp"
 	android:paddingRight="8dip"
 	android:paddingLeft="8dip"
 	android:paddingTop="4dip"
 	android:paddingBottom="8dip"
 	android:minHeight="?android:attr/listPreferredItemHeight"
-	android:background="@drawable/two_item_background">
+	android:background="@drawable/list_normal">
    	<TextView
 		android:id="@+id/text1"
 		android:layout_width="wrap_content"

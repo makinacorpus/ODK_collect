@@ -45,15 +45,15 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 	private Button mGetBarcodeButton;
 	private TextView mStringAnswer;
 
-	public BarcodeWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
+	public BarcodeWidget(Activity activity, FormEntryPrompt prompt) {
+		super(activity, prompt);
 		setOrientation(LinearLayout.VERTICAL);
 
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
 
 		// set button formatting
-		mGetBarcodeButton = new Button(getContext());
+		mGetBarcodeButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
 		mGetBarcodeButton.setId(QuestionWidget.newUniqueId());
 		mGetBarcodeButton.setText(getContext().getString(R.string.get_barcode));
 		mGetBarcodeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP,
@@ -61,7 +61,6 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 		mGetBarcodeButton.setPadding(20, 20, 20, 20);
 		mGetBarcodeButton.setEnabled(!prompt.isReadOnly());
 		mGetBarcodeButton.setLayoutParams(params);
-		mGetBarcodeButton.setBackgroundColor(Color.WHITE);
 		mGetBarcodeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_menu_barcode, 0, 0, 0);
 
 		// launch barcode capture intent on click

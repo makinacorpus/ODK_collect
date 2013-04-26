@@ -15,10 +15,8 @@ the License.
 -->
 <RelativeLayout 
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent" 
   android:id="@+id/rl" 
-  android:background="@drawable/background" >  
+  style="@style/Collect.MainLayout">  
  
     <LinearLayout
      android:id="@+id/questionholder"

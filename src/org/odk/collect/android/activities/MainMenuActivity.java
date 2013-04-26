@@ -101,7 +101,6 @@ public class MainMenuActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTheme(android.R.style.Theme_Holo);
 		// must be at the beginning of any activity that can be called from an
 		// external intent
 		Log.i(t, "Starting up, creating directories");

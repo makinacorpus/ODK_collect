@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import java.io.File;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -29,7 +31,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore.Video;
 import android.util.Log;
@@ -40,8 +41,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.Toast;
-
-import java.io.File;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the
@@ -61,8 +60,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
 	private String mInstanceFolder;
 
-	public VideoWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
+	public VideoWidget(Activity activity, FormEntryPrompt prompt) {
+		super(activity, prompt);
 
 		mInstanceFolder = Collect.getInstance().getFormController()
 				.getInstancePath().getParent();
@@ -72,7 +71,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
 		// setup capture button
-		mCaptureButton = new Button(getContext());
+		mCaptureButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
 		mCaptureButton.setId(QuestionWidget.newUniqueId());
 		mCaptureButton.setText(getContext().getString(R.string.capture_video));
 		mCaptureButton
@@ -80,7 +79,6 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		mCaptureButton.setPadding(20, 20, 20, 20);
 		mCaptureButton.setEnabled(!prompt.isReadOnly());
 		mCaptureButton.setLayoutParams(params);
-		mCaptureButton.setBackgroundColor(Color.WHITE);
 		mCaptureButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_camera, 0, 0, 0);
 
 		// launch capture intent on click
@@ -114,14 +112,13 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		});
 
 		// setup capture button
-		mChooseButton = new Button(getContext());
+		mChooseButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
 		mChooseButton.setId(QuestionWidget.newUniqueId());
 		mChooseButton.setText(getContext().getString(R.string.choose_video));
 		mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mChooseButton.setPadding(20, 20, 20, 20);
 		mChooseButton.setEnabled(!prompt.isReadOnly());
 		mChooseButton.setLayoutParams(params);
-		mChooseButton.setBackgroundColor(Color.WHITE);
 		mChooseButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_gallery, 0, 0, 0);
 
 		// launch capture intent on click
@@ -156,14 +153,13 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		});
 
 		// setup play button
-		mPlayButton = new Button(getContext());
+		mPlayButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
 		mPlayButton.setId(QuestionWidget.newUniqueId());
 		mPlayButton.setText(getContext().getString(R.string.play_video));
 		mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mPlayButton.setPadding(20, 20, 20, 20);
 		mPlayButton.setLayoutParams(params);
-		mPlayButton.setBackgroundColor(Color.WHITE);
-
+		
 		// on play, launch the appropriate viewer
 		mPlayButton.setOnClickListener(new View.OnClickListener() {
 			@Override

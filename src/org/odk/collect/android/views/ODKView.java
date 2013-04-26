@@ -27,6 +27,7 @@ import org.odk.collect.android.widgets.IBinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
@@ -58,9 +59,9 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     
     public final static String FIELD_LIST = "field-list";
 
-    public ODKView(Context context, FormEntryPrompt[] questionPrompts,
+    public ODKView(Activity activity, FormEntryPrompt[] questionPrompts,
             FormEntryCaption[] groups, boolean advancingPage) {
-        super(context);
+        super(activity);
 
         widgets = new ArrayList<QuestionWidget>();
 
@@ -91,7 +92,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
 
             // if question or answer type is not supported, use text widget
             QuestionWidget qw =
-                WidgetFactory.createWidgetFromPrompt(p, getContext());
+                WidgetFactory.createWidgetFromPrompt(p, activity);
             qw.setLongClickable(true);
             qw.setOnLongClickListener(this);
             qw.setId(VIEW_ID + id++);

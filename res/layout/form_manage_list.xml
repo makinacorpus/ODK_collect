@@ -17,10 +17,8 @@ the License.
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
     android:layout_alignParentTop="true" 
-	android:background="@drawable/background" >
+	style="@style/Collect.MainLayout">
     
      <LinearLayout
         android:id="@+id/buttonholder"
@@ -31,27 +29,15 @@ the License.
         
         <Button
             android:id="@+id/toggle_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="12dp"
             android:text="@string/toggle_selected"
-            android:textSize="16sp" 
-            android:background="#ffffff"/>
+            style="@style/Collect.Button2"/>
         
-        <View
-                android:layout_width="3dp"
-                android:layout_height="fill_parent" />
-         
         <Button
             android:id="@+id/delete_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="12dp"
             android:text="@string/delete_file"
-            android:textSize="16sp" 
-            android:background="#ffffff"/>
+            style="@style/Collect.Button2"/>
 
     </LinearLayout>
     
@@ -69,8 +55,7 @@ the License.
 
         <ListView
             android:id="@android:id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            style="@style/Collect.List"
             android:layout_below="@+id/status_text"
             android:layout_above="@+id/buttonholder"
         	 />

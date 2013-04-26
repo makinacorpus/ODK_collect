@@ -19,7 +19,7 @@ import java.util.Locale;
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
 
-import android.content.Context;
+import android.app.Activity;
 import android.util.Log;
 
 /**
@@ -35,7 +35,7 @@ public class WidgetFactory {
      * @param fep prompt element to be rendered
      * @param context Android context
      */
-    static public QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Context context) {
+    static public QuestionWidget createWidgetFromPrompt(FormEntryPrompt fep, Activity activity) {
 
     	// get appearance hint and clean it up so it is lower case and never null...
         String appearance = fep.getAppearanceHint();
@@ -48,68 +48,68 @@ public class WidgetFactory {
             case Constants.CONTROL_INPUT:
                 switch (fep.getDataType()) {
                     case Constants.DATATYPE_DATE_TIME:
-                        questionWidget = new DateTimeWidget(context, fep);
+                        questionWidget = new DateTimeWidget(activity, fep);
                         break;
                     case Constants.DATATYPE_DATE:
-                        questionWidget = new DateWidget(context, fep);
+                        questionWidget = new DateWidget(activity, fep);
                         break;
                     case Constants.DATATYPE_TIME:
-                        questionWidget = new TimeWidget(context, fep);
+                        questionWidget = new TimeWidget(activity, fep);
                         break;
                     case Constants.DATATYPE_DECIMAL:
                     	if ( appearance.startsWith("ex:") ) {
-                    		questionWidget = new ExDecimalWidget(context, fep);
+                    		questionWidget = new ExDecimalWidget(activity, fep);
                     	} else {
-                    		questionWidget = new DecimalWidget(context, fep);
+                    		questionWidget = new DecimalWidget(activity, fep);
                     	}
                         break;
                     case Constants.DATATYPE_INTEGER:
                     	if ( appearance.startsWith("ex:") ) {
-                    		questionWidget = new ExIntegerWidget(context, fep);
+                    		questionWidget = new ExIntegerWidget(activity, fep);
                     	} else {
-                    		questionWidget = new IntegerWidget(context, fep);
+                    		questionWidget = new IntegerWidget(activity, fep);
                     	}
                         break;
                     case Constants.DATATYPE_GEOPOINT:
-                        questionWidget = new GeoPointWidget(context, fep);
+                        questionWidget = new GeoPointWidget(activity, fep);
                         break;
                     case Constants.DATATYPE_BARCODE:
-                        questionWidget = new BarcodeWidget(context, fep);
+                        questionWidget = new BarcodeWidget(activity, fep);
                         break;
                     case Constants.DATATYPE_TEXT:
                     	if (appearance.startsWith("printer")) {
-                            questionWidget = new ExPrinterWidget(context, fep);
+                            questionWidget = new ExPrinterWidget(activity, fep);
                     	} else if (appearance.startsWith("ex:")) {
-                            questionWidget = new ExStringWidget(context, fep);
+                            questionWidget = new ExStringWidget(activity, fep);
                     	} else if (appearance.equals("numbers")) {
-                            questionWidget = new StringNumberWidget(context, fep);
+                            questionWidget = new StringNumberWidget(activity, fep);
                         } else {
-                            questionWidget = new StringWidget(context, fep);
+                            questionWidget = new StringWidget(activity, fep);
                         }
                         break;
                     default:
-                        questionWidget = new StringWidget(context, fep);
+                        questionWidget = new StringWidget(activity, fep);
                         break;
                 }
                 break;
             case Constants.CONTROL_IMAGE_CHOOSE:
             	if (appearance.equals("web")) {
-            		questionWidget = new ImageWebViewWidget(context, fep);
+            		questionWidget = new ImageWebViewWidget(activity, fep);
         		} else if(appearance.equals("signature")) {
-            		questionWidget = new SignatureWidget(context, fep);
+            		questionWidget = new SignatureWidget(activity, fep);
             	} else if(appearance.equals("annotate")) {
-            		questionWidget = new AnnotateWidget(context, fep);
+            		questionWidget = new AnnotateWidget(activity, fep);
             	} else if(appearance.equals("draw")) {
-            		questionWidget = new DrawWidget(context, fep);
+            		questionWidget = new DrawWidget(activity, fep);
             	} else {
-            		questionWidget = new ImageWidget(context, fep);
+            		questionWidget = new ImageWidget(activity, fep);
             	}
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
-                questionWidget = new AudioWidget(context, fep);
+                questionWidget = new AudioWidget(activity, fep);
                 break;
             case Constants.CONTROL_VIDEO_CAPTURE:
-                questionWidget = new VideoWidget(context, fep);
+                questionWidget = new VideoWidget(activity, fep);
                 break;
             case Constants.CONTROL_SELECT_ONE:
                 if (appearance.contains("compact")) {
@@ -126,12 +126,12 @@ public class WidgetFactory {
                     }
 
                     if (appearance.contains("quick")) {
-                        questionWidget = new GridWidget(context, fep, numColumns, true);
+                        questionWidget = new GridWidget(activity, fep, numColumns, true);
                     } else {
-                        questionWidget = new GridWidget(context, fep, numColumns, false);
+                        questionWidget = new GridWidget(activity, fep, numColumns, false);
                     }
                 } else if (appearance.equals("minimal")) {
-                    questionWidget = new SpinnerWidget(context, fep);
+                    questionWidget = new SpinnerWidget(activity, fep);
                 }
                 // else if (appearance != null && appearance.contains("autocomplete")) {
                 // String filterType = null;
@@ -145,15 +145,15 @@ public class WidgetFactory {
                 //
                 // }
                 else if (appearance.equals("quick")) {
-                    questionWidget = new SelectOneAutoAdvanceWidget(context, fep);
+                    questionWidget = new SelectOneAutoAdvanceWidget(activity, fep);
                 } else if (appearance.equals("list")) {
-                    questionWidget = new ListWidget(context, fep, true);
+                    questionWidget = new ListWidget(activity, fep, true);
                 } else if (appearance.equals("list-nolabel")) {
-                    questionWidget = new ListWidget(context, fep, false);
+                    questionWidget = new ListWidget(activity, fep, false);
                 } else if (appearance.equals("label")) {
-                    questionWidget = new LabelWidget(context, fep);
+                    questionWidget = new LabelWidget(activity, fep);
                 } else {
-                    questionWidget = new SelectOneWidget(context, fep);
+                    questionWidget = new SelectOneWidget(activity, fep);
                 }
                 break;
             case Constants.CONTROL_SELECT_MULTI:
@@ -170,24 +170,24 @@ public class WidgetFactory {
                         Log.e("WidgetFactory", "Exception parsing numColumns");
                     }
 
-                    questionWidget = new GridMultiWidget(context, fep, numColumns);
+                    questionWidget = new GridMultiWidget(activity, fep, numColumns);
                 } else if (appearance.equals("minimal")) {
-                    questionWidget = new SpinnerMultiWidget(context, fep);
+                    questionWidget = new SpinnerMultiWidget(activity, fep);
                 } else if (appearance.equals("list")) {
-                    questionWidget = new ListMultiWidget(context, fep, true);
+                    questionWidget = new ListMultiWidget(activity, fep, true);
                 } else if (appearance.equals("list-nolabel")) {
-                    questionWidget = new ListMultiWidget(context, fep, false);
+                    questionWidget = new ListMultiWidget(activity, fep, false);
                 } else if (appearance.equals("label")) {
-                    questionWidget = new LabelWidget(context, fep);
+                    questionWidget = new LabelWidget(activity, fep);
                 } else {
-                    questionWidget = new SelectMultiWidget(context, fep);
+                    questionWidget = new SelectMultiWidget(activity, fep);
                 }
                 break;
             case Constants.CONTROL_TRIGGER:
-                questionWidget = new TriggerWidget(context, fep);
+                questionWidget = new TriggerWidget(activity, fep);
                 break;
             default:
-                questionWidget = new StringWidget(context, fep);
+                questionWidget = new StringWidget(activity, fep);
                 break;
         }
         return questionWidget;

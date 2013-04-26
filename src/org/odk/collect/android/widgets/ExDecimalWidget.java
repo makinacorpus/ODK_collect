@@ -58,8 +58,8 @@ public class ExDecimalWidget extends ExStringWidget {
         return d;
 	}
 
-    public ExDecimalWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public ExDecimalWidget(Activity activity, FormEntryPrompt prompt) {
+        super(activity, prompt);
 
         mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 

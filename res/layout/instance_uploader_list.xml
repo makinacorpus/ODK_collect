@@ -15,10 +15,9 @@ the License.
 -->
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
 	android:layout_alignParentTop="true"
-	android:background="@drawable/background">
+	style="@style/Collect.MainLayout"
+	>
 	<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
@@ -28,29 +27,19 @@ the License.
 		<Button
 			android:id="@+id/toggle_button"
 			android:text="@string/toggle_selected"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:padding="12dp"
-			android:textSize="16sp"
-			android:layout_weight="1" 
-			android:background="#ffffff"/>
-		<View
-            android:layout_height="fill_parent"
-            android:layout_width="3dp" />
+            android:layout_weight="1" 
+			style="@style/Collect.Button2"
+			/>
 		<Button
 			android:id="@+id/upload_button"
 			android:text="@string/send_selected_data"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:padding="12dp"
-			android:textSize="16sp"
-			android:layout_weight="1" 
-			android:background="#ffffff"/>
+            android:layout_weight="1"
+            style="@style/Collect.Button2"
+            />
 	</LinearLayout>
 	<ListView
 		android:id="@android:id/list"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
+		style="@style/Collect.List"
 		android:layout_above="@+id/buttonholder"
 		android:layout_alignParentTop="true" />
 	<TextView

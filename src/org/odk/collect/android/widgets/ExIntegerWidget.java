@@ -56,8 +56,8 @@ public class ExIntegerWidget extends ExStringWidget {
         return d;
 	}
 
-    public ExIntegerWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public ExIntegerWidget(Activity activity, FormEntryPrompt prompt) {
+        super(activity, prompt);
 
         mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 

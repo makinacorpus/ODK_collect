@@ -1088,9 +1088,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 							}
 						}
 					});
-			((Button) endView.findViewById(R.id.save_exit_button)).setBackgroundColor(Color.WHITE);
-			((Button) endView.findViewById(R.id.save_exit_button)).setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_save, 0, 0, 0);
-
+			
 			if (mBackButton.isShown()) {
 				mBackButton.setEnabled(true);
 			}

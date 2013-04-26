@@ -10,11 +10,9 @@
 -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
     android:fillViewport="true"
     android:orientation="vertical" 
-    android:background="@drawable/background" >
+    style="@style/Collect.MainLayout">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -66,12 +64,9 @@
 
         <Button
             android:id="@+id/save_exit_button"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:padding="20dp"
-            android:text="@string/quit_entry"
-            android:textSize="21sp" />
+            style="@style/Collect.Button1"
+            android:drawableLeft="@android:drawable/ic_menu_save"
+            android:text="@string/quit_entry"/>
 
         <View
             android:layout_width="fill_parent"

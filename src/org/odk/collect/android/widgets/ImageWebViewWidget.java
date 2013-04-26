@@ -30,7 +30,6 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
@@ -127,8 +126,8 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 		return false;
 	}
 
-	public ImageWebViewWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
+	public ImageWebViewWidget(Activity activity, FormEntryPrompt prompt) {
+		super(activity, prompt);
 
 		mInstanceFolder = Collect.getInstance().getFormController()
 				.getInstancePath().getParent();
@@ -138,12 +137,12 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
 
-		mErrorTextView = new TextView(context);
+		mErrorTextView = new TextView(activity);
 		mErrorTextView.setId(QuestionWidget.newUniqueId());
 		mErrorTextView.setText("Selected file is not a valid image");
 
 		// setup capture button
-		mCaptureButton = new Button(getContext());
+		mCaptureButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
 		mCaptureButton.setId(QuestionWidget.newUniqueId());
 		mCaptureButton.setText(getContext().getString(R.string.capture_image));
 		mCaptureButton
@@ -151,7 +150,6 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 		mCaptureButton.setPadding(20, 20, 20, 20);
 		mCaptureButton.setEnabled(!prompt.isReadOnly());
 		mCaptureButton.setLayoutParams(params);
-		mCaptureButton.setBackgroundColor(Color.WHITE);
         mCaptureButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_camera, 0, 0, 0);
 
 		// launch capture intent on click
@@ -196,14 +194,13 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 		});
 
 		// setup chooser button
-		mChooseButton = new Button(getContext());
+		mChooseButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
 		mChooseButton.setId(QuestionWidget.newUniqueId());
 		mChooseButton.setText(getContext().getString(R.string.choose_image));
 		mChooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mChooseButton.setPadding(20, 20, 20, 20);
 		mChooseButton.setEnabled(!prompt.isReadOnly());
 		mChooseButton.setLayoutParams(params);
-		mChooseButton.setBackgroundColor(Color.WHITE);
         mChooseButton.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_menu_gallery, 0, 0, 0);
 
 		// launch capture intent on click
