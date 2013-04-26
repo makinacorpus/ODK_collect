@@ -6,6 +6,7 @@
 	    <item name="android:scrollbarSize">1.75mm</item>
 	    <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
 	    <item name="android:fadeScrollbars">false</item>
+<<<<<<< Updated upstream
 	</style>
 	<style name="Collect.MainLayout">
 	    <item name="android:layout_width">fill_parent</item> 
@@ -36,3 +37,7 @@
 		
 	</style>
 </resources>
+=======
+	</style>   
+</resources>
+>>>>>>> Stashed changes
