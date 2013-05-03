@@ -25,11 +25,11 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
+import org.odk.collect.android.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -182,7 +182,7 @@ public class GridMultiWidget extends QuestionWidget {
 
 	                        imageView.setPadding(IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING, IMAGE_PADDING);
 	                        imageView.setImageBitmap(b);
-	                        imageView.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.WRAP_CONTENT, ListView.LayoutParams.WRAP_CONTENT));
+	                        imageView.setLayoutParams(new ListView.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
 	                        imageView.setScaleType(ScaleType.FIT_XY);
 
 	                        imageView.measure(0, 0);
@@ -268,7 +268,8 @@ public class GridMultiWidget extends QuestionWidget {
         gridview.setStretchMode(GridView.NO_STRETCH);
 
         gridview.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+            @Override
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 if (selected[position]) {
                     selected[position] = false;
                 	if ( audioHandlers[position] != null) {
@@ -328,7 +329,7 @@ public class GridMultiWidget extends QuestionWidget {
         // Use the custom image adapter and initialize the grid view
         ImageAdapter ia = new ImageAdapter(getContext(), choices);
         gridview.setAdapter(ia);
-        addView(gridview,  new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        addView(gridview,  new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.FILL_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
 
@@ -380,23 +381,27 @@ public class GridMultiWidget extends QuestionWidget {
         }
 
 
-        public int getCount() {
+        @Override
+		public int getCount() {
             return choices.length;
         }
 
 
-        public Object getItem(int position) {
+        @Override
+		public Object getItem(int position) {
             return null;
         }
 
 
-        public long getItemId(int position) {
+        @Override
+		public long getItemId(int position) {
             return 0;
         }
 
 
         // create a new ImageView for each item referenced by the Adapter
-        public View getView(int position, View convertView, ViewGroup parent) {
+        @Override
+		public View getView(int position, View convertView, ViewGroup parent) {
            	if ( position < imageViews.length ) {
         		return imageViews[position];
         	} else {

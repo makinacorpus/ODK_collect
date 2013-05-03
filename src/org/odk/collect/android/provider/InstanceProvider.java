@@ -14,11 +14,17 @@
 
 package org.odk.collect.android.provider;
 
-import org.odk.collect.android.R;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.R;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -29,14 +35,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
-
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
 
 /**
  *
@@ -69,7 +70,7 @@ public class InstanceProvider extends ContentProvider {
         @Override
         public void onCreate(SQLiteDatabase db) {
            db.execSQL("CREATE TABLE " + INSTANCES_TABLE_NAME + " ("
-               + InstanceColumns._ID + " integer primary key, "
+               + BaseColumns._ID + " integer primary key, "
                + InstanceColumns.DISPLAY_NAME + " text not null, "
                + InstanceColumns.SUBMISSION_URI + " text, "
                + InstanceColumns.CAN_EDIT_WHEN_COMPLETE + " text, "
@@ -129,7 +130,7 @@ public class InstanceProvider extends ContentProvider {
 
             case INSTANCE_ID:
                 qb.setProjectionMap(sInstancesProjectionMap);
-                qb.appendWhere(InstanceColumns._ID + "=" + uri.getPathSegments().get(1));
+                qb.appendWhere(BaseColumns._ID + "=" + uri.getPathSegments().get(1));
                 break;
 
             default:
@@ -297,7 +298,7 @@ public class InstanceProvider extends ContentProvider {
 
                 count =
                     db.delete(INSTANCES_TABLE_NAME,
-                        InstanceColumns._ID + "=" + instanceId
+                        BaseColumns._ID + "=" + instanceId
                                 + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
                         whereArgs);
                 break;
@@ -345,7 +346,7 @@ public class InstanceProvider extends ContentProvider {
                 }
 
                 count =
-                    db.update(INSTANCES_TABLE_NAME, values, InstanceColumns._ID + "=" + instanceId
+                    db.update(INSTANCES_TABLE_NAME, values, BaseColumns._ID + "=" + instanceId
                             + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""), whereArgs);
                 break;
 
@@ -363,7 +364,7 @@ public class InstanceProvider extends ContentProvider {
         sUriMatcher.addURI(InstanceProviderAPI.AUTHORITY, "instances/#", INSTANCE_ID);
 
         sInstancesProjectionMap = new HashMap<String, String>();
-        sInstancesProjectionMap.put(InstanceColumns._ID, InstanceColumns._ID);
+        sInstancesProjectionMap.put(BaseColumns._ID, BaseColumns._ID);
         sInstancesProjectionMap.put(InstanceColumns.DISPLAY_NAME, InstanceColumns.DISPLAY_NAME);
         sInstancesProjectionMap.put(InstanceColumns.SUBMISSION_URI, InstanceColumns.SUBMISSION_URI);
         sInstancesProjectionMap.put(InstanceColumns.CAN_EDIT_WHEN_COMPLETE, InstanceColumns.CAN_EDIT_WHEN_COMPLETE);

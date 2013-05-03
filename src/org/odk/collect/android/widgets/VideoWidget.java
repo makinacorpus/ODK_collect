@@ -19,11 +19,11 @@ import java.io.File;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.R;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -32,6 +32,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore.MediaColumns;
 import android.provider.MediaStore.Video;
 import android.util.Log;
 import android.util.TypedValue;
@@ -159,6 +160,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		mPlayButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mPlayButton.setPadding(20, 20, 20, 20);
 		mPlayButton.setLayoutParams(params);
+		mPlayButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_menu_play_clip, 0, 0, 0);
 		
 		// on play, launch the appropriate viewer
 		mPlayButton.setOnClickListener(new View.OnClickListener() {
@@ -236,12 +238,12 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		if (uri.toString().startsWith("file")) {
 			return uri.toString().substring(6);
 		} else {
-			String[] videoProjection = { Video.Media.DATA };
+			String[] videoProjection = { MediaColumns.DATA };
 			Cursor c = null;
 			try {
 				c = getContext().getContentResolver().query(uri,
 						videoProjection, null, null, null);
-				int column_index = c.getColumnIndexOrThrow(Video.Media.DATA);
+				int column_index = c.getColumnIndexOrThrow(MediaColumns.DATA);
 				String videoPath = null;
 				if (c.getCount() > 0) {
 					c.moveToFirst();
@@ -276,10 +278,10 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 		if (newVideo.exists()) {
 			// Add the copy to the content provier
 			ContentValues values = new ContentValues(6);
-			values.put(Video.Media.TITLE, newVideo.getName());
-			values.put(Video.Media.DISPLAY_NAME, newVideo.getName());
-			values.put(Video.Media.DATE_ADDED, System.currentTimeMillis());
-			values.put(Video.Media.DATA, newVideo.getAbsolutePath());
+			values.put(MediaColumns.TITLE, newVideo.getName());
+			values.put(MediaColumns.DISPLAY_NAME, newVideo.getName());
+			values.put(MediaColumns.DATE_ADDED, System.currentTimeMillis());
+			values.put(MediaColumns.DATA, newVideo.getAbsolutePath());
 
 			Uri VideoURI = getContext().getContentResolver().insert(
 					Video.Media.EXTERNAL_CONTENT_URI, values);

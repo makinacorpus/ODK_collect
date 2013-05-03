@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.PropertyManager;
@@ -47,6 +46,7 @@ import org.opendatakit.httpclientandroidlib.entity.mime.MultipartEntity;
 import org.opendatakit.httpclientandroidlib.entity.mime.content.FileBody;
 import org.opendatakit.httpclientandroidlib.entity.mime.content.StringBody;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
+import org.odk.collect.android.R;
 
 import android.content.ContentValues;
 import android.content.SharedPreferences;
@@ -54,6 +54,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.provider.BaseColumns;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 
@@ -468,15 +469,16 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 
     // TODO: This method is like 350 lines long, down from 400.
     // still. ridiculous. make it smaller.
-    protected Outcome doInBackground(Long... values) {
+    @Override
+	protected Outcome doInBackground(Long... values) {
     	Outcome outcome = new Outcome();
 
-        String selection = InstanceColumns._ID + "=?";
+        String selection = BaseColumns._ID + "=?";
         String[] selectionArgs = new String[(values == null) ? 0 : values.length];
         if ( values != null ) {
 	        for (int i = 0; i < values.length; i++) {
 	            if (i != values.length - 1) {
-	                selection += " or " + InstanceColumns._ID + "=?";
+	                selection += " or " + BaseColumns._ID + "=?";
 	            }
 	            selectionArgs[i] = values[i].toString();
 	        }
@@ -503,7 +505,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
 	                }
 	                publishProgress(c.getPosition() + 1, c.getCount());
 	                String instance = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-	                String id = c.getString(c.getColumnIndex(InstanceColumns._ID));
+	                String id = c.getString(c.getColumnIndex(BaseColumns._ID));
 	                Uri toUpdate = Uri.withAppendedPath(InstanceColumns.CONTENT_URI, id);
 
 	                int subIdx = c.getColumnIndex(InstanceColumns.SUBMISSION_URI);

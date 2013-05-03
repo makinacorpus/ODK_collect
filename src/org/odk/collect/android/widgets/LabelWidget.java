@@ -23,8 +23,8 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -153,7 +153,7 @@ public class LabelWidget extends QuestionWidget {
                 // answer layout holds the label text/image on top and the radio button on bottom
                 RelativeLayout answer = new RelativeLayout(getContext());
                 RelativeLayout.LayoutParams headerParams =
-                        new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+                        new RelativeLayout.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
                 headerParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 headerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
                 
@@ -170,8 +170,8 @@ public class LabelWidget extends QuestionWidget {
 
                 // Each button gets equal weight
                 LinearLayout.LayoutParams answerParams =
-                    new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,
-                            LayoutParams.WRAP_CONTENT);
+                    new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.FILL_PARENT,
+                            android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
                 answerParams.weight = 1;
 
                 buttonLayout.addView(answer, answerParams);
@@ -188,7 +188,7 @@ public class LabelWidget extends QuestionWidget {
 
         // The buttons take up the right half of the screen
         LinearLayout.LayoutParams buttonParams =
-            new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+            new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.FILL_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
         buttonParams.weight = 1;
 
         questionLayout.addView(buttonLayout, buttonParams);
@@ -220,7 +220,8 @@ public class LabelWidget extends QuestionWidget {
 
     // Override QuestionWidget's add question text. Build it the same
     // but add it to the relative layout
-    protected void addQuestionText(FormEntryPrompt p) {
+    @Override
+	protected void addQuestionText(FormEntryPrompt p) {
 
         // Add the text view. Textview always exists, regardless of whether there's text.
         mQuestionText = new TextView(getContext());
@@ -239,7 +240,7 @@ public class LabelWidget extends QuestionWidget {
 
         // Put the question text on the left half of the screen
         LinearLayout.LayoutParams labelParams =
-            new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+            new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.FILL_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
         labelParams.weight = 1;
 
         questionLayout = new LinearLayout(getContext());

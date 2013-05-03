@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
@@ -48,7 +49,6 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.views.ODKView;
 import org.odk.collect.android.widgets.QuestionWidget;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -65,7 +65,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore.Images;
+import android.provider.BaseColumns;
+import android.provider.MediaStore.MediaColumns;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
@@ -77,8 +78,6 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -97,13 +96,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
 /**
  * FormEntryActivity is responsible for displaying questions, animating
  * transitions between questions, and allowing the user to enter data.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormEntryActivity extends Activity implements AnimationListener,
+
+public class FormEntryActivity extends SherlockActivity implements AnimationListener,
 		FormLoaderListener, FormSavedListener, AdvanceToNextListener,
 		OnGestureListener {
 	private static final String t = "FormEntryActivity";
@@ -619,13 +623,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			if (selectedImage.toString().startsWith("file")) {
 				sourceImagePath = selectedImage.toString().substring(6);
 			} else {
-				String[] projection = { Images.Media.DATA };
+				String[] projection = { MediaColumns.DATA };
 				Cursor cursor = null;
 				try {
 					cursor = getContentResolver().query(selectedImage,
 							projection, null, null, null);
 					int column_index = cursor
-							.getColumnIndexOrThrow(Images.Media.DATA);
+							.getColumnIndexOrThrow(MediaColumns.DATA);
 					cursor.moveToFirst();
 					sourceImagePath = cursor.getString(column_index);
 				} finally {
@@ -700,14 +704,19 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			View current = createView(event, false);
 			showView(current, AnimationType.FADE);
 		}
+		//update menu cause of sherlock bar
+		invalidateOptionsMenu();
 	}
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		Collect.getInstance().getActivityLogger()
-				.logInstanceAction(this, "onPrepareOptionsMenu", "show");
+		
+
 		FormController formController = Collect.getInstance()
 				.getFormController();
+
+		Collect.getInstance().getActivityLogger()
+				.logInstanceAction(this, "onPrepareOptionsMenu", "show");
 
 		menu.removeItem(MENU_LANGUAGES);
 		menu.removeItem(MENU_HIERARCHY_VIEW);
@@ -727,11 +736,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 		if (mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_LANGUAGE, true)) {
+			boolean enabled = false;
+			if (formController != null)
+				enabled = (formController.getLanguages() == null || formController
+						.getLanguages().length == 1) ? false : true;
 			menu.add(0, MENU_LANGUAGES, 0, getString(R.string.change_language))
 					.setIcon(R.drawable.ic_menu_start_conversation)
-					.setEnabled(
-							(formController.getLanguages() == null || formController
-									.getLanguages().length == 1) ? false : true);
+					.setEnabled(enabled);
 		}
 		if (mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_ACCESS_SETTINGS, true)) {
@@ -835,9 +846,11 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 		menu.setHeaderTitle(getString(R.string.edit_prompt));
 	}
+	
+	
 
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
+	public boolean onContextItemSelected(android.view.MenuItem item) {
 		/*
 		 * We don't have the right view here, so we store the View's ID as the
 		 * item ID and loop through the possible views to find the one the user
@@ -1000,6 +1013,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 			// disallow carriage returns in the name
 			InputFilter returnFilter = new InputFilter() {
+				@Override
 				public CharSequence filter(CharSequence source, int start,
 						int end, Spanned dest, int dstart, int dend) {
 					for (int i = start; i < end; i++) {
@@ -2149,6 +2163,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		t.cancel(true);
 		t.destroy();
 		Collect.getInstance().setFormController(formController);
+		//updateMenu
+		
 
 		// Set the language if one has already been set in the past
 		String[] languageTest = formController.getLanguages();
@@ -2379,7 +2395,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					// should only be one...
 					c.moveToFirst();
 					String id = c.getString(c
-							.getColumnIndex(InstanceColumns._ID));
+							.getColumnIndex(BaseColumns._ID));
 					Uri instance = Uri.withAppendedPath(
 							InstanceColumns.CONTENT_URI, id);
 					setResult(RESULT_OK, new Intent().setData(instance));

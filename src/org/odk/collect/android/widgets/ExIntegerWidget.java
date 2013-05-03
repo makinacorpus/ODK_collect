@@ -22,7 +22,6 @@ import org.odk.collect.android.application.Collect;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.text.InputFilter;
 import android.text.InputType;

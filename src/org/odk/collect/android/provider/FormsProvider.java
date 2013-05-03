@@ -20,12 +20,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.ODKSQLiteOpenHelper;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.R;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -36,6 +36,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -77,7 +78,7 @@ public class FormsProvider extends ContentProvider {
 
         private void onCreateNamed(SQLiteDatabase db, String tableName) {
             db.execSQL("CREATE TABLE " + tableName + " ("
-            		+ FormsColumns._ID + " integer primary key, "
+            		+ BaseColumns._ID + " integer primary key, "
             		+ FormsColumns.DISPLAY_NAME + " text not null, "
                     + FormsColumns.DISPLAY_SUBTEXT + " text not null, "
                     + FormsColumns.DESCRIPTION + " text, "
@@ -107,7 +108,7 @@ public class FormsProvider extends ContentProvider {
                 db.execSQL("DROP TABLE IF EXISTS " + TEMP_FORMS_TABLE_NAME);
                 onCreateNamed(db, TEMP_FORMS_TABLE_NAME);
         		db.execSQL("INSERT INTO " + TEMP_FORMS_TABLE_NAME + " ("
-                		+ FormsColumns._ID + ", "
+                		+ BaseColumns._ID + ", "
                 		+ FormsColumns.DISPLAY_NAME + ", "
                         + FormsColumns.DISPLAY_SUBTEXT + ", "
                         + FormsColumns.DESCRIPTION + ", "
@@ -121,7 +122,7 @@ public class FormsProvider extends ContentProvider {
                         + FormsColumns.JR_VERSION + ", "
                         + ((oldVersion != 3) ? "" : (FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "))
                         + FormsColumns.JRCACHE_FILE_PATH + ") SELECT "
-                		+ FormsColumns._ID + ", "
+                		+ BaseColumns._ID + ", "
                 		+ FormsColumns.DISPLAY_NAME + ", "
                         + FormsColumns.DISPLAY_SUBTEXT + ", "
                         + FormsColumns.DESCRIPTION + ", "
@@ -141,7 +142,7 @@ public class FormsProvider extends ContentProvider {
         		db.execSQL("DROP TABLE IF EXISTS " + FORMS_TABLE_NAME);
         		onCreateNamed(db, FORMS_TABLE_NAME);
         		db.execSQL("INSERT INTO " + FORMS_TABLE_NAME + " ("
-                		+ FormsColumns._ID + ", "
+                		+ BaseColumns._ID + ", "
                 		+ FormsColumns.DISPLAY_NAME + ", "
                         + FormsColumns.DISPLAY_SUBTEXT + ", "
                         + FormsColumns.DESCRIPTION + ", "
@@ -155,7 +156,7 @@ public class FormsProvider extends ContentProvider {
                         + FormsColumns.JR_VERSION + ", "
                         + FormsColumns.BASE64_RSA_PUBLIC_KEY + ", "
                         + FormsColumns.JRCACHE_FILE_PATH + ") SELECT "
-                		+ FormsColumns._ID + ", "
+                		+ BaseColumns._ID + ", "
                 		+ FormsColumns.DISPLAY_NAME + ", "
                         + FormsColumns.DISPLAY_SUBTEXT + ", "
                         + FormsColumns.DESCRIPTION + ", "
@@ -204,7 +205,7 @@ public class FormsProvider extends ContentProvider {
 
             case FORM_ID:
                 qb.setProjectionMap(sFormsProjectionMap);
-                qb.appendWhere(FormsColumns._ID + "=" + uri.getPathSegments().get(1));
+                qb.appendWhere(BaseColumns._ID + "=" + uri.getPathSegments().get(1));
                 break;
 
             default:
@@ -299,7 +300,7 @@ public class FormsProvider extends ContentProvider {
 
         // first try to see if a record with this filename already exists...
         String[] projection = {
-                FormsColumns._ID, FormsColumns.FORM_FILE_PATH
+                BaseColumns._ID, FormsColumns.FORM_FILE_PATH
         };
         String[] selectionArgs = { filePath };
         String selection = FormsColumns.FORM_FILE_PATH + "=?";
@@ -411,7 +412,7 @@ public class FormsProvider extends ContentProvider {
 
                 count =
                     db.delete(FORMS_TABLE_NAME,
-                        FormsColumns._ID + "=" + formId
+                        BaseColumns._ID + "=" + formId
                                 + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
                         whereArgs);
                 break;
@@ -539,7 +540,7 @@ public class FormsProvider extends ContentProvider {
 	                    }
 
 	                    count =
-	                        db.update(FORMS_TABLE_NAME, values, FormsColumns._ID + "=" + formId
+	                        db.update(FORMS_TABLE_NAME, values, BaseColumns._ID + "=" + formId
 	                                + (!TextUtils.isEmpty(where) ? " AND (" + where + ')' : ""),
 	                            whereArgs);
 	                } else {
@@ -566,7 +567,7 @@ public class FormsProvider extends ContentProvider {
         sUriMatcher.addURI(FormsProviderAPI.AUTHORITY, "forms/#", FORM_ID);
 
         sFormsProjectionMap = new HashMap<String, String>();
-        sFormsProjectionMap.put(FormsColumns._ID, FormsColumns._ID);
+        sFormsProjectionMap.put(BaseColumns._ID, BaseColumns._ID);
         sFormsProjectionMap.put(FormsColumns.DISPLAY_NAME, FormsColumns.DISPLAY_NAME);
         sFormsProjectionMap.put(FormsColumns.DISPLAY_SUBTEXT, FormsColumns.DISPLAY_SUBTEXT);
         sFormsProjectionMap.put(FormsColumns.DESCRIPTION, FormsColumns.DESCRIPTION);

@@ -14,10 +14,10 @@
 
 package org.odk.collect.android.activities;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.R;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -95,7 +96,7 @@ public class InstanceChooserList extends ListActivity {
         startManagingCursor(c);
         Uri instanceUri =
             ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,
-                c.getLong(c.getColumnIndex(InstanceColumns._ID)));
+                c.getLong(c.getColumnIndex(BaseColumns._ID)));
 
         Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick", instanceUri.toString());
 

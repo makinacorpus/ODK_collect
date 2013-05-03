@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.ArrayList;
+import java.util.Vector;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -30,9 +33,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * SelctMultiWidget handles multiple selection fields using checkboxes.

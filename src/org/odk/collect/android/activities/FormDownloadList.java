@@ -30,7 +30,6 @@ import org.odk.collect.android.utilities.WebUtils;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -45,8 +44,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -54,6 +51,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
 /**
  * Responsible for displaying, adding and deleting all the valid forms in the forms directory. One
@@ -69,7 +70,7 @@ import android.widget.Toast;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormDownloadList extends ListActivity implements FormListDownloaderListener,
+public class FormDownloadList extends SherlockListActivity implements FormListDownloaderListener,
         FormDownloaderListener {
     private static final String t = "RemoveFileManageList";
 
@@ -97,12 +98,9 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
     private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
-    private Button mDownloadButton;
 
     private DownloadFormListTask mDownloadFormListTask;
     private DownloadFormsTask mDownloadFormsTask;
-    private Button mToggleButton;
-    private Button mRefreshButton;
 
     private HashMap<String, FormDetails> mFormNamesAndURLs = new HashMap<String,FormDetails>();
     private SimpleAdapter mFormListAdapter;
@@ -127,50 +125,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
         // need clear background before load
         getListView().setBackgroundResource(R.drawable.background);
-
-        mDownloadButton = (Button) findViewById(R.id.add_button);
-        mDownloadButton.setEnabled(selectedItemCount() > 0);
-        mDownloadButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            	// this is called in downloadSelectedFiles():
-            	//    Collect.getInstance().getActivityLogger().logAction(this, "downloadSelectedFiles", ...);
-                downloadSelectedFiles();
-                mToggled = false;
-                clearChoices();
-            }
-        });
-
-        mToggleButton = (Button) findViewById(R.id.toggle_button);
-        mToggleButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // toggle selections of items to all or none
-                ListView ls = getListView();
-                mToggled = !mToggled;
-
-                Collect.getInstance().getActivityLogger().logAction(this, "toggleFormCheckbox", Boolean.toString(mToggled));
-
-                for (int pos = 0; pos < ls.getCount(); pos++) {
-                    ls.setItemChecked(pos, mToggled);
-                }
-
-                mDownloadButton.setEnabled(!(selectedItemCount() == 0));
-            }
-        });
-
-        mRefreshButton = (Button) findViewById(R.id.refresh_button);
-        mRefreshButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logAction(this, "refreshForms", "");
-
-                mToggled = false;
-                downloadFormList();
-                FormDownloadList.this.getListView().clearChoices();
-                clearChoices();
-            }
-        });
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         if (savedInstanceState != null) {
             // If the screen has rotated, the hashmap with the form ids and urls is passed here.
@@ -189,7 +144,6 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
             // Android should keep track of this, but broken on rotate...
             if (savedInstanceState.containsKey(BUNDLE_SELECTED_COUNT)) {
                 mSelectedCount = savedInstanceState.getInt(BUNDLE_SELECTED_COUNT);
-                mDownloadButton.setEnabled(!(mSelectedCount == 0));
             }
 
             // to restore alert dialog.
@@ -268,14 +222,12 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
     private void clearChoices() {
         FormDownloadList.this.getListView().clearChoices();
-        mDownloadButton.setEnabled(false);
     }
 
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		mDownloadButton.setEnabled(!(selectedItemCount() == 0));
 
 		Object o = getListAdapter().getItem(position);
 		@SuppressWarnings("unchecked")
@@ -358,6 +310,7 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
 
         menu.add(0, MENU_PREFERENCES, 0, getString(R.string.general_preferences)).setIcon(
             android.R.drawable.ic_menu_preferences);
+        getSupportMenuInflater().inflate(R.menu.menu_form_download, menu);
         return true;
     }
 
@@ -370,6 +323,30 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
                 Intent i = new Intent(this, PreferencesActivity.class);
                 startActivity(i);
                 return true;
+                
+            case R.id.select_all:
+            	ListView ls = getListView();
+                mToggled = !mToggled;
+                Collect.getInstance().getActivityLogger().logAction(this, "toggleFormCheckbox", Boolean.toString(mToggled));
+                for (int pos = 0; pos < ls.getCount(); pos++) {
+                    ls.setItemChecked(pos, mToggled);
+                }
+            	return true;
+            	
+            case R.id.forms_get:
+            	downloadSelectedFiles();
+                mToggled = false;
+                clearChoices();
+                return true;
+                
+            case R.id.refresh_forms:
+            	Collect.getInstance().getActivityLogger().logAction(this, "refreshForms", "");
+                mToggled = false;
+                downloadFormList();
+                FormDownloadList.this.getListView().clearChoices();
+                clearChoices();
+                return true;
+            	
         }
         return super.onMenuItemSelected(featureId, item);
     }
@@ -556,7 +533,8 @@ public class FormDownloadList extends ListActivity implements FormListDownloader
      *
      * @param result
      */
-    public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
+    @Override
+	public void formListDownloadingComplete(HashMap<String, FormDetails> result) {
         dismissDialog(PROGRESS_DIALOG);
         mDownloadFormListTask.setDownloaderListener(null);
         mDownloadFormListTask = null;

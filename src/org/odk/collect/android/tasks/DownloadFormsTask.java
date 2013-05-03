@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
-import org.odk.collect.android.R;
+import org.kxml2.kdom.Node;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
@@ -42,11 +42,13 @@ import org.opendatakit.httpclientandroidlib.HttpStatus;
 import org.opendatakit.httpclientandroidlib.client.HttpClient;
 import org.opendatakit.httpclientandroidlib.client.methods.HttpGet;
 import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
+import org.odk.collect.android.R;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.BaseColumns;
 import android.util.Log;
 
 /**
@@ -100,7 +102,7 @@ public class DownloadFormsTask extends
                 Uri uri = null;
                 try {
                     String[] projection = {
-                            FormsColumns._ID, FormsColumns.FORM_FILE_PATH
+                            BaseColumns._ID, FormsColumns.FORM_FILE_PATH
                     };
                     String[] selectionArgs = {
                         dl.getAbsolutePath()
@@ -131,7 +133,7 @@ public class DownloadFormsTask extends
 	                    alreadyExists.moveToFirst();
 	                    uri =
 	                        Uri.withAppendedPath(FormsColumns.CONTENT_URI,
-	                            alreadyExists.getString(alreadyExists.getColumnIndex(FormsColumns._ID)));
+	                            alreadyExists.getString(alreadyExists.getColumnIndex(BaseColumns._ID)));
 	                	Collect.getInstance().getActivityLogger().logAction(this, "refresh", dl.getAbsolutePath());
 	                }
                 } finally {
@@ -416,11 +418,11 @@ public class DownloadFormsTask extends
         }
         int nElements = manifestElement.getChildCount();
         for (int i = 0; i < nElements; ++i) {
-            if (manifestElement.getType(i) != Element.ELEMENT) {
+            if (manifestElement.getType(i) != Node.ELEMENT) {
                 // e.g., whitespace (text)
                 continue;
             }
-            Element mediaFileElement = (Element) manifestElement.getElement(i);
+            Element mediaFileElement = manifestElement.getElement(i);
             if (!isXformsManifestNamespacedElement(mediaFileElement)) {
                 // someone else's extension?
                 continue;
@@ -433,7 +435,7 @@ public class DownloadFormsTask extends
                 // don't process descriptionUrl
                 int childCount = mediaFileElement.getChildCount();
                 for (int j = 0; j < childCount; ++j) {
-                    if (mediaFileElement.getType(j) != Element.ELEMENT) {
+                    if (mediaFileElement.getType(j) != Node.ELEMENT) {
                         // e.g., whitespace (text)
                         continue;
                     }

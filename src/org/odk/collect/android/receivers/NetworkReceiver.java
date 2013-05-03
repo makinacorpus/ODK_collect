@@ -18,6 +18,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.provider.BaseColumns;
 
 public class NetworkReceiver extends BroadcastReceiver implements InstanceUploaderListener {
 
@@ -89,7 +90,7 @@ public class NetworkReceiver extends BroadcastReceiver implements InstanceUpload
             if (c != null && c.getCount() > 0) {
                 c.move(-1);
                 while (c.moveToNext()) {
-                    Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                    Long l = c.getLong(c.getColumnIndex(BaseColumns._ID));
                     toUpload.add(Long.valueOf(l));
                 }
 

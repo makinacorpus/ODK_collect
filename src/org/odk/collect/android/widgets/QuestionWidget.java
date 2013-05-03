@@ -77,8 +77,8 @@ public abstract class QuestionWidget extends LinearLayout {
         setPadding(0, 7, 0, 0);
 
         mLayout =
-            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.FILL_PARENT,
+                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
         mLayout.setMargins(10, 0, 10, 0);
 
         addQuestionText(p);
@@ -142,7 +142,8 @@ public abstract class QuestionWidget extends LinearLayout {
     public abstract void setFocus(Context context);
 
 
-    public abstract void setOnLongClickListener(OnLongClickListener l);
+    @Override
+	public abstract void setOnLongClickListener(OnLongClickListener l);
 
     /**
      * Override this to implement fling gesture suppression (e.g. for embedded WebView treatments).
@@ -217,7 +218,8 @@ public abstract class QuestionWidget extends LinearLayout {
      * Every subclassed widget should override this, adding any views they may contain, and calling
      * super.cancelLongPress()
      */
-    public void cancelLongPress() {
+    @Override
+	public void cancelLongPress() {
         super.cancelLongPress();
         if (mQuestionText != null) {
             mQuestionText.cancelLongPress();

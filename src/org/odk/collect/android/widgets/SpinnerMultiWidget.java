@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.Vector;
+
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
@@ -29,8 +31,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.Vector;
 
 /**
  * SpinnerMultiWidget, like SelectMultiWidget handles multiple selection fields using checkboxes,
@@ -91,11 +91,13 @@ public class SpinnerMultiWidget extends QuestionWidget {
         // Give the button a click listener. This defines the alert as well. All the
         // click and selection behavior is defined here.
         button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+            @Override
+			public void onClick(View v) {
 
                 alert_builder.setTitle(mPrompt.getQuestionText()).setPositiveButton(R.string.ok,
                     new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                        @Override
+						public void onClick(DialogInterface dialog, int id) {
                             boolean first = true;
                             selectionText.setText("");
                             for (int i = 0; i < selections.length; i++) {

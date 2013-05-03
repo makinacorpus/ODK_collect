@@ -22,7 +22,6 @@ import org.odk.collect.android.tasks.DiskSyncTask;
 import org.odk.collect.android.utilities.VersionHidingCursorAdapter;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,11 +29,15 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
+
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.MenuItem;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores the path to
@@ -43,7 +46,7 @@ import android.widget.TextView;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class FormChooserList extends ListActivity implements DiskSyncListener {
+public class FormChooserList extends SherlockListActivity implements DiskSyncListener {
 
     private static final String t = "FormChooserList";
     private static final boolean EXIT = true;
@@ -64,10 +67,14 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
             createErrorDialog(e.getMessage(), EXIT);
             return;
         }
+        
 
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.enter_data));
-
+        
+        //TODO Action Bar
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        
         String sortOrder = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC";
         Cursor c = managedQuery(FormsColumns.CONTENT_URI, null, null, null, sortOrder);
 
@@ -137,6 +144,17 @@ public class FormChooserList extends ListActivity implements DiskSyncListener {
 
         finish();
     }
+    
+    //TODO Back to previous task
+    /*public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }*/
 
 
     @Override

@@ -23,10 +23,10 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.views.MediaLayout;
+import org.odk.collect.android.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;

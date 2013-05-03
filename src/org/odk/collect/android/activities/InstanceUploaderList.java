@@ -22,8 +22,8 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
+
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,8 +31,7 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.provider.BaseColumns;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -40,6 +39,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -49,7 +53,7 @@ import android.widget.Toast;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderList extends ListActivity implements
+public class InstanceUploaderList extends SherlockListActivity implements
 		OnLongClickListener {
 
 	private static final String BUNDLE_SELECTED_ITEMS_KEY = "selected_items";
@@ -58,9 +62,6 @@ public class InstanceUploaderList extends ListActivity implements
 	private static final int MENU_PREFERENCES = Menu.FIRST;
 	private static final int MENU_SHOW_UNSENT = Menu.FIRST + 1;
 	private static final int INSTANCE_UPLOADER = 0;
-
-	private Button mUploadButton;
-	private Button mToggleButton;
 
 	private boolean mShowUnsent = true;
 	private SimpleCursorAdapter mInstances;
@@ -98,77 +99,9 @@ public class InstanceUploaderList extends ListActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.instance_uploader_list);
-
-		// set up long click listener
-
-		mUploadButton = (Button) findViewById(R.id.upload_button);
-		mUploadButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-				NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
-
-				if (NetworkReceiver.running == true) {
-					Toast.makeText(
-							InstanceUploaderList.this,
-							"Background send running, please try again shortly",
-							Toast.LENGTH_SHORT).show();
-				} else if (ni == null || !ni.isConnected()) {
-					Collect.getInstance().getActivityLogger()
-							.logAction(this, "uploadButton", "noConnection");
-
-					Toast.makeText(InstanceUploaderList.this,
-							R.string.no_connection, Toast.LENGTH_SHORT).show();
-				} else {
-					Collect.getInstance()
-							.getActivityLogger()
-							.logAction(this, "uploadButton",
-									Integer.toString(mSelected.size()));
-
-					if (mSelected.size() > 0) {
-						// items selected
-						uploadSelectedFiles();
-						mToggled = false;
-						mSelected.clear();
-						InstanceUploaderList.this.getListView().clearChoices();
-						mUploadButton.setEnabled(false);
-					} else {
-						// no items selected
-						Toast.makeText(getApplicationContext(),
-								getString(R.string.noselect_error),
-								Toast.LENGTH_SHORT).show();
-					}
-				}
-			}
-		});
-
-		mToggleButton = (Button) findViewById(R.id.toggle_button);
-		mToggleButton.setLongClickable(true);
-		mToggleButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// toggle selections of items to all or none
-				ListView ls = getListView();
-				mToggled = !mToggled;
-
-				Collect.getInstance()
-						.getActivityLogger()
-						.logAction(this, "toggleButton",
-								Boolean.toString(mToggled));
-				// remove all items from selected list
-				mSelected.clear();
-				for (int pos = 0; pos < ls.getCount(); pos++) {
-					ls.setItemChecked(pos, mToggled);
-					// add all items if mToggled sets to select all
-					if (mToggled)
-						mSelected.add(ls.getItemIdAtPosition(pos));
-				}
-				mUploadButton.setEnabled(!(mSelected.size() == 0));
-
-			}
-		});
-		mToggleButton.setOnLongClickListener(this);
+		
+		ActionBar bar = getSupportActionBar();
+		bar.setDisplayShowHomeEnabled(true);
 
 		Cursor c = mShowUnsent ? getUnsentCursor() : getAllCursor();
 
@@ -183,7 +116,6 @@ public class InstanceUploaderList extends ListActivity implements
 		setListAdapter(mInstances);
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		getListView().setItemsCanFocus(false);
-		mUploadButton.setEnabled(!(mSelected.size() == 0));
 
 		// set title
 		setTitle(getString(R.string.app_name) + " > "
@@ -236,11 +168,13 @@ public class InstanceUploaderList extends ListActivity implements
 		Collect.getInstance().getActivityLogger()
 				.logAction(this, "onCreateOptionsMenu", "show");
 		super.onCreateOptionsMenu(menu);
+		getSupportMenuInflater().inflate(R.menu.menu_instance_uploader, menu);
 		menu.add(0, MENU_PREFERENCES, 0,
 				getString(R.string.general_preferences)).setIcon(
-				android.R.drawable.ic_menu_preferences);
+				android.R.drawable.ic_menu_preferences).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+		
 		menu.add(0, MENU_SHOW_UNSENT, 1, getString(R.string.change_view))
-				.setIcon(android.R.drawable.ic_menu_preferences);
+				.setIcon(android.R.drawable.ic_menu_preferences).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		return true;
 	}
 
@@ -256,6 +190,60 @@ public class InstanceUploaderList extends ListActivity implements
 			Collect.getInstance().getActivityLogger()
 					.logAction(this, "onMenuItemSelected", "MENU_SHOW_UNSENT");
 			showSentAndUnsentChoices();
+			
+			return true;
+		case R.id.upload:
+			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
+
+			if (NetworkReceiver.running == true) {
+				Toast.makeText(
+						InstanceUploaderList.this,
+						"Background send running, please try again shortly",
+						Toast.LENGTH_SHORT).show();
+			} else if (ni == null || !ni.isConnected()) {
+				Collect.getInstance().getActivityLogger()
+						.logAction(this, "uploadButton", "noConnection");
+
+				Toast.makeText(InstanceUploaderList.this,
+						R.string.no_connection, Toast.LENGTH_SHORT).show();
+			} else {
+				Collect.getInstance()
+						.getActivityLogger()
+						.logAction(this, "uploadButton",
+								Integer.toString(mSelected.size()));
+
+				if (mSelected.size() > 0) {
+					// items selected
+					uploadSelectedFiles();
+					mToggled = false;
+					mSelected.clear();
+					InstanceUploaderList.this.getListView().clearChoices();
+				} else {
+					// no items selected
+					Toast.makeText(getApplicationContext(),
+							getString(R.string.noselect_error),
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+			return true;
+		case R.id.select_all:
+			// toggle selections of items to all or none
+			ListView ls = getListView();
+			mToggled = !mToggled;
+
+			Collect.getInstance()
+					.getActivityLogger()
+					.logAction(this, "toggleButton",
+							Boolean.toString(mToggled));
+			// remove all items from selected list
+			mSelected.clear();
+			for (int pos = 0; pos < ls.getCount(); pos++) {
+				ls.setItemChecked(pos, mToggled);
+				// add all items if mToggled sets to select all
+				if (mToggled)
+					mSelected.add(ls.getItemIdAtPosition(pos));
+			}
 			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
@@ -272,7 +260,7 @@ public class InstanceUploaderList extends ListActivity implements
 
 		// get row id from db
 		Cursor c = (Cursor) getListAdapter().getItem(position);
-		long k = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+		long k = c.getLong(c.getColumnIndex(BaseColumns._ID));
 
 		Collect.getInstance().getActivityLogger()
 				.logAction(this, "onListItemClick", Long.toString(k));
@@ -282,9 +270,6 @@ public class InstanceUploaderList extends ListActivity implements
 			mSelected.remove(k);
 		else
 			mSelected.add(k);
-
-		mUploadButton.setEnabled(!(mSelected.size() == 0));
-
 	}
 
 	@Override
@@ -296,7 +281,6 @@ public class InstanceUploaderList extends ListActivity implements
 			mSelected.add(selectedArray[i]);
 		mToggled = savedInstanceState.getBoolean(BUNDLE_TOGGLED_KEY);
 		mRestored = true;
-		mUploadButton.setEnabled(selectedArray.length > 0);
 	}
 
 	@Override

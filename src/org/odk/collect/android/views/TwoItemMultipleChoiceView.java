@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.views;
 
+
 import org.odk.collect.android.R;
 
 import android.content.Context;

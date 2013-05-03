@@ -71,8 +71,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         mView.setPadding(0, 7, 0, 0);
 
         mLayout =
-            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            new LinearLayout.LayoutParams(android.view.ViewGroup.LayoutParams.FILL_PARENT,
+                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
         mLayout.setMargins(10, 0, 10, 0);
 
         // display which group you are in as well as the question
@@ -98,7 +98,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             qw.setId(VIEW_ID + id++);
 
             widgets.add(qw);
-            mView.addView((View) qw, mLayout);
+            mView.addView(qw, mLayout);
 
 
         }
@@ -136,7 +136,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     	}
     }
     
-    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+    @Override
+	protected void onScrollChanged(int l, int t, int oldl, int oldt) {
     	Collect.getInstance().getActivityLogger().logScrollAction(this, t - oldt);
     }
 

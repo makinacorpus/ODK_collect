@@ -27,7 +27,7 @@ the License.
         android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
         
-        <Button
+        <!--  <Button
             android:id="@+id/toggle_button"
             android:layout_weight="1"
             android:text="@string/toggle_selected"
@@ -37,7 +37,7 @@ the License.
             android:id="@+id/delete_button"
             android:layout_weight="1"
             android:text="@string/delete_file"
-            style="@style/Collect.Button2"/>
+            style="@style/Collect.Button2"/> -->
 
     </LinearLayout>
     

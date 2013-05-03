@@ -19,10 +19,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.ColorPickerDialog;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -203,6 +203,7 @@ public class DrawActivity extends Activity {
 				PorterDuff.Mode.SRC_ATOP);
 		btnDrawColor.setText(getString(R.string.set_color));
 		btnDrawColor.setOnClickListener(new View.OnClickListener() {
+			@Override
 			public void onClick(View v) {
 				Collect.getInstance()
 						.getActivityLogger()
@@ -215,6 +216,7 @@ public class DrawActivity extends Activity {
 				ColorPickerDialog cpd = new ColorPickerDialog(
 						DrawActivity.this,
 						new ColorPickerDialog.OnColorChangedListener() {
+							@Override
 							public void colorChanged(String key, int color) {
 								btnDrawColor
 										.setTextColor(getInverseColor(color));

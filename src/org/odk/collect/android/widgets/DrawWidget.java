@@ -19,12 +19,12 @@ import java.io.File;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.activities.DrawActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.R;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -32,9 +32,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore.Images;
+import android.provider.MediaStore.Images.ImageColumns;
+import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
@@ -221,11 +222,11 @@ public class DrawWidget extends QuestionWidget implements IBinaryWidget {
 			// Add the new image to the Media content provider so that the
 			// viewing is fast in Android 2.0+
 			ContentValues values = new ContentValues(6);
-			values.put(Images.Media.TITLE, newImage.getName());
-			values.put(Images.Media.DISPLAY_NAME, newImage.getName());
-			values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
-			values.put(Images.Media.MIME_TYPE, "image/jpeg");
-			values.put(Images.Media.DATA, newImage.getAbsolutePath());
+			values.put(MediaColumns.TITLE, newImage.getName());
+			values.put(MediaColumns.DISPLAY_NAME, newImage.getName());
+			values.put(ImageColumns.DATE_TAKEN, System.currentTimeMillis());
+			values.put(MediaColumns.MIME_TYPE, "image/jpeg");
+			values.put(MediaColumns.DATA, newImage.getAbsolutePath());
 
 			Uri imageURI = getContext().getContentResolver().insert(
 					Images.Media.EXTERNAL_CONTENT_URI, values);

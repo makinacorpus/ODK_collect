@@ -30,7 +30,6 @@ import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -46,8 +45,6 @@ import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -56,6 +53,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
  * some activities based on returns of others.
@@ -63,7 +65,7 @@ import android.widget.Toast;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends Activity {
+public class MainMenuActivity extends SherlockActivity {
 	private static final String t = "MainMenuActivity";
 
 	private static final int PASSWORD_DIALOG = 1;
@@ -112,6 +114,9 @@ public class MainMenuActivity extends Activity {
 		}
 
 		setContentView(R.layout.main_menu);
+		ActionBar bar = getSupportActionBar();
+		bar.setDisplayShowHomeEnabled(true);
+		//TODO
 
 		{
 			// dynamically construct the "ODK Collect vA.B" string
@@ -307,20 +312,23 @@ public class MainMenuActivity extends Activity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		Collect.getInstance().getActivityLogger()
-				.logAction(this, "onCreateOptionsMenu", "show");
+		.logAction(this, "onCreateOptionsMenu", "show");
 		super.onCreateOptionsMenu(menu);
 		menu.add(0, MENU_PREFERENCES, 0,
 				getString(R.string.general_preferences)).setIcon(
-				android.R.drawable.ic_menu_preferences);
+				android.R.drawable.ic_menu_preferences).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		menu.add(0, MENU_ADMIN, 0, getString(R.string.admin_preferences))
-				.setIcon(R.drawable.ic_menu_login);
+				.setIcon(R.drawable.ic_menu_login).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		return true;
 	}
 
+	
+	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(
+			com.actionbarsherlock.view.MenuItem item) {
 		switch (item.getItemId()) {
 		case MENU_PREFERENCES:
 			Collect.getInstance()
@@ -391,9 +399,10 @@ public class MainMenuActivity extends Activity {
 					.getInstance());
 			passwordDialog.setView(input, 20, 10, 20, 10);
 
-			passwordDialog.setButton(AlertDialog.BUTTON_POSITIVE,
+			passwordDialog.setButton(DialogInterface.BUTTON_POSITIVE,
 					getString(R.string.ok),
 					new DialogInterface.OnClickListener() {
+						@Override
 						public void onClick(DialogInterface dialog,
 								int whichButton) {
 							String value = input.getText().toString();
@@ -418,10 +427,11 @@ public class MainMenuActivity extends Activity {
 						}
 					});
 
-			passwordDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
+			passwordDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
 					getString(R.string.cancel),
 					new DialogInterface.OnClickListener() {
 
+						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							Collect.getInstance()
 									.getActivityLogger()

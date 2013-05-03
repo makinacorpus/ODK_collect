@@ -14,9 +14,9 @@
 
 package org.odk.collect.android.listeners;
 
-import org.odk.collect.android.logic.FormDetails;
-
 import java.util.HashMap;
+
+import org.odk.collect.android.logic.FormDetails;
 
 /**
  * @author Carl Hartung (carlhartung@gmail.com)

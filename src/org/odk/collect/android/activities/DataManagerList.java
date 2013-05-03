@@ -23,18 +23,20 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.SherlockListFragment;
 
 /**
  * Responsible for displaying and deleting all the valid forms in the forms
@@ -43,12 +45,11 @@ import android.widget.Toast;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class DataManagerList extends ListActivity implements
+public class DataManagerList extends SherlockListFragment implements
 		DeleteInstancesListener {
 	private static final String t = "DataManagerList";
 	private AlertDialog mAlertDialog;
-	private Button mDeleteButton;
-	private Button mToggleButton;
+	private View mView;
 
 	private SimpleCursorAdapter mInstances;
 	private ArrayList<Long> mSelected = new ArrayList<Long>();
@@ -60,97 +61,63 @@ public class DataManagerList extends ListActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.data_manage_list);
-
-		mDeleteButton = (Button) findViewById(R.id.delete_button);
-		mDeleteButton.setText(getString(R.string.delete_file));
-		mDeleteButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-		    	Collect.getInstance().getActivityLogger().logAction(this, "deleteButton", Integer.toString(mSelected.size()));
-				if (mSelected.size() > 0) {
-					createDeleteInstancesDialog();
-				} else {
-					Toast.makeText(getApplicationContext(),
-							R.string.noselect_error, Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
 		
-		mToggleButton = (Button) findViewById(R.id.toggle_button);
-        mToggleButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean checkAll = false;
-                // if everything is checked, uncheck
-                if (mSelected.size() == mInstances.getCount()) {
-                    checkAll = false;
-                    mSelected.clear();
-                    mDeleteButton.setEnabled(false);
-                } else {
-                    // otherwise check everything
-                    checkAll = true;
-                    for (int pos = 0; pos < DataManagerList.this.getListView().getCount(); pos++) {
-                        Long id = getListAdapter().getItemId(pos);
-                        if (!mSelected.contains(id)) {
-                            mSelected.add(id);
-                        }
-                    }
-                    mDeleteButton.setEnabled(true);
-                }
-                for (int pos = 0; pos < DataManagerList.this.getListView().getCount(); pos++) {
-                    DataManagerList.this.getListView().setItemChecked(pos, checkAll);
-                }
-            }
-        });
+		getSherlockActivity().getSupportActionBar().setDisplayShowTitleEnabled(false);
+	}
+	
+    @Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		mView = inflater.inflate(R.layout.data_manage_list, container,false);
+		setRetainInstance(true);
+		return mView;
+	}
 
-		Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, null, null,
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		Cursor c = getActivity().managedQuery(InstanceColumns.CONTENT_URI, null, null, null,
 				InstanceColumns.DISPLAY_NAME + " ASC");
 
 		String[] data = new String[] { InstanceColumns.DISPLAY_NAME,
 				InstanceColumns.DISPLAY_SUBTEXT };
 		int[] view = new int[] { R.id.text1, R.id.text2 };
 
-		mInstances = new SimpleCursorAdapter(this,
+		mInstances = new SimpleCursorAdapter(this.getActivity(),
 				R.layout.two_item_multiple_choice, c, data, view);
 		setListAdapter(mInstances);
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		getListView().setItemsCanFocus(false);
-		mDeleteButton.setEnabled(false);
-
-		mDeleteInstancesTask = (DeleteInstancesTask) getLastNonConfigurationInstance();
 	}
-	
-    @Override
-    protected void onStart() {
+
+	@Override
+	public void onStart() {
     	super.onStart();
-		Collect.getInstance().getActivityLogger().logOnStart(this); 
+		Collect.getInstance().getActivityLogger().logOnStart(this.getActivity()); 
     }
     
     @Override
-    protected void onStop() {
-		Collect.getInstance().getActivityLogger().logOnStop(this); 
+	public void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this.getActivity()); 
     	super.onStop();
     }
-
-	@Override
-	public Object onRetainNonConfigurationInstance() {
-		// pass the tasks on orientation-change restart
-		return mDeleteInstancesTask;
-	}
-
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-		long[] selectedArray = savedInstanceState.getLongArray(SELECTED);
-		for (int i = 0; i < selectedArray.length; i++) {
-			mSelected.add(selectedArray[i]);
+    
+    @Override
+	public void onViewStateRestored(Bundle savedInstanceState) {
+		super.onViewStateRestored(savedInstanceState);
+		if (savedInstanceState!=null)
+		{
+			long[] selectedArray = savedInstanceState.getLongArray(SELECTED);
+			for (int i = 0; i < selectedArray.length; i++) {
+				mSelected.add(selectedArray[i]);
+			}
 		}
-		mDeleteButton.setEnabled(selectedArray.length > 0);
 	}
 
+    
+
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		long[] selectedArray = new long[mSelected.size()];
 		for (int i = 0; i < mSelected.size(); i++) {
@@ -160,7 +127,7 @@ public class DataManagerList extends ListActivity implements
 	}
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 		// hook up to receive completion events
 		if (mDeleteInstancesTask != null) {
 			mDeleteInstancesTask.setDeleteListener(this);
@@ -172,9 +139,44 @@ public class DataManagerList extends ListActivity implements
 			deleteComplete(mDeleteInstancesTask.getDeleteCount());
 		}
 	}
+	
+	protected void selectAll () {
+		boolean checkAll = false;
+        // if everything is checked, uncheck
+		//TODO selection not working
+		
+		Log.i(t, "Selected : "+mSelected.size()+", Instances count : "+mInstances.getCount());
+
+        if (this.mSelected.size() == this.mInstances.getCount()) {
+            checkAll = false;
+            this.mSelected.clear();
+        } else {
+            // otherwise check everything
+            checkAll = true;
+            for (int pos = 0; pos < DataManagerList.this.getListView().getCount(); pos++) {
+                Long id = getListAdapter().getItemId(pos);
+                if (!this.mSelected.contains(id)) {
+                    this.mSelected.add(id);
+                }
+            }
+        }
+        for (int pos = 0; pos < DataManagerList.this.getListView().getCount(); pos++) {
+            DataManagerList.this.getListView().setItemChecked(pos, checkAll);
+        }
+	}
+	
+	protected void delete () {
+		Collect.getInstance().getActivityLogger().logAction(this, "deleteButton", Integer.toString(mSelected.size()));
+		if (mSelected.size() > 0) {
+			createDeleteInstancesDialog();
+		} else {
+			Toast.makeText(getActivity().getApplicationContext(),
+					R.string.noselect_error, Toast.LENGTH_SHORT).show();
+		}
+	}
 
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		if (mDeleteInstancesTask != null ) {
 			mDeleteInstancesTask.setDeleteListener(null);
 		}
@@ -190,7 +192,7 @@ public class DataManagerList extends ListActivity implements
 	private void createDeleteInstancesDialog() {
         Collect.getInstance().getActivityLogger().logAction(this, "createDeleteInstancesDialog", "show");
 
-		mAlertDialog = new AlertDialog.Builder(this).create();
+		mAlertDialog = new AlertDialog.Builder(this.getActivity()).create();
 		mAlertDialog.setTitle(getString(R.string.delete_file));
 		mAlertDialog.setMessage(getString(R.string.delete_confirm,
 				mSelected.size()));
@@ -223,23 +225,23 @@ public class DataManagerList extends ListActivity implements
 	private void deleteSelectedInstances() {
 		if (mDeleteInstancesTask == null) {
 			mDeleteInstancesTask = new DeleteInstancesTask();
-			mDeleteInstancesTask.setContentResolver(getContentResolver());
+			mDeleteInstancesTask.setContentResolver(getActivity().getContentResolver());
 			mDeleteInstancesTask.setDeleteListener(this);
 			mDeleteInstancesTask.execute(mSelected.toArray(new Long[mSelected
 					.size()]));
 		} else {
-			Toast.makeText(this, getString(R.string.file_delete_in_progress),
+			Toast.makeText(this.getActivity(), getString(R.string.file_delete_in_progress),
 					Toast.LENGTH_LONG).show();
 		}
 	}
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
+	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
 		// get row id from db
 		Cursor c = (Cursor) getListAdapter().getItem(position);
-		long k = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+		long k = c.getLong(c.getColumnIndex(BaseColumns._ID));
 
 		// add/remove from selected list
 		if (mSelected.contains(k))
@@ -248,8 +250,6 @@ public class DataManagerList extends ListActivity implements
 			mSelected.add(k);
 		
 		Collect.getInstance().getActivityLogger().logAction(this, "onListItemClick", Long.toString(k));
-		
-		mDeleteButton.setEnabled(!(mSelected.size() == 0));
 	}
 
 	@Override
@@ -258,7 +258,7 @@ public class DataManagerList extends ListActivity implements
         Collect.getInstance().getActivityLogger().logAction(this, "deleteComplete", Integer.toString(deletedInstances));
 		if (deletedInstances == mSelected.size()) {
 			// all deletes were successful
-			Toast.makeText(this,
+			Toast.makeText(this.getActivity(),
 					getString(R.string.file_deleted_ok, deletedInstances),
 					Toast.LENGTH_SHORT).show();
 		} else {
@@ -266,7 +266,7 @@ public class DataManagerList extends ListActivity implements
 			Log.e(t, "Failed to delete "
 					+ (mSelected.size() - deletedInstances) + " instances");
 			Toast.makeText(
-					this,
+					this.getActivity(),
 					getString(R.string.file_deleted_error, mSelected.size()
 							- deletedInstances, mSelected.size()),
 					Toast.LENGTH_LONG).show();
@@ -277,6 +277,5 @@ public class DataManagerList extends ListActivity implements
 		for ( int i = 0 ; i < getListView().getCount() ; ++i ) {
 			getListView().setItemChecked(i, false);
 		}
-		mDeleteButton.setEnabled(false);
 	}
 }

@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.Date;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -24,8 +26,6 @@ import android.content.Context;
 import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TimePicker;
-
-import java.util.Date;
 
 /**
  * Displays a TimePicker widget.

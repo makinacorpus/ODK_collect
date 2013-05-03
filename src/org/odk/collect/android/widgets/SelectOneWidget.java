@@ -111,8 +111,8 @@ public class SelectOneWidget extends QuestionWidget implements
 		buttonLayout.setOrientation(LinearLayout.VERTICAL);
 
 		// The buttons take up the right half of the screen
-		LayoutParams buttonParams = new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT);
+		LayoutParams buttonParams = new LayoutParams(android.view.ViewGroup.LayoutParams.FILL_PARENT,
+				android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		addView(buttonLayout, buttonParams);
 	}

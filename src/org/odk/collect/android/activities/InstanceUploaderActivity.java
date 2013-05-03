@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -30,6 +29,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.utilities.WebUtils;
+import org.odk.collect.android.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -42,6 +42,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -228,7 +229,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         int i = 0;
         while (it.hasNext()) {
             String id = it.next();
-            selection.append(InstanceColumns._ID + "=?");
+            selection.append(BaseColumns._ID + "=?");
             selectionArgs[i++] = id;
             toDelete.add(Long.valueOf(id));
             if (i != keys.size()) {
@@ -249,7 +250,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
                     while (results.moveToNext()) {
                         String name =
                             results.getString(results.getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                        String id = results.getString(results.getColumnIndex(InstanceColumns._ID));
+                        String id = results.getString(results.getColumnIndex(BaseColumns._ID));
                         message.append(name + " - " + result.get(id) + "\n\n");
                     }
                 } else {

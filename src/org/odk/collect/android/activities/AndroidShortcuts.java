@@ -16,9 +16,9 @@ package org.odk.collect.android.activities;
 
 import java.util.ArrayList;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 
+import org.odk.collect.android.R;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -28,6 +28,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.BaseColumns;
 
 /**
  * Allows the user to create desktop shortcuts to any form currently avaiable to Collect
@@ -76,7 +77,7 @@ public class AndroidShortcuts extends Activity {
 	                names.add(formName);
 	                Uri uri =
 	                    Uri.withAppendedPath(FormsColumns.CONTENT_URI,
-	                        c.getString(c.getColumnIndex(FormsColumns._ID)));
+	                        c.getString(c.getColumnIndex(BaseColumns._ID)));
 	                commands.add(uri);
 	            }
 	        }
@@ -90,13 +91,15 @@ public class AndroidShortcuts extends Activity {
         mCommands = commands.toArray(new Uri[0]);
 
         builder.setItems(this.mNames, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
+            @Override
+			public void onClick(DialogInterface dialog, int item) {
                 returnShortcut(mNames[item], mCommands[item]);
             }
         });
 
         builder.setOnCancelListener(new OnCancelListener() {
-            public void onCancel(DialogInterface dialog) {
+            @Override
+			public void onCancel(DialogInterface dialog) {
                 AndroidShortcuts sc = AndroidShortcuts.this;
                 sc.setResult(RESULT_CANCELED);
                 sc.finish();

@@ -26,7 +26,7 @@ the License.
     android:id="@+id/buttonholder">
 
 
-	    <Button
+	    <!-- <Button
 		android:id="@+id/toggle_button"
 	    android:text="@string/toggle_selected"
 	    style="@style/Collect.Button2"/>
@@ -34,12 +34,12 @@ the License.
 	    <Button
 	    android:id="@+id/refresh_button"
 	    android:text="@string/refresh"
-	    style="@style/Collect.Button2"/>
+	    style="@style/Collect.Button2"/> 
 	    
 	    <Button
 	    android:id="@+id/add_button"
 	    android:text="@string/download"
-	    style="@style/Collect.Button2"/>
+	    style="@style/Collect.Button2"/>-->
 	    
 	</LinearLayout>
 		

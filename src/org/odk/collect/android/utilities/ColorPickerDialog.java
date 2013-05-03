@@ -14,8 +14,7 @@
 
 package org.odk.collect.android.utilities;
 
-import org.odk.collect.android.R;
-
+import android.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -391,6 +390,7 @@ public class ColorPickerDialog extends Dialog {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		OnColorChangedListener l = new OnColorChangedListener() {
+			@Override
 			public void colorChanged(String key, int color) {
 				mListener.colorChanged(mKey, color);
 				dismiss();

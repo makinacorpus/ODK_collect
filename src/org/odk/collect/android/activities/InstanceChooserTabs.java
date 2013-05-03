@@ -14,8 +14,8 @@
 
 package org.odk.collect.android.activities;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.R;
 
 import android.app.TabActivity;
 import android.content.Intent;

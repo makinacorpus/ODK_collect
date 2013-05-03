@@ -16,8 +16,8 @@ package org.odk.collect.android.preferences;
 
 import java.util.ArrayList;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.UrlUtils;
+import org.odk.collect.android.R;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -39,7 +39,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.provider.MediaStore.Images;
+import android.provider.MediaStore.MediaColumns;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.widget.Toast;
@@ -514,12 +514,12 @@ public class PreferencesActivity extends PreferenceActivity implements
 			if (uri.toString().startsWith("file")) {
 				sourceImagePath = uri.toString().substring(6);
 			} else {
-				String[] projection = { Images.Media.DATA };
+				String[] projection = { MediaColumns.DATA };
 				Cursor c = null;
 				try {
 					c = getContentResolver().query(uri, projection, null, null,
 							null);
-					int i = c.getColumnIndexOrThrow(Images.Media.DATA);
+					int i = c.getColumnIndexOrThrow(MediaColumns.DATA);
 					c.moveToFirst();
 					sourceImagePath = c.getString(i);
 				} finally {
@@ -542,6 +542,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 	 */
 	private InputFilter getWhitespaceFilter() {
 		InputFilter whitespaceFilter = new InputFilter() {
+			@Override
 			public CharSequence filter(CharSequence source, int start, int end,
 					Spanned dest, int dstart, int dend) {
 				for (int i = start; i < end; i++) {
@@ -562,6 +563,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 	 */
 	private InputFilter getReturnFilter() {
 		InputFilter returnFilter = new InputFilter() {
+			@Override
 			public CharSequence filter(CharSequence source, int start, int end,
 					Spanned dest, int dstart, int dend) {
 				for (int i = start; i < end; i++) {

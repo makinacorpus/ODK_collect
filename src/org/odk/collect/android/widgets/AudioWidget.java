@@ -19,11 +19,11 @@ import java.io.File;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.R;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -33,6 +33,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore.Audio;
+import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -237,13 +238,13 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 		if (uri.toString().startsWith("file")) {
 			return uri.toString().substring(6);
 		} else {
-			String[] audioProjection = { Audio.Media.DATA };
+			String[] audioProjection = { MediaColumns.DATA };
 			String audioPath = null;
 			Cursor c = null;
 			try {
 				c = getContext().getContentResolver().query(uri,
 						audioProjection, null, null, null);
-				int column_index = c.getColumnIndexOrThrow(Audio.Media.DATA);
+				int column_index = c.getColumnIndexOrThrow(MediaColumns.DATA);
 				if (c.getCount() > 0) {
 					c.moveToFirst();
 					audioPath = c.getString(column_index);
@@ -277,10 +278,10 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 		if (newAudio.exists()) {
 			// Add the copy to the content provier
 			ContentValues values = new ContentValues(6);
-			values.put(Audio.Media.TITLE, newAudio.getName());
-			values.put(Audio.Media.DISPLAY_NAME, newAudio.getName());
-			values.put(Audio.Media.DATE_ADDED, System.currentTimeMillis());
-			values.put(Audio.Media.DATA, newAudio.getAbsolutePath());
+			values.put(MediaColumns.TITLE, newAudio.getName());
+			values.put(MediaColumns.DISPLAY_NAME, newAudio.getName());
+			values.put(MediaColumns.DATE_ADDED, System.currentTimeMillis());
+			values.put(MediaColumns.DATA, newAudio.getAbsolutePath());
 
 			Uri AudioURI = getContext().getContentResolver().insert(
 					Audio.Media.EXTERNAL_CONTENT_URI, values);

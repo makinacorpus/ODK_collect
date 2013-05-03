@@ -77,7 +77,8 @@ public class AgingCredentialsProvider implements CredentialsProvider {
         nextClearTimestamp = System.currentTimeMillis() + expiryInterval;
     }
 
-    public void setCredentials(
+    @Override
+	public void setCredentials(
             final AuthScope authscope,
             final Credentials credentials) {
         if (authscope == null) {
@@ -126,7 +127,8 @@ public class AgingCredentialsProvider implements CredentialsProvider {
         return creds;
     }
 
-    public Credentials getCredentials(final AuthScope authscope) {
+    @Override
+	public Credentials getCredentials(final AuthScope authscope) {
         if (authscope == null) {
             throw new IllegalArgumentException("Authentication scope may not be null");
         }
@@ -138,7 +140,8 @@ public class AgingCredentialsProvider implements CredentialsProvider {
         return c;
     }
 
-    public void clear() {
+    @Override
+	public void clear() {
         this.credMap.clear();
     }
 

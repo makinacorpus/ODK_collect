@@ -21,17 +21,18 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.provider.FormsProviderAPI.FormsColumns;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.R;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.BaseColumns;
 import android.util.Log;
 
 /**
@@ -122,7 +123,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
 		                    if (!FileUtils.getMd5Hash(sqlFile).contentEquals(md5)) {
 		                        // Probably someone overwrite the file on the sdcard
 		                        // So re-parse it and update it's information
-		                        String id = mCursor.getString(mCursor.getColumnIndex(FormsColumns._ID));
+		                        String id = mCursor.getString(mCursor.getColumnIndex(BaseColumns._ID));
 		                        Uri updateUri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, id);
 		                        uriToUpdate.add(new UriFile(updateUri, sqlFile));
 		                    }
@@ -217,7 +218,7 @@ public class DiskSyncTask extends AsyncTask<Void, String, String> {
     private boolean isAlreadyDefined(File formDefFile) {
         // first try to see if a record with this filename already exists...
         String[] projection = {
-                FormsColumns._ID, FormsColumns.FORM_FILE_PATH
+                BaseColumns._ID, FormsColumns.FORM_FILE_PATH
         };
         String[] selectionArgs = { formDefFile.getAbsolutePath() };
         String selection = FormsColumns.FORM_FILE_PATH + "=?";

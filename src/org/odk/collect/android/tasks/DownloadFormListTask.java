@@ -14,24 +14,25 @@
 
 package org.odk.collect.android.tasks;
 
-import org.opendatakit.httpclientandroidlib.client.HttpClient;
-import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
+import java.util.HashMap;
+
 import org.javarosa.xform.parse.XFormParser;
 import org.kxml2.kdom.Element;
-import org.odk.collect.android.R;
+import org.kxml2.kdom.Node;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
 import org.odk.collect.android.logic.FormDetails;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebUtils;
+import org.opendatakit.httpclientandroidlib.client.HttpClient;
+import org.opendatakit.httpclientandroidlib.protocol.HttpContext;
+import org.odk.collect.android.R;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
-
-import java.util.HashMap;
 
 /**
  * Background task for downloading forms from urls or a formlist from a url. We overload this task a
@@ -118,11 +119,11 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
             }
             int nElements = xformsElement.getChildCount();
             for (int i = 0; i < nElements; ++i) {
-                if (xformsElement.getType(i) != Element.ELEMENT) {
+                if (xformsElement.getType(i) != Node.ELEMENT) {
                     // e.g., whitespace (text)
                     continue;
                 }
-                Element xformElement = (Element) xformsElement.getElement(i);
+                Element xformElement = xformsElement.getElement(i);
                 if (!isXformsListNamespacedElement(xformElement)) {
                     // someone else's extension?
                     continue;
@@ -144,7 +145,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
                 // don't process descriptionUrl
                 int fieldCount = xformElement.getChildCount();
                 for (int j = 0; j < fieldCount; ++j) {
-                    if (xformElement.getType(j) != Element.ELEMENT) {
+                    if (xformElement.getType(j) != Node.ELEMENT) {
                         // whitespace
                         continue;
                     }
@@ -212,7 +213,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, HashMap<String
             int formsCount = formsElement.getChildCount();
             String formId = null;
             for (int i = 0; i < formsCount; ++i) {
-                if (formsElement.getType(i) != Element.ELEMENT) {
+                if (formsElement.getType(i) != Node.ELEMENT) {
                     // whitespace
                     continue;
                 }
