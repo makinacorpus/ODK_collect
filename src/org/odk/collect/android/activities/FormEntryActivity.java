@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
@@ -220,6 +219,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		setContentView(R.layout.form_entry);
 		setTitle(getString(R.string.loading_form));
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		
 
 		mBeenSwiped = false;
 		mAlertDialog = null;
@@ -705,7 +705,16 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			showView(current, AnimationType.FADE);
 		}
 		//update menu cause of sherlock bar
-		invalidateOptionsMenu();
+		supportInvalidateOptionsMenu();
+	}
+	
+	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		System.out.println("FormEntryActivity : onCreateOptionsMenu");
+		getSupportMenuInflater().inflate(R.menu.menu_form_entry, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
@@ -722,18 +731,8 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		menu.removeItem(MENU_HIERARCHY_VIEW);
 		menu.removeItem(MENU_SAVE);
 		menu.removeItem(MENU_PREFERENCES);
-
-		if (mAdminPreferences.getBoolean(AdminPreferencesActivity.KEY_SAVE_MID,
-				true)) {
-			menu.add(0, MENU_SAVE, 0, R.string.save_all_answers).setIcon(
-					android.R.drawable.ic_menu_save);
-		}
-		if (mAdminPreferences.getBoolean(AdminPreferencesActivity.KEY_JUMP_TO,
-				true)) {
-			menu.add(0, MENU_HIERARCHY_VIEW, 0,
-					getString(R.string.view_hierarchy)).setIcon(
-					R.drawable.ic_menu_goto);
-		}
+		
+	
 		if (mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_LANGUAGE, true)) {
 			boolean enabled = false;
@@ -765,7 +764,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 							"MENU_LANGUAGES");
 			createLanguageDialog();
 			return true;
-		case MENU_SAVE:
+		case R.id.save_form:
 			Collect.getInstance()
 					.getActivityLogger()
 					.logInstanceAction(this, "onOptionsItemSelected",
@@ -773,7 +772,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			// don't exit
 			saveDataToDisk(DO_NOT_EXIT, isInstanceComplete(false), null);
 			return true;
-		case MENU_HIERARCHY_VIEW:
+		case R.id.hierachy_view:
 			Collect.getInstance()
 					.getActivityLogger()
 					.logInstanceAction(this, "onOptionsItemSelected",

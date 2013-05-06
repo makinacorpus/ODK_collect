@@ -69,6 +69,7 @@ public class FileManagerTabs extends SherlockFragmentActivity {
     
      @Override
      public boolean onCreateOptionsMenu(Menu menu) {
+    	 System.out.println("FileManagerTabs : OnCreateOptionsMenu");
          Collect.getInstance().getActivityLogger().logAction(this, "onCreateOptionsMenu", "show");
          getSupportMenuInflater().inflate(R.menu.menu_form_manager, menu);
          return true;

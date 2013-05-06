@@ -20,6 +20,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.R;
 
 import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 import android.app.AlertDialog;
@@ -139,8 +140,8 @@ public class InstanceChooserList extends SherlockListActivity {
 		Collect.getInstance().getActivityLogger().logOnStop(this); 
     	super.onStop();
     }
-    
-    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
+
+	private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
 
         mAlertDialog = new AlertDialog.Builder(this).create();

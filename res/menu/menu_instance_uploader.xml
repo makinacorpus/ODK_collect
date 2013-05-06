@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-	<item android:id="@+id/select_all"
+	<item android:id="@+id/select_all_instance"
           android:icon="@drawable/ic_menu_selectall_holo_dark"
           android:title="@string/toggle_selected"
           android:showAsAction="always|withText" />
-    <item android:id="@+id/upload"
+    <item android:id="@+id/upload_instance"
           android:icon="@android:drawable/ic_menu_upload"
           android:title="@string/send_data"
           android:showAsAction="always|withText"/>

@@ -42,361 +42,401 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class FormHierarchyActivity extends SherlockListActivity {
 
-    private static final String t = "FormHierarchyActivity";
+	private static final String t = "FormHierarchyActivity";
 
-    private static final int CHILD = 1;
-    private static final int EXPANDED = 2;
-    private static final int COLLAPSED = 3;
-    private static final int QUESTION = 4;
+	private static final int CHILD = 1;
+	private static final int EXPANDED = 2;
+	private static final int COLLAPSED = 3;
+	private static final int QUESTION = 4;
 
-    private static final String mIndent = "     ";
+	private static final String mIndent = "     ";
 
-    private Button jumpPreviousButton;
+	private Button jumpPreviousButton;
 
-    List<HierarchyElement> formList;
-    TextView mPath;
+	List<HierarchyElement> formList;
+	TextView mPath;
 
-    FormIndex mStartIndex;
+	FormIndex mStartIndex;
 
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.hierarchy_layout);
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.hierarchy_layout);
+		FormController formController = Collect.getInstance()
+				.getFormController();
 
-        FormController formController = Collect.getInstance().getFormController();
-        
-        // We use a static FormEntryController to make jumping faster.
-        mStartIndex = formController.getFormIndex();
+		// We use a static FormEntryController to make jumping faster.
+		mStartIndex = formController.getFormIndex();
 
-        setTitle(formController.getFormTitle());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		setTitle(formController.getFormTitle());
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mPath = (TextView) findViewById(R.id.pathtext);
+		mPath = (TextView) findViewById(R.id.pathtext);
 
-        jumpPreviousButton = (Button) findViewById(R.id.jumpPreviousButton);
-        jumpPreviousButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "goUpLevelButton", "click");
-                goUpLevel();
-            }
-        });
+		jumpPreviousButton = (Button) findViewById(R.id.jumpPreviousButton);
+		jumpPreviousButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Collect.getInstance().getActivityLogger()
+						.logInstanceAction(this, "goUpLevelButton", "click");
+				goUpLevel();
+			}
+		});
 
-        Button jumpBeginningButton = (Button) findViewById(R.id.jumpBeginningButton);
-        jumpBeginningButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToBeginning", "click");
-                Collect.getInstance().getFormController().jumpToIndex(FormIndex
-                        .createBeginningOfFormIndex());
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
+		Button jumpBeginningButton = (Button) findViewById(R.id.jumpBeginningButton);
+		jumpBeginningButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Collect.getInstance().getActivityLogger()
+						.logInstanceAction(this, "jumpToBeginning", "click");
+				Collect.getInstance().getFormController()
+						.jumpToIndex(FormIndex.createBeginningOfFormIndex());
+				setResult(RESULT_OK);
+				finish();
+			}
+		});
 
-        Button jumpEndButton = (Button) findViewById(R.id.jumpEndButton);
-        jumpEndButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "jumpToEnd", "click");
-                Collect.getInstance().getFormController().jumpToIndex(FormIndex.createEndOfFormIndex());
-                setResult(RESULT_OK);
-                finish();
-            }
-        });
+		Button jumpEndButton = (Button) findViewById(R.id.jumpEndButton);
+		jumpEndButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Collect.getInstance().getActivityLogger()
+						.logInstanceAction(this, "jumpToEnd", "click");
+				Collect.getInstance().getFormController()
+						.jumpToIndex(FormIndex.createEndOfFormIndex());
+				setResult(RESULT_OK);
+				finish();
+			}
+		});
 
-        // kinda slow, but works.
-        // this scrolls to the last question the user was looking at
-        getListView().post(new Runnable() {
-            @Override
-            public void run() {
-                int position = 0;
-                for (int i = 0; i < getListAdapter().getCount(); i++) {
-                    HierarchyElement he = (HierarchyElement) getListAdapter().getItem(i);
-                    if (mStartIndex.equals(he.getFormIndex())) {
-                        position = i;
-                        break;
-                    }
-                }
-                getListView().setSelection(position);
-            }
-        });
-        refreshView();
-    }
-	
-    @Override
-    protected void onStart() {
-    	super.onStart();
-		Collect.getInstance().getActivityLogger().logOnStart(this); 
-    }
-    
-    @Override
-    protected void onStop() {
-		Collect.getInstance().getActivityLogger().logOnStop(this); 
-    	super.onStop();
-    }
-    
-    
+		// kinda slow, but works.
+		// this scrolls to the last question the user was looking at
+		getListView().post(new Runnable() {
+			@Override
+			public void run() {
+				int position = 0;
+				for (int i = 0; i < getListAdapter().getCount(); i++) {
+					HierarchyElement he = (HierarchyElement) getListAdapter()
+							.getItem(i);
+					if (mStartIndex.equals(he.getFormIndex())) {
+						position = i;
+						break;
+					}
+				}
+				getListView().setSelection(position);
+			}
+		});
+		refreshView();
+	}
 
-    @Override
+	@Override
+	protected void onStart() {
+		super.onStart();
+		Collect.getInstance().getActivityLogger().logOnStart(this);
+	}
+
+	@Override
+	protected void onStop() {
+		Collect.getInstance().getActivityLogger().logOnStop(this);
+		super.onStop();
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-    	switch (item.getItemId()) {
-			case android.R.id.home:
-				Collect.getInstance().getActivityLogger().logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP", mStartIndex);
-                Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
-				return true;
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			Collect.getInstance()
+					.getActivityLogger()
+					.logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP",
+							mStartIndex);
+			Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
 	private void goUpLevel() {
-    	Collect.getInstance().getFormController().stepToOuterScreenEvent();
+		Collect.getInstance().getFormController().stepToOuterScreenEvent();
 
-        refreshView();
-    }
+		refreshView();
+	}
 
+	private String getCurrentPath() {
+		FormController formController = Collect.getInstance()
+				.getFormController();
+		FormIndex index = formController.getFormIndex();
+		// move to enclosing group...
+		index = formController.stepIndexOut(index);
 
-    private String getCurrentPath() {
-    	FormController formController = Collect.getInstance().getFormController();
-        FormIndex index = formController.getFormIndex();
-        // move to enclosing group...
-        index = formController.stepIndexOut(index);
+		String path = "";
+		while (index != null) {
 
-        String path = "";
-        while (index != null) {
+			path = formController.getCaptionPrompt(index).getLongText()
+					+ " ("
+					+ (formController.getCaptionPrompt(index).getMultiplicity() + 1)
+					+ ") > " + path;
 
-            path =
-            		formController.getCaptionPrompt(index).getLongText()
-                        + " ("
-                        + (formController.getCaptionPrompt(index)
-                                .getMultiplicity() + 1) + ") > " + path;
+			index = formController.stepIndexOut(index);
+		}
+		// return path?
+		return path.substring(0, path.length() - 2);
+	}
 
-            index = formController.stepIndexOut(index);
-        }
-        // return path?
-        return path.substring(0, path.length() - 2);
-    }
+	public void refreshView() {
+		FormController formController = Collect.getInstance()
+				.getFormController();
+		// Record the current index so we can return to the same place if the
+		// user hits 'back'.
+		FormIndex currentIndex = formController.getFormIndex();
 
+		// If we're not at the first level, we're inside a repeated group so we
+		// want to only display
+		// everything enclosed within that group.
+		String enclosingGroupRef = "";
+		formList = new ArrayList<HierarchyElement>();
 
-    public void refreshView() {
-    	FormController formController = Collect.getInstance().getFormController();
-        // Record the current index so we can return to the same place if the user hits 'back'.
-        FormIndex currentIndex = formController.getFormIndex();
+		// If we're currently at a repeat node, record the name of the node and
+		// step to the next
+		// node to display.
+		if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
+			enclosingGroupRef = formController.getFormIndex().getReference()
+					.toString(false);
+			formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+		} else {
+			FormIndex startTest = formController.stepIndexOut(currentIndex);
+			// If we have a 'group' tag, we want to step back until we hit a
+			// repeat or the
+			// beginning.
+			while (startTest != null
+					&& formController.getEvent(startTest) == FormEntryController.EVENT_GROUP) {
+				startTest = formController.stepIndexOut(startTest);
+			}
+			if (startTest == null) {
+				// check to see if the question is at the first level of the
+				// hierarchy. If it is,
+				// display the root level from the beginning.
+				formController.jumpToIndex(FormIndex
+						.createBeginningOfFormIndex());
+			} else {
+				// otherwise we're at a repeated group
+				formController.jumpToIndex(startTest);
+			}
 
-        // If we're not at the first level, we're inside a repeated group so we want to only display
-        // everything enclosed within that group.
-        String enclosingGroupRef = "";
-        formList = new ArrayList<HierarchyElement>();
+			// now test again for repeat. This should be true at this point or
+			// we're at the
+			// beginning
+			if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
+				enclosingGroupRef = formController.getFormIndex()
+						.getReference().toString(false);
+				formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+			}
+		}
 
-        // If we're currently at a repeat node, record the name of the node and step to the next
-        // node to display.
-        if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
-            enclosingGroupRef =
-            		formController.getFormIndex().getReference().toString(false);
-            formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-        } else {
-            FormIndex startTest = formController.stepIndexOut(currentIndex);
-            // If we have a 'group' tag, we want to step back until we hit a repeat or the
-            // beginning.
-            while (startTest != null
-                    && formController.getEvent(startTest) == FormEntryController.EVENT_GROUP) {
-                startTest = formController.stepIndexOut(startTest);
-            }
-            if (startTest == null) {
-                // check to see if the question is at the first level of the hierarchy. If it is,
-                // display the root level from the beginning.
-            	formController.jumpToIndex(FormIndex
-                        .createBeginningOfFormIndex());
-            } else {
-                // otherwise we're at a repeated group
-            	formController.jumpToIndex(startTest);
-            }
+		int event = formController.getEvent();
+		if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+			// The beginning of form has no valid prompt to display.
+			formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+			mPath.setVisibility(View.GONE);
+			jumpPreviousButton.setEnabled(false);
+		} else {
+			mPath.setVisibility(View.VISIBLE);
+			mPath.setText(getCurrentPath());
+			jumpPreviousButton.setEnabled(true);
+		}
 
-            // now test again for repeat. This should be true at this point or we're at the
-            // beginning
-            if (formController.getEvent() == FormEntryController.EVENT_REPEAT) {
-                enclosingGroupRef =
-                		formController.getFormIndex().getReference().toString(false);
-                formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-            }
-        }
+		// Refresh the current event in case we did step forward.
+		event = formController.getEvent();
 
-        int event = formController.getEvent();
-        if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-            // The beginning of form has no valid prompt to display.
-        	formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-            mPath.setVisibility(View.GONE);
-            jumpPreviousButton.setEnabled(false);
-        } else {
-            mPath.setVisibility(View.VISIBLE);
-            mPath.setText(getCurrentPath());
-            jumpPreviousButton.setEnabled(true);
-        }
+		// There may be repeating Groups at this level of the hierarchy, we use
+		// this variable to
+		// keep track of them.
+		String repeatedGroupRef = "";
 
-        // Refresh the current event in case we did step forward.
-        event = formController.getEvent();
+		event_search: while (event != FormEntryController.EVENT_END_OF_FORM) {
+			switch (event) {
+			case FormEntryController.EVENT_QUESTION:
+				if (!repeatedGroupRef.equalsIgnoreCase("")) {
+					// We're in a repeating group, so skip this question and
+					// move to the next
+					// index.
+					event = formController
+							.stepToNextEvent(FormController.STEP_INTO_GROUP);
+					continue;
+				}
 
-        // There may be repeating Groups at this level of the hierarchy, we use this variable to
-        // keep track of them.
-        String repeatedGroupRef = "";
+				FormEntryPrompt fp = formController.getQuestionPrompt();
+				String label = fp.getLongText();
+				if (!fp.isReadOnly() || (label != null && label.length() > 0)) {
+					// show the question if it is an editable field.
+					// or if it is read-only and the label is not blank.
+					formList.add(new HierarchyElement(fp.getLongText(), fp
+							.getAnswerText(), null,
+							R.drawable.abs__ab_bottom_solid_dark_holo,
+							QUESTION, fp.getIndex()));
+				}
+				break;
+			case FormEntryController.EVENT_GROUP:
+				// ignore group events
+				break;
+			case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+				if (enclosingGroupRef.compareTo(formController.getFormIndex()
+						.getReference().toString(false)) == 0) {
+					// We were displaying a set of questions inside of a
+					// repeated group. This is
+					// the end of that group.
+					break event_search;
+				}
 
-        event_search: while (event != FormEntryController.EVENT_END_OF_FORM) {
-            switch (event) {
-                case FormEntryController.EVENT_QUESTION:
-                    if (!repeatedGroupRef.equalsIgnoreCase("")) {
-                        // We're in a repeating group, so skip this question and move to the next
-                        // index.
-                        event =
-                        		formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                        continue;
-                    }
+				if (repeatedGroupRef.compareTo(formController.getFormIndex()
+						.getReference().toString(false)) != 0) {
+					// We're in a repeating group, so skip this repeat prompt
+					// and move to the
+					// next event.
+					event = formController
+							.stepToNextEvent(FormController.STEP_INTO_GROUP);
+					continue;
+				}
 
-                    FormEntryPrompt fp = formController.getQuestionPrompt();
-                    String label = fp.getLongText();
-                    if ( !fp.isReadOnly() || (label != null && label.length() > 0) ) {
-                    	// show the question if it is an editable field.
-                    	// or if it is read-only and the label is not blank.
-	                    formList.add(new HierarchyElement(fp.getLongText(), fp.getAnswerText(), null,
-	                            R.drawable.abs__ab_bottom_solid_dark_holo, QUESTION, fp.getIndex()));
-                    }
-                    break;
-                case FormEntryController.EVENT_GROUP:
-                    // ignore group events
-                    break;
-                case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
-                    if (enclosingGroupRef.compareTo(formController
-                            .getFormIndex().getReference().toString(false)) == 0) {
-                        // We were displaying a set of questions inside of a repeated group. This is
-                        // the end of that group.
-                        break event_search;
-                    }
+				if (repeatedGroupRef.compareTo(formController.getFormIndex()
+						.getReference().toString(false)) == 0) {
+					// This is the end of the current repeating group, so we
+					// reset the
+					// repeatedGroupName variable
+					repeatedGroupRef = "";
+				}
+				break;
+			case FormEntryController.EVENT_REPEAT:
+				FormEntryCaption fc = formController.getCaptionPrompt();
+				if (enclosingGroupRef.compareTo(formController.getFormIndex()
+						.getReference().toString(false)) == 0) {
+					// We were displaying a set of questions inside a repeated
+					// group. This is
+					// the end of that group.
+					break event_search;
+				}
+				if (repeatedGroupRef.equalsIgnoreCase("")
+						&& fc.getMultiplicity() == 0) {
+					// This is the start of a repeating group. We only want to
+					// display
+					// "Group #", so we mark this as the beginning and skip all
+					// of its children
+					HierarchyElement group = new HierarchyElement(
+							fc.getLongText(), null, getResources().getDrawable(
+									R.drawable.expander_ic_minimized),
+							Color.BLACK, COLLAPSED, fc.getIndex());
+					repeatedGroupRef = formController.getFormIndex()
+							.getReference().toString(false);
+					formList.add(group);
+				}
 
-                    if (repeatedGroupRef.compareTo(formController.getFormIndex()
-                            .getReference().toString(false)) != 0) {
-                        // We're in a repeating group, so skip this repeat prompt and move to the
-                        // next event.
-                        event =
-                        		formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-                        continue;
-                    }
+				if (repeatedGroupRef.compareTo(formController.getFormIndex()
+						.getReference().toString(false)) == 0) {
+					// Add this group name to the drop down list for this
+					// repeating group.
+					HierarchyElement h = formList.get(formList.size() - 1);
+					h.addChild(new HierarchyElement(mIndent + fc.getLongText()
+							+ " " + (fc.getMultiplicity() + 1), null, null,
+							Color.BLACK, CHILD, fc.getIndex()));
+				}
+				break;
+			}
+			event = formController
+					.stepToNextEvent(FormController.STEP_INTO_GROUP);
+		}
 
-                    if (repeatedGroupRef.compareTo(formController.getFormIndex()
-                            .getReference().toString(false)) == 0) {
-                        // This is the end of the current repeating group, so we reset the
-                        // repeatedGroupName variable
-                        repeatedGroupRef = "";
-                    }
-                    break;
-                case FormEntryController.EVENT_REPEAT:
-                    FormEntryCaption fc = formController.getCaptionPrompt();
-                    if (enclosingGroupRef.compareTo(formController
-                            .getFormIndex().getReference().toString(false)) == 0) {
-                        // We were displaying a set of questions inside a repeated group. This is
-                        // the end of that group.
-                        break event_search;
-                    }
-                    if (repeatedGroupRef.equalsIgnoreCase("") && fc.getMultiplicity() == 0) {
-                        // This is the start of a repeating group. We only want to display
-                        // "Group #", so we mark this as the beginning and skip all of its children
-                        HierarchyElement group =
-                            new HierarchyElement(fc.getLongText(), null, getResources()
-                                    .getDrawable(R.drawable.expander_ic_minimized), Color.WHITE,
-                                    COLLAPSED, fc.getIndex());
-                        repeatedGroupRef =
-                        		formController.getFormIndex().getReference()
-                                    .toString(false);
-                        formList.add(group);
-                    }
+		HierarchyListAdapter itla = new HierarchyListAdapter(this);
+		itla.setListItems(formList);
+		setListAdapter(itla);
 
-                    if (repeatedGroupRef.compareTo(formController.getFormIndex()
-                            .getReference().toString(false)) == 0) {
-                        // Add this group name to the drop down list for this repeating group.
-                        HierarchyElement h = formList.get(formList.size() - 1);
-                        h.addChild(new HierarchyElement(mIndent + fc.getLongText() + " "
-                                + (fc.getMultiplicity() + 1), null, null, Color.WHITE, CHILD, fc
-                                .getIndex()));
-                    }
-                    break;
-            }
-            event =
-            		formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
-        }
+		// set the controller back to the current index in case the user hits
+		// 'back'
+		formController.jumpToIndex(currentIndex);
+	}
 
-        HierarchyListAdapter itla = new HierarchyListAdapter(this);
-        itla.setListItems(formList);
-        setListAdapter(itla);
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		HierarchyElement h = (HierarchyElement) l.getItemAtPosition(position);
+		FormIndex index = h.getFormIndex();
+		if (index == null) {
+			goUpLevel();
+			return;
+		}
 
-        // set the controller back to the current index in case the user hits 'back'
-        formController.jumpToIndex(currentIndex);
-    }
+		switch (h.getType()) {
+		case EXPANDED:
+			Collect.getInstance()
+					.getActivityLogger()
+					.logInstanceAction(this, "onListItemClick", "COLLAPSED",
+							h.getFormIndex());
+			h.setType(COLLAPSED);
+			ArrayList<HierarchyElement> children = h.getChildren();
+			for (int i = 0; i < children.size(); i++) {
+				formList.remove(position + 1);
+			}
+			h.setIcon(getResources().getDrawable(
+					R.drawable.expander_ic_minimized));
+			h.setColor(Color.BLACK);
+			break;
+		case COLLAPSED:
+			Collect.getInstance()
+					.getActivityLogger()
+					.logInstanceAction(this, "onListItemClick", "EXPANDED",
+							h.getFormIndex());
+			h.setType(EXPANDED);
+			ArrayList<HierarchyElement> children1 = h.getChildren();
+			for (int i = 0; i < children1.size(); i++) {
+				Log.i(t, "adding child: " + children1.get(i).getFormIndex());
+				formList.add(position + 1 + i, children1.get(i));
 
-    
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        HierarchyElement h = (HierarchyElement) l.getItemAtPosition(position);
-        FormIndex index = h.getFormIndex();
-        if (index == null) {
-            goUpLevel();
-            return;
-        }
+			}
+			h.setIcon(getResources().getDrawable(
+					R.drawable.expander_ic_maximized));
+			h.setColor(Color.BLACK);
+			break;
+		case QUESTION:
+			Collect.getInstance()
+					.getActivityLogger()
+					.logInstanceAction(this, "onListItemClick",
+							"QUESTION-JUMP", index);
+			Collect.getInstance().getFormController().jumpToIndex(index);
+			if (Collect.getInstance().getFormController().indexIsInFieldList()) {
+				Collect.getInstance().getFormController()
+						.stepToPreviousScreenEvent();
+			}
+			setResult(RESULT_OK);
+			finish();
+			return;
+		case CHILD:
+			Collect.getInstance()
+					.getActivityLogger()
+					.logInstanceAction(this, "onListItemClick", "REPEAT-JUMP",
+							h.getFormIndex());
+			Collect.getInstance().getFormController()
+					.jumpToIndex(h.getFormIndex());
+			setResult(RESULT_OK);
+			refreshView();
+			return;
+		}
 
-        switch (h.getType()) {
-            case EXPANDED:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick", "COLLAPSED", h.getFormIndex());
-                h.setType(COLLAPSED);
-                ArrayList<HierarchyElement> children = h.getChildren();
-                for (int i = 0; i < children.size(); i++) {
-                    formList.remove(position + 1);
-                }
-                h.setIcon(getResources().getDrawable(R.drawable.expander_ic_minimized));
-                h.setColor(Color.WHITE);
-                break;
-            case COLLAPSED:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick", "EXPANDED", h.getFormIndex());
-                h.setType(EXPANDED);
-                ArrayList<HierarchyElement> children1 = h.getChildren();
-                for (int i = 0; i < children1.size(); i++) {
-                    Log.i(t, "adding child: " + children1.get(i).getFormIndex());
-                    formList.add(position + 1 + i, children1.get(i));
+		// Should only get here if we've expanded or collapsed a group
+		HierarchyListAdapter itla = new HierarchyListAdapter(this);
+		itla.setListItems(formList);
+		setListAdapter(itla);
+		getListView().setSelection(position);
+	}
 
-                }
-                h.setIcon(getResources().getDrawable(R.drawable.expander_ic_maximized));
-                h.setColor(Color.WHITE);
-                break;
-            case QUESTION:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick", "QUESTION-JUMP", index);
-                Collect.getInstance().getFormController().jumpToIndex(index);
-            	if ( Collect.getInstance().getFormController().indexIsInFieldList() ) {
-            		Collect.getInstance().getFormController().stepToPreviousScreenEvent();
-            	}
-                setResult(RESULT_OK);
-                finish();
-                return;
-            case CHILD:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onListItemClick", "REPEAT-JUMP", h.getFormIndex());
-                Collect.getInstance().getFormController().jumpToIndex(h.getFormIndex());
-                setResult(RESULT_OK);
-                refreshView();
-                return;
-        }
-
-        // Should only get here if we've expanded or collapsed a group
-        HierarchyListAdapter itla = new HierarchyListAdapter(this);
-        itla.setListItems(formList);
-        setListAdapter(itla);
-        getListView().setSelection(position);
-    }
-
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP", mStartIndex);
-                Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_BACK:
+			Collect.getInstance()
+					.getActivityLogger()
+					.logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP",
+							mStartIndex);
+			Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
 }

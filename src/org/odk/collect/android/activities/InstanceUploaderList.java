@@ -191,7 +191,7 @@ public class InstanceUploaderList extends SherlockListActivity implements
 			showSentAndUnsentChoices();
 			
 			return true;
-		case R.id.upload:
+		case R.id.upload_instance:
 			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
@@ -226,7 +226,7 @@ public class InstanceUploaderList extends SherlockListActivity implements
 				}
 			}
 			return true;
-		case R.id.select_all:
+		case R.id.select_all_instance:
 			// toggle selections of items to all or none
 			ListView ls = getListView();
 			mToggled = !mToggled;

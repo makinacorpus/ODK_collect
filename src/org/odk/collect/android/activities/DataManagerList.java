@@ -143,7 +143,6 @@ public class DataManagerList extends SherlockListFragment implements
 	protected void selectAll () {
 		boolean checkAll = false;
         // if everything is checked, uncheck
-		//TODO selection not working
 		
 		Log.i(t, "Selected : "+mSelected.size()+", Instances count : "+mInstances.getCount());
 
