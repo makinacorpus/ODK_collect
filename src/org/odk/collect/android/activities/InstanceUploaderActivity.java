@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -29,7 +30,6 @@ import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 import org.odk.collect.android.utilities.WebUtils;
-import org.odk.collect.android.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -48,6 +48,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.actionbarsherlock.view.MenuItem;
 
 /**
  * Activity to upload completed forms.
@@ -93,7 +95,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 
         mUploadedInstances = new HashMap<String, String>();
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.send_data));
+        setTitle(getString(R.string.send_data));
 
         // get any simple saved state...
         if (savedInstanceState != null) {
@@ -210,7 +212,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         super.onDestroy();
     }
 
-    @Override
+	@Override
     public void uploadingComplete(HashMap<String, String> result) {
         Log.i(t, "uploadingComplete: Processing results (" + result.size() + ") from upload of " + mInstancesToSend.length + " instances!");
 

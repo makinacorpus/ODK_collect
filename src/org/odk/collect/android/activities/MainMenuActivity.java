@@ -125,8 +125,7 @@ public class MainMenuActivity extends SherlockActivity {
 					.getVersionedAppName());
 		}
 
-		setTitle(getString(R.string.app_name) + " > "
-				+ getString(R.string.main_menu));
+		setTitle(getString(R.string.app_name));
 		
 		File f = new File(Collect.ODK_ROOT + "/collect.settings");
 		if (f.exists()) {

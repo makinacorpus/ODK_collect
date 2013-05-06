@@ -24,18 +24,7 @@ the License.
 		android:orientation="horizontal"
 		android:layout_alignParentBottom="true"
 		android:id="@+id/buttonholder">
-		<!-- <Button
-			android:id="@+id/toggle_button"
-			android:text="@string/toggle_selected"
-            android:layout_weight="1" 
-			style="@style/Collect.Button2"
-			/>
-		<Button
-			android:id="@+id/upload_button"
-			android:text="@string/send_selected_data"
-            android:layout_weight="1"
-            style="@style/Collect.Button2"
-            /> -->
+		
 	</LinearLayout>
 	<ListView
 		android:id="@android:id/list"

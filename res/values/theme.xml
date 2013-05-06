@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-	<style name="Collect" parent="Theme.Sherlock.Light">
+	<style name="Collect" parent="Theme.Sherlock">
 	    <item name="android:scrollbarThumbHorizontal">@drawable/thumb</item>
 	    <item name="android:scrollbarThumbVertical">@drawable/thumb</item>
 	    <item name="android:scrollbarSize">1dp</item>
@@ -33,6 +33,5 @@
 	    <item name="android:layout_width">fill_parent</item>
 	    <item name="android:layout_height">fill_parent</item>
 		<item name="android:divider">@drawable/h_divider</item>
-		
 	</style>
 </resources>

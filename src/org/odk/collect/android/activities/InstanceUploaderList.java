@@ -101,7 +101,7 @@ public class InstanceUploaderList extends SherlockListActivity implements
 		setContentView(R.layout.instance_uploader_list);
 		
 		ActionBar bar = getSupportActionBar();
-		bar.setDisplayShowHomeEnabled(true);
+		bar.setDisplayHomeAsUpEnabled(true);
 
 		Cursor c = mShowUnsent ? getUnsentCursor() : getAllCursor();
 
@@ -118,8 +118,7 @@ public class InstanceUploaderList extends SherlockListActivity implements
 		getListView().setItemsCanFocus(false);
 
 		// set title
-		setTitle(getString(R.string.app_name) + " > "
-				+ getString(R.string.send_data));
+		setTitle(getString(R.string.send_data));
 
 		// if current activity is being reinitialized due to changing
 		// orientation restore all check
@@ -179,7 +178,7 @@ public class InstanceUploaderList extends SherlockListActivity implements
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case MENU_PREFERENCES:
 			Collect.getInstance().getActivityLogger()
@@ -245,8 +244,18 @@ public class InstanceUploaderList extends SherlockListActivity implements
 					mSelected.add(ls.getItemIdAtPosition(pos));
 			}
 			return true;
-		}
-		return super.onMenuItemSelected(featureId, item);
+		case android.R.id.home:
+	         // This is called when the Home (Up) button is pressed
+	         // in the Action Bar.
+	         Intent parentActivityIntent = new Intent(this, MainMenuActivity.class);
+	         parentActivityIntent.addFlags(
+	                 Intent.FLAG_ACTIVITY_CLEAR_TOP |
+	                 Intent.FLAG_ACTIVITY_NEW_TASK);
+	         startActivity(parentActivityIntent);
+	         finish();
+	         return true;
+        }
+        return super.onOptionsItemSelected(item);
 	}
 
 	private void createPreferencesMenu() {

@@ -21,13 +21,12 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
-import org.odk.collect.android.R;
 
-import android.app.ListActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,7 +37,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class FormHierarchyActivity extends ListActivity {
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.MenuItem;
+
+public class FormHierarchyActivity extends SherlockListActivity {
 
     private static final String t = "FormHierarchyActivity";
 
@@ -67,8 +69,8 @@ public class FormHierarchyActivity extends ListActivity {
         // We use a static FormEntryController to make jumping faster.
         mStartIndex = formController.getFormIndex();
 
-        setTitle(getString(R.string.app_name) + " > "
-                + formController.getFormTitle());
+        setTitle(formController.getFormTitle());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mPath = (TextView) findViewById(R.id.pathtext);
 
@@ -120,7 +122,6 @@ public class FormHierarchyActivity extends ListActivity {
                 getListView().setSelection(position);
             }
         });
-
         refreshView();
     }
 	
@@ -135,8 +136,21 @@ public class FormHierarchyActivity extends ListActivity {
 		Collect.getInstance().getActivityLogger().logOnStop(this); 
     	super.onStop();
     }
+    
+    
 
-    private void goUpLevel() {
+    @Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+    	switch (item.getItemId()) {
+			case android.R.id.home:
+				Collect.getInstance().getActivityLogger().logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP", mStartIndex);
+                Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	private void goUpLevel() {
     	Collect.getInstance().getFormController().stepToOuterScreenEvent();
 
         refreshView();
@@ -244,7 +258,7 @@ public class FormHierarchyActivity extends ListActivity {
                     	// show the question if it is an editable field.
                     	// or if it is read-only and the label is not blank.
 	                    formList.add(new HierarchyElement(fp.getLongText(), fp.getAnswerText(), null,
-	                            Color.WHITE, QUESTION, fp.getIndex()));
+	                            R.drawable.abs__ab_bottom_solid_dark_holo, QUESTION, fp.getIndex()));
                     }
                     break;
                 case FormEntryController.EVENT_GROUP:

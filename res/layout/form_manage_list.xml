@@ -26,18 +26,6 @@ the License.
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
-        
-        <!--  <Button
-            android:id="@+id/toggle_button"
-            android:layout_weight="1"
-            android:text="@string/toggle_selected"
-            style="@style/Collect.Button2"/>
-        
-        <Button
-            android:id="@+id/delete_button"
-            android:layout_weight="1"
-            android:text="@string/delete_file"
-            style="@style/Collect.Button2"/> -->
 
     </LinearLayout>
     
@@ -46,7 +34,7 @@ the License.
             android:id="@+id/status_text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="#DDDDDD"
+            android:background="@drawable/text_info"
             android:padding="5dp"
             android:paddingTop="0dp"
             android:text="@string/form_scan_starting"

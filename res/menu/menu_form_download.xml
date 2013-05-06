@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/refresh_forms"
+          android:icon="@drawable/ic_menu_refresh"
+          android:title="@string/refresh"
+          android:showAsAction="always|withText" />
+    <item android:id="@+id/select_all"
+          android:icon="@drawable/ic_menu_selectall_holo_dark"
+          android:title="@string/toggle_selected"
+          android:showAsAction="always|withText" />
+    <item android:id="@+id/forms_get"
+          android:icon="@drawable/stat_sys_download_anim0_dark"
+          android:title="@string/download"
+          android:showAsAction="always|withText"/>
+</menu>

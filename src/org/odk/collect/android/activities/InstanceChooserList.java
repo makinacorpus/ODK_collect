@@ -19,8 +19,10 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.R;
 
+import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.MenuItem;
+
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,7 +41,7 @@ import android.widget.TextView;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceChooserList extends ListActivity {
+public class InstanceChooserList extends SherlockListActivity {
 
     private static final boolean EXIT = true;
     private static final boolean DO_NOT_EXIT = false;
@@ -58,9 +60,10 @@ public class InstanceChooserList extends ListActivity {
         }
         
         setContentView(R.layout.chooser_list_layout);
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.review_data));
+        setTitle(getString(R.string.review_data));
         TextView tv = (TextView) findViewById(R.id.status_text);
         tv.setVisibility(View.GONE);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
         String selection = InstanceColumns.STATUS + " != ?";
         String[] selectionArgs = {InstanceProviderAPI.STATUS_SUBMITTED};
@@ -161,6 +164,26 @@ public class InstanceChooserList extends ListActivity {
         mAlertDialog.setButton(getString(R.string.ok), errorListener);
         mAlertDialog.show();
     }
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+		        // This is called when the Home (Up) button is pressed
+		        // in the Action Bar.
+		        Intent parentActivityIntent = new Intent(this, MainMenuActivity.class);
+		        parentActivityIntent.addFlags(
+		                Intent.FLAG_ACTIVITY_CLEAR_TOP |
+		                Intent.FLAG_ACTIVITY_NEW_TASK);
+		        startActivity(parentActivityIntent);
+		        finish();
+		        return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+    
+    
 
 
 }

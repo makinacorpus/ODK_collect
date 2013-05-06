@@ -218,8 +218,8 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		}
 
 		setContentView(R.layout.form_entry);
-		setTitle(getString(R.string.app_name) + " > "
-				+ getString(R.string.loading_form));
+		setTitle(getString(R.string.loading_form));
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mBeenSwiped = false;
 		mAlertDialog = null;
@@ -791,6 +791,13 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 							"MENU_PREFERENCES");
 			Intent pref = new Intent(this, PreferencesActivity.class);
 			startActivity(pref);
+			return true;
+		case android.R.id.home:
+	         // This is called when the Home (Up) button is pressed
+			// in the Action Bar.
+			Collect.getInstance().getActivityLogger()
+					.logInstanceAction(this, "onKeyDown.KEYCODE_BACK", "quit");
+			createQuitDialog();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -1565,7 +1572,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 	/**
 	 * Saves data and writes it to disk. If exit is set, program will exit after
 	 * save completes. Complete indicates whether the user has marked the
-	 * isntancs as complete. If updatedSaveName is non-null, the instances
+	 * instances as complete. If updatedSaveName is non-null, the instances
 	 * content provider is updated with the new name
 	 */
 	private boolean saveDataToDisk(boolean exit, boolean complete,

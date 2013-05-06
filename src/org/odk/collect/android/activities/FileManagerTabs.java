@@ -20,6 +20,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
@@ -47,7 +48,8 @@ public class FileManagerTabs extends SherlockFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTitle(getString(R.string.app_name) + " > " + getString(R.string.manage_files));
+        setTitle(getString(R.string.manage_files));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setContentView(R.layout.file_manager_tabs_layout);
         
@@ -73,7 +75,7 @@ public class FileManagerTabs extends SherlockFragmentActivity {
      }
      
      @Override
-     public boolean onMenuItemSelected(int featureId, MenuItem item) {
+     public boolean onOptionsItemSelected(MenuItem item) {
          switch (item.getItemId()) {
          case R.id.select_all:
         	 Log.i("FileManagertabs", "Current tab : "+mTabHost.getCurrentTab());
@@ -90,8 +92,18 @@ public class FileManagerTabs extends SherlockFragmentActivity {
         		 ((FormManagerList) getSupportFragmentManager().findFragmentByTag("forms")).delete();
         	 }
         	 return true;
+	     case android.R.id.home:
+	         // This is called when the Home (Up) button is pressed
+	         // in the Action Bar.
+	         Intent parentActivityIntent = new Intent(this, MainMenuActivity.class);
+	         parentActivityIntent.addFlags(
+	                 Intent.FLAG_ACTIVITY_CLEAR_TOP |
+	                 Intent.FLAG_ACTIVITY_NEW_TASK);
+	         startActivity(parentActivityIntent);
+	         finish();
+	         return true;
          }
-         return super.onMenuItemSelected(featureId, item);
+         return super.onOptionsItemSelected(item);
      }
 
     protected void onSaveInstanceState(Bundle outState) {
