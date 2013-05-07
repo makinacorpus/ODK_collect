@@ -57,6 +57,15 @@
 				android:layout_height="fill_parent"
 				android:layout_weight="1"
 				android:visibility="gone" />
+			<Button
+				android:id="@+id/refresh_location"
+				android:drawableRight="@drawable/ic_menu_refresh"
+				android:padding="15dp"
+				android:layout_margin="5dp"
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:layout_weight="1"
+				android:visibility="gone" />
 		</LinearLayout>
 </FrameLayout>
 <!-- android:text="@string/cancel"
