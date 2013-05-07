@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:drawable="@color/abs__background_holo_dark" />
+    <item>
+  		<bitmap 
+  		    android:src="@drawable/odk_base_4"
+  		    android:gravity="bottom"
+          	 />
+	</item>
+</layer-list>

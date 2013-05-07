@@ -61,6 +61,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
     private Button mAcceptLocation;
     private Button mCancelLocation;
     private LatLng mLatLng;
+    private boolean returnDrag = false;
 
     private boolean mCaptureLocation = true;
     private Button mShowLocation;
@@ -79,7 +80,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         if ( savedInstanceState != null ) {
         	mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
         }
-
+        
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.geopoint_layout);
@@ -102,7 +103,9 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                 mMarker = mMap.addMarker(mMarkerOption);
                 mMarker.setDraggable(true);
                 mMap.setOnMarkerDragListener(this);
+                returnDrag = true;
             	mCaptureLocation = false;
+            	mAcceptLocation.setClickable(false);
             	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
             }
         	
@@ -168,19 +171,25 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
            			   " lastKnownLocation(Network) null location");
         	}
         }
+        
+        mAcceptLocation = (Button) findViewById(R.id.accept_location);
+        mAcceptLocation.setOnClickListener(new OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation", "OK");
+                if (returnDrag = true){
+                	returnDragLocation();
+                }else{
+                	returnLocation();
+                }
+            }
+        });
+        
         if (mCaptureLocation) {
         	// Case where we show the current location according to the provider
             mLocationStatus = (TextView) findViewById(R.id.location_status);
-            mAcceptLocation = (Button) findViewById(R.id.accept_location);
-            mAcceptLocation.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation", "OK");
-                    returnLocation();
-                }
-            });
+            
 
         } else {
         	// Case where we only show the saved location
@@ -283,7 +292,8 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 	                mMap.animateCamera(CameraUpdateFactory.newLatLng(mLatLng));
 
 	                if (mLocation.getAccuracy() <= mLocationAccuracy) {
-	                    returnLocation();
+	                    mCaptureLocation = false;
+	                    mMarker.setDraggable(true);
 	                }
             	}
             	mLatLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
@@ -325,16 +335,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 	public void onMarkerDragEnd(Marker marker) {
 		Log.i("GeoPointMapActivity", "DragEnd");
 		mLatLng = marker.getPosition();
-		//mCancelLocation.setVisibility(View.GONE);
-		mAcceptLocation = (Button) findViewById(R.id.accept_location);
-        mAcceptLocation.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Collect.getInstance().getActivityLogger().logInstanceAction(this, "acceptLocation", "OK");
-                returnDragLocation();
-            }
-        });
-        mAcceptLocation.setVisibility(View.VISIBLE);
+		mAcceptLocation.setClickable(true);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
 	}
 
