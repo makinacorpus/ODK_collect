@@ -84,6 +84,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				mAnswerFontsize);
 		mGetLocationButton.setEnabled(!prompt.isReadOnly());
 		mGetLocationButton.setLayoutParams(params);
+		mGetLocationButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_menu_save, 0, 0, 0);
 		if ( prompt.isReadOnly()) {
 			mGetLocationButton.setVisibility(View.GONE);
 		}
@@ -95,6 +96,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		mViewButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		mViewButton.setPadding(20, 20, 20, 20);
 		mViewButton.setLayoutParams(params);
+		mViewButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_menu_mylocation, 0, 0, 0);
 		// on play, launch the appropriate viewer
 		mViewButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -161,11 +163,16 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 						.logInstanceAction(this, "recordLocation", "click",
 								mPrompt.getIndex());
 				Intent i = null;
-				if (mUseMaps) {
+				
+				//TODO Always use GeoPointMapActivity since it works fine
+				i = new Intent(getContext(), GeoPointMapActivity.class);
+				
+				/*if (mUseMaps) {
 					i = new Intent(getContext(), GeoPointMapActivity.class);
 				} else {
 					i = new Intent(getContext(), GeoPointActivity.class);
-				}
+				}*/
+				
 				i.putExtra(ACCURACY_THRESHOLD, mAccuracyThreshold);
 				Collect.getInstance().getFormController()
 						.setIndexWaitingForData(mPrompt.getIndex());
@@ -178,9 +185,12 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		// retrieve answer from data model and update ui
 
 		addView(mGetLocationButton);
-		if (mUseMaps) {
+		
+		//TODO Always use maps
+		addView(mViewButton);
+		/*if (mUseMaps) {
 			addView(mViewButton);
-		}
+		}*/
 		addView(mAnswerDisplay);
 	}
 

@@ -95,6 +95,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
                 .getMap();
         mMap.setOnMarkerDragListener(this);
+        
         if (intent != null && intent.getExtras() != null) {
         	// Case where we only show the saved location
         	if ( intent.hasExtra(GeoPointWidget.LOCATION) ) {
@@ -299,10 +300,10 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             				mLocation.getProvider(), truncateFloat(mLocation.getAccuracy())));
             		mLatLng = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
 	                mMap.animateCamera(CameraUpdateFactory.newLatLng(mLatLng));
-
-	                if (mLocation.getAccuracy() <= 30) {
-	                	//TODO Stop updating position without closing activity
-	                    //returnLocation();
+	                
+	                //TODO choose a relevant accuracy
+	                //if (mLocation.getAccuracy() <= mLocationAccuracy) {
+	                if (mLocation.getAccuracy() <= 20) {
 	                	mLocationManager.removeUpdates(this);
 	                	mRefreshLocation.setClickable(true);
 	                	mMarker.setDraggable(true);

@@ -70,7 +70,7 @@ public class FormHierarchyActivity extends SherlockListActivity {
 		mStartIndex = formController.getFormIndex();
 
 		setTitle(formController.getFormTitle());
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
 		mPath = (TextView) findViewById(R.id.pathtext);
 
