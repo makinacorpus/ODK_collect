@@ -89,7 +89,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             } else {
                 first = false;
             }
-
+            
             // if question or answer type is not supported, use text widget
             QuestionWidget qw =
                 WidgetFactory.createWidgetFromPrompt(p, activity);

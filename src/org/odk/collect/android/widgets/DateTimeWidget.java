@@ -23,6 +23,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.application.Collect;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.inputmethod.InputMethodManager;
@@ -36,6 +37,7 @@ import android.widget.TimePicker;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
+@SuppressLint("NewApi")
 public class DateTimeWidget extends QuestionWidget {
 
     private DatePicker mDatePicker;
@@ -50,6 +52,9 @@ public class DateTimeWidget extends QuestionWidget {
         mDatePicker.setId(QuestionWidget.newUniqueId());
         mDatePicker.setFocusable(!prompt.isReadOnly());
         mDatePicker.setEnabled(!prompt.isReadOnly());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB){
+        	mDatePicker.setCalendarViewShown(false);
+        }
 
         mTimePicker = new TimePicker(getContext());
         mTimePicker.setId(QuestionWidget.newUniqueId());
