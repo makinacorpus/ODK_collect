@@ -36,6 +36,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -116,7 +117,6 @@ public class MainMenuActivity extends SherlockActivity {
 		setContentView(R.layout.main_menu);
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayShowHomeEnabled(true);
-		//TODO
 
 		{
 			// dynamically construct the "ODK Collect vA.B" string
