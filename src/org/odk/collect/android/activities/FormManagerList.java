@@ -110,7 +110,7 @@ public class FormManagerList extends SherlockListFragment implements DiskSyncLis
 			tv.setText(savedInstanceState.getString(syncMsgKey));
 		}
 
-		mBackgroundTasks = (BackgroundTasks) getActivity().getLastNonConfigurationInstance();
+		mBackgroundTasks = (BackgroundTasks) getActivity().getLastCustomNonConfigurationInstance();
 		if (mBackgroundTasks == null) {
 			mBackgroundTasks = new BackgroundTasks();
 			mBackgroundTasks.mDiskSyncTask = new DiskSyncTask();

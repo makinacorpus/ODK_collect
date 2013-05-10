@@ -54,9 +54,7 @@ public class FileManagerTabs extends SherlockFragmentActivity {
         setContentView(R.layout.file_manager_tabs_layout);
         
         
-        if (savedInstanceState != null) {
-            mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab")); //set the tab as per the saved state
-        }
+        
         
         mTabHost = (FragmentTabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
@@ -65,6 +63,9 @@ public class FileManagerTabs extends SherlockFragmentActivity {
         TabHost.TabSpec tabSpec2 = this.mTabHost.newTabSpec("data").setIndicator(getString(R.string.data));
         mTabHost.addTab(tabSpec2,DataManagerList.class, savedInstanceState);
         mTabHost.setCurrentTab(0);
+        if (savedInstanceState != null) {
+            mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab")); //set the tab as per the saved state
+        }
     }
     
      @Override
