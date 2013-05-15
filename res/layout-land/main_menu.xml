@@ -10,7 +10,6 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:grid="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res/org.odk.collect.android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl"
     style="@style/Collect.MainLayout"
@@ -20,7 +19,6 @@
     android:layout_marginLeft="0dp"
     android:layout_marginRight="0dp"
     android:layout_marginTop="0dp"
-    android:background="@drawable/main_background"
     android:orientation="vertical"
     android:padding="0dp" >
 
@@ -40,66 +38,59 @@
         android:paddingBottom="2dp"
         android:paddingTop="1dp"
         android:text="@string/main_menu_details"/>
-
-    <android.support.v7.widget.GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:columnCount="2"
-        tools:ignore="MissingPrefix" >
-
-        <Button
-            android:id="@+id/enter_data"
-            style="@style/Collect.ButtonLand"
-            app:layout_gravity="fill"
-            app:layout_column="0"
-            app:layout_row="0"
-            android:drawableLeft="@android:drawable/ic_menu_add" />
-
-        <Button
-            android:id="@+id/review_data"
-            style="@style/Collect.ButtonLand"
-            app:layout_gravity="fill"
-            app:layout_column="1"
-            app:layout_row="0"
-            android:drawableLeft="@android:drawable/ic_menu_edit" />
-
-        <View
-            android:id="@+id/review_spacer"
-            android:layout_gravity="fill_horizontal"
-            android:layout_height="5dp"
-            app:layout_columnSpan="2"
-            app:layout_row="1" />
-
-        <Button
-            android:id="@+id/send_data"
-            style="@style/Collect.ButtonLand"
-            app:layout_gravity="fill"
-            app:layout_column="0"
-            app:layout_row="2"
-            android:drawableLeft="@android:drawable/ic_menu_save" />
-
-        <Button
-            android:id="@+id/get_forms"
-            style="@style/Collect.ButtonLand"
-            app:layout_gravity="fill"
-            app:layout_column="1"
-            app:layout_row="2"
-            android:drawableLeft="@android:drawable/ic_input_get" />
-
-        <View
-            android:id="@+id/get_forms_spacer"
-            android:layout_gravity="fill_horizontal"
-            android:layout_height="5dp"
-            app:layout_columnSpan="2"
-            app:layout_row="3" />
-
-        <Button
-            android:id="@+id/manage_forms"
-            style="@style/Collect.ButtonLand"
-            app:layout_gravity="fill"
-            app:layout_columnSpan="2"
-            app:layout_row="4"
-            android:drawableLeft="@android:drawable/ic_menu_send" />
-    </android.support.v7.widget.GridLayout>
+	<ScrollView 
+	    android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+	    <TableLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:stretchColumns="1"
+	        android:shrinkColumns="1">
+			<TableRow >
+			    <Button
+		            android:id="@+id/enter_data"
+		            style="@style/Collect.ButtonLand"
+		            android:drawableLeft="@android:drawable/ic_menu_add" />
+		
+		        <Button
+		            android:id="@+id/review_data"
+		            style="@style/Collect.ButtonLand"
+		            android:drawableLeft="@android:drawable/ic_menu_edit" />
+			</TableRow>
+			<TableRow>
+			    <View
+		            android:id="@+id/review_spacer"
+		            android:layout_gravity="fill_horizontal"
+		            android:layout_height="5dp"
+		            android:layout_span="2"/>
+			</TableRow>
+			<TableRow >
+			    <Button
+		            android:id="@+id/send_data"
+		            style="@style/Collect.ButtonLand"
+		            android:drawableLeft="@android:drawable/ic_menu_save" />
+		
+		        <Button
+		            android:id="@+id/get_forms"
+		            style="@style/Collect.ButtonLand"
+		            android:drawableLeft="@android:drawable/ic_input_get" />
+			</TableRow>
+			<TableRow>
+			    <View
+		            android:id="@+id/get_forms_spacer"
+		            android:layout_span="2"
+		            android:layout_gravity="fill_horizontal"
+		            android:layout_height="5dp"/>
+			</TableRow>
+			<TableRow >
+			    <Button
+		            android:id="@+id/manage_forms"
+		            style="@style/Collect.ButtonLand"
+		            android:layout_span="2"
+		            android:drawableLeft="@android:drawable/ic_menu_send" />
+			</TableRow>
+	        
+	    </TableLayout>
+	</ScrollView>
 
 </LinearLayout>

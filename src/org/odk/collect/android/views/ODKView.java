@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -76,8 +77,15 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         mLayout.setMargins(10, 0, 10, 0);
 
         // display which group you are in as well as the question
-
+         //TODO 
         addGroupText(groups);
+        for (FormEntryPrompt p : questionPrompts) {
+        	String text = p.getConstraintText();
+        	String answer = p.getAnswerText();
+        	
+        	Log.e(getClass().getName(), "Contrainte :" + text + "Value :" + answer) ;
+       }
+        
         boolean first = true;
         int id = 0;
         for (FormEntryPrompt p : questionPrompts) {

@@ -49,7 +49,6 @@ public class SpinnerWidget extends QuestionWidget {
     Vector<SelectChoice> mItems;
     Spinner spinner;
     String[] choices;
-    private static final int BROWN = 0xFF936931;
 
 
     public SpinnerWidget(Context context, FormEntryPrompt prompt) {
@@ -172,18 +171,18 @@ public class SpinnerWidget extends QuestionWidget {
 
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
             tv.setTextSize(textUnit, textSize);
-            tv.setBackgroundColor(Color.WHITE);
+            tv.setBackgroundColor(Color.BLACK);
         	tv.setPadding(10, 10, 10, 10); // Are these values OK?
             if (position == items.length-1) {
             	tv.setText(parent.getContext().getString(R.string.clear_answer));
-            	tv.setTextColor(BROWN);
+            	tv.setTextColor(Color.WHITE);
         		tv.setTypeface(null, Typeface.NORMAL);
             	if (spinner.getSelectedItemPosition() == position) {
-            		tv.setBackgroundColor(Color.LTGRAY);
+            		tv.setTextColor(Color.LTGRAY);
             	}
             } else {
                 tv.setText(items[position]);
-                tv.setTextColor(Color.BLACK);
+                tv.setTextColor(Color.WHITE);
             	tv.setTypeface(null, (spinner.getSelectedItemPosition() == position) 
             							? Typeface.BOLD : Typeface.NORMAL);
             }
@@ -201,10 +200,10 @@ public class SpinnerWidget extends QuestionWidget {
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
             tv.setText(items[position]);
             tv.setTextSize(textUnit, textSize);
-            tv.setTextColor(Color.BLACK);
+            tv.setTextColor(Color.WHITE);
         	tv.setTypeface(null, Typeface.BOLD);
             if (position == items.length-1) {
-            	tv.setTextColor(BROWN);
+            	tv.setTextColor(Color.WHITE);
             	tv.setTypeface(null, Typeface.NORMAL);
             }
             return convertView;
