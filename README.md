@@ -11,7 +11,7 @@ User aspects :
 You can find the installation file at /bin/ODKCollect_Modifie.apk
 If you cannot install it, check that you have not the version from the play store installed on your phone, and if so, uninstall it. If it still doesn't work, go in System Settings -> Security -> Device Administration and if unchecked, check "Unknown sources".
 
-Forms can be defined in xls using a syntax documented here : http://formhub.org/syntax/ and then uploaded on a server that supports it, like formhub.org
+Forms can be defined in xls using a syntax documented here : http://formhub.org/syntax/ and then uploaded on a server that supports it, like http://formhub.org/
 
 
 Technical aspects : 
@@ -24,7 +24,8 @@ Main modifications compared to the play store version :
 		src/org/odk/collect/android/widgets/GeoPointWidget.java
 		res/layout/geopoint_layout.xml
 
-Libraries used : 
+Libraries : 
+ - Already used in the play store version : see LICENSE.txt
  - For the global "holo" look and the action bar : actionbarsherlock
 See : http://actionbarsherlock.com/
  - For the map in geopoint widgets : google-play-services_lib
