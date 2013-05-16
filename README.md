@@ -33,5 +33,11 @@ See : https://developers.google.com/maps/documentation/android/
 
 Bugs : 
  - In a form, when several questions are related by a relevance constraint in the same group with a field-list appearance : if you give an answer to a question that should make another question appear, unless you leave the current view and come back on it, the other question won't appear.
+ - When an attempt to upload a finalised instance of a form fails, the instance is deleted from the device and cannot be uploaded again.
+ - When editing a saved form instance, at the end of the editing process, the default instance name is the form's name, not the saved instance name.
+
+Improvements to add :
+ - When in a repeating group, it would be useful to be able to customize the name of each instance of the group.
+ - Have a widget to enter a time without a date.
 
 
