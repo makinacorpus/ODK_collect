@@ -112,7 +112,7 @@ public class InstanceUploaderList extends SherlockListActivity implements
 		// render total instance view
 		mInstances = new SimpleCursorAdapter(this,
 				R.layout.two_item_multiple_choice, c, data, view);
-
+		
 		setListAdapter(mInstances);
 		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		getListView().setItemsCanFocus(false);

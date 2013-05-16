@@ -123,6 +123,7 @@ public class InstanceChooserList extends SherlockListActivity {
                     	          DO_NOT_EXIT);
             	return;
             }
+            System.out.println("URI : "+instanceUri);
             // caller wants to view/edit a form, so launch formentryactivity
             startActivity(new Intent(Intent.ACTION_EDIT, instanceUri));
         }

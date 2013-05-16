@@ -119,7 +119,7 @@ public class MainMenuActivity extends SherlockActivity {
 		bar.setDisplayShowHomeEnabled(true);
 
 		{
-			// dynamically construct the "ODK Collect vA.B" string
+			// dynamically construct the "'Application name' vA.B" string
 			TextView mainMenuMessageLabel = (TextView) findViewById(R.id.main_menu_header);
 			mainMenuMessageLabel.setText(Collect.getInstance()
 					.getVersionedAppName());
@@ -243,7 +243,6 @@ public class MainMenuActivity extends SherlockActivity {
 		// don't need to set a content observer because it can't change in the
 		// background
 		
-		
 		updateButtons();
 	}
 
@@ -355,7 +354,14 @@ public class MainMenuActivity extends SherlockActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+	
+	/**
+	 * Displays an error message and if necessary terminates application
+	 * 
+	 * @param errorMsg
+	 * @param shouldExit
+	 * 
+	 */
 	private void createErrorDialog(String errorMsg, final boolean shouldExit) {
 		Collect.getInstance().getActivityLogger()
 				.logAction(this, "createErrorDialog", "show");
@@ -383,6 +389,9 @@ public class MainMenuActivity extends SherlockActivity {
 		mAlertDialog.show();
 	}
 
+	/*
+	 * Is used to ask for the administrator password when accessing admin settings
+	 */
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
@@ -448,7 +457,10 @@ public class MainMenuActivity extends SherlockActivity {
 		}
 		return null;
 	}
-
+	
+	/*
+	 * I have not the slightest idea of what is this.
+	 */
 	private void updateButtons() {
 		mFinalizedCursor.requery();
 		mCompletedCount = mFinalizedCursor.getCount();
@@ -506,6 +518,12 @@ public class MainMenuActivity extends SherlockActivity {
 		}
 	}
 	
+	/**
+	 * Loads the preferences for the application
+	 * 
+	 * @param src
+	 * @return
+	 */
 	private boolean loadSharedPreferencesFromFile(File src) {
 		// this should probably be in a thread if it ever gets big
 		boolean res = false;

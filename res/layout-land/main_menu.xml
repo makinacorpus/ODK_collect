@@ -50,12 +50,16 @@
 			    <Button
 		            android:id="@+id/enter_data"
 		            style="@style/Collect.ButtonLand"
-		            android:drawableLeft="@android:drawable/ic_menu_add" />
+		            android:drawableLeft="@android:drawable/ic_menu_add" 
+        			android:layout_weight="1"
+        			android:layout_width="0dip"/>
 		
 		        <Button
 		            android:id="@+id/review_data"
 		            style="@style/Collect.ButtonLand"
-		            android:drawableLeft="@android:drawable/ic_menu_edit" />
+		            android:drawableLeft="@android:drawable/ic_menu_edit" 
+        			android:layout_weight="1"
+        			android:layout_width="0dip" />
 			</TableRow>
 			<TableRow>
 			    <View
@@ -68,12 +72,16 @@
 			    <Button
 		            android:id="@+id/send_data"
 		            style="@style/Collect.ButtonLand"
-		            android:drawableLeft="@android:drawable/ic_menu_save" />
+		            android:drawableLeft="@android:drawable/ic_menu_save" 
+        			android:layout_weight="1"
+        			android:layout_width="0dip" />
 		
 		        <Button
 		            android:id="@+id/get_forms"
 		            style="@style/Collect.ButtonLand"
-		            android:drawableLeft="@android:drawable/ic_input_get" />
+		            android:drawableLeft="@android:drawable/ic_input_get" 
+        			android:layout_weight="1"
+        			android:layout_width="0dip" />
 			</TableRow>
 			<TableRow>
 			    <View

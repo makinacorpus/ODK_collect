@@ -15,9 +15,10 @@
 package org.odk.collect.android.preferences;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import org.odk.collect.android.utilities.UrlUtils;
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.UrlUtils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -98,6 +99,8 @@ public class PreferencesActivity extends PreferenceActivity implements
 	private CheckBoxPreference mAutosendWifiPreference;
 	private CheckBoxPreference mAutosendNetworkPreference;
 	private ListPreference mProtocolPreference;
+	
+	private List<Preference> mPreferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +108,9 @@ public class PreferencesActivity extends PreferenceActivity implements
 		addPreferencesFromResource(R.xml.preferences);
 
 		setTitle(getString(R.string.general_preferences));
+		
+		
+		//mPreferences = 
 
 		// not super safe, but we're just putting in this mode to help
 		// administrate
@@ -137,7 +143,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		if (!(autosendNetworkAvailable || autosendWifiAvailable || adminMode)) {
 			getPreferenceScreen().removePreference(autosendCategory);
 		}
-
+		
 		PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
 
 		// declared early to prevent NPE in toggleServerPaths

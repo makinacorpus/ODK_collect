@@ -69,6 +69,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     // it can take up to 27 seconds to spin up Aggregate
     private static final int CONNECTION_TIMEOUT = 60000;
     private static final String fail = "Error: ";
+    private boolean isUploaded;
 
     private InstanceUploaderListener mStateListener;
 
@@ -471,6 +472,7 @@ public class InstanceUploaderTask extends AsyncTask<Long, Integer, InstanceUploa
     // still. ridiculous. make it smaller.
     @Override
 	protected Outcome doInBackground(Long... values) {
+    	isUploaded = false;
     	Outcome outcome = new Outcome();
 
         String selection = BaseColumns._ID + "=?";

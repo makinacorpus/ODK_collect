@@ -284,6 +284,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			if (savedInstanceState.containsKey(KEY_ERROR)) {
 				mErrorMessage = savedInstanceState.getString(KEY_ERROR);
 			}
+			
 		}
 
 		// If a parse error message is showing then nothing else is loaded
@@ -301,6 +302,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			mSaveToDiskTask = (SaveToDiskTask) data;
 		} else if (data == null) {
 			if (!newForm) {
+				System.out.println("!newform");
 				if (Collect.getInstance().getFormController() != null) {
 					refreshCurrentView();
 				} else {
@@ -1033,7 +1035,11 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			saveAs.setFilters(new InputFilter[] { returnFilter });
 
 			String saveName = formController.getSubmissionMetadata().instanceName;
+			
+			
+			
 			if (saveName == null) {
+				//TODO Default saveAs text should be previous save name
 				// no meta/instanceName field in the form -- see if we have a
 				// name for this instance from a previous save attempt...
 				if (getContentResolver().getType(getIntent().getData()) == InstanceColumns.CONTENT_ITEM_TYPE) {
@@ -1105,6 +1111,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 								saveDataToDisk(EXIT, instanceComplete
 										.isChecked(), saveAs.getText()
 										.toString());
+								
 							}
 						}
 					});
