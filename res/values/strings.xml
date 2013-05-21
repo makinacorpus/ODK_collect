@@ -42,6 +42,7 @@
 <string name="clear_answer_ask">Remove This Response?</string>
 <string name="clear_answer_no">Cancel</string>
 <string name="completed_data">Complete (%s)</string>
+<string name="create_marker">You can now create a marker on the map by long-clicking on it</string>
 <string name="data">Saved Forms</string>
 <string name="data_saved_error">Sorry, form save failed!</string>
 <string name="data_saved_ok">Form successfully saved!</string>

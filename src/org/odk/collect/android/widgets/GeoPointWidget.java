@@ -39,7 +39,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
@@ -147,17 +146,22 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 						.getActivityLogger()
 						.logInstanceAction(this, "showLocation", "click",
 								mPrompt.getIndex());
-
-				String s = mStringAnswer.getText().toString();
-				String[] sa = s.split(" ");
-				double gp[] = new double[4];
-				gp[0] = Double.valueOf(sa[0]).doubleValue();
-				gp[1] = Double.valueOf(sa[1]).doubleValue();
-				gp[2] = Double.valueOf(sa[2]).doubleValue();
-				gp[3] = Double.valueOf(sa[3]).doubleValue();
 				Intent i = new Intent(getContext(), GeoPointMapActivity.class);
-				i.putExtra(LOCATION, gp);
-				i.putExtra(ACCURACY_THRESHOLD, mAccuracyThreshold);
+				
+				if (mUseMaps && !mUseGPS){
+					i.putExtra("noGPS", true);
+				} else {
+					String s = mStringAnswer.getText().toString();
+					String[] sa = s.split(" ");
+					double gp[] = new double[4];
+					gp[0] = Double.valueOf(sa[0]).doubleValue();
+					gp[1] = Double.valueOf(sa[1]).doubleValue();
+					gp[2] = Double.valueOf(sa[2]).doubleValue();
+					gp[3] = Double.valueOf(sa[3]).doubleValue();
+					
+					i.putExtra(LOCATION, gp);
+					i.putExtra(ACCURACY_THRESHOLD, mAccuracyThreshold);
+				}
 				Collect.getInstance().getFormController()
 				.setIndexWaitingForData(mPrompt.getIndex());
 				((Activity) getContext()).startActivityForResult(i,
@@ -192,8 +196,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		//Ok button to submit the values entered in the fields above
 		mOkButton = (Button)activity.getLayoutInflater().inflate(R.layout.button1_layout, null);
 		mOkButton.setId(QuestionWidget.newUniqueId());
-		//TODO Put this in R.string
-		mOkButton.setText("OK");
+		mOkButton.setText(R.string.ok);
 		mOkButton.setEnabled(!prompt.isReadOnly());
 		mOkButton.setLayoutParams(params);
 		mOkButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_menu_save, 0, 0, 0);
@@ -288,8 +291,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 			addView(mViewButton);
 		}
 		addView(mAnswerDisplay);
-		
-		//TODO 
+
 		refreshWidget ();
 	}
 
@@ -420,12 +422,15 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 					mLatField.setVisibility(View.GONE);
 					mLongField.setVisibility(View.GONE);
 					mOkButton.setVisibility(View.GONE);
+					mViewButton.setText(R.string.show_location);
 				} else {
 					mGetLocationButton.setVisibility(View.GONE);
 					mViewButton.setVisibility(View.VISIBLE);
-					mLatField.setVisibility(View.VISIBLE);
-					mLongField.setVisibility(View.VISIBLE);
+					mLatField.setVisibility(View.GONE);
+					mLongField.setVisibility(View.GONE);
 					mOkButton.setVisibility(View.GONE);
+					mViewButton.setEnabled(true);
+					mViewButton.setText(R.string.get_location);
 				}
 			}else{
 				if (mUseGPS){
@@ -449,6 +454,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				mLatField.setVisibility(View.GONE);
 				mLongField.setVisibility(View.GONE);
 				mOkButton.setVisibility(View.GONE);
+				mViewButton.setText(R.string.show_location);
 			}else{
 				mGetLocationButton.setVisibility(View.GONE);
 				mViewButton.setVisibility(View.GONE);

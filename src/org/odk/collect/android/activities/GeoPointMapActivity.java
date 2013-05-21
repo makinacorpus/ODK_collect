@@ -32,6 +32,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
@@ -39,6 +40,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -46,7 +48,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class GeoPointMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener {
+public class GeoPointMapActivity extends FragmentActivity implements LocationListener, OnMarkerDragListener, OnMapLongClickListener {
 
 	private static final String LOCATION_COUNT = "locationCount";
 
@@ -112,6 +114,12 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         	
         	if ( intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD) ) {
         		mLocationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD, GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
+        	}
+        	
+        	if ( intent.hasExtra("noGPS")) {
+        		Toast.makeText(getApplicationContext(), R.string.create_marker, Toast.LENGTH_LONG).show();
+        		mMap.setOnMapLongClickListener(this);
+        		mCaptureLocation = false;
         	}
         }
 
@@ -368,6 +376,20 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 		}else{
 			returnLocation();
 		}
+	}
+
+
+	@Override
+	public void onMapLongClick(LatLng point) {
+		mMarkerOption.position(point);
+		mLatLng = point;
+        mMarker = mMap.addMarker(mMarkerOption);
+        mMarker.setDraggable(true);
+        Toast.makeText(getApplicationContext(), R.string.marker_draggable, Toast.LENGTH_LONG).show();
+        mAcceptLocation.setClickable(true);
+        mShowLocation.setClickable(true);
+        isDragged = true;
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
 	}
 
 }
