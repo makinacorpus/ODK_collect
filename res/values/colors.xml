@@ -22,4 +22,5 @@ the License.
     <drawable name="red">#ffff0000</drawable>
     <drawable name="list_normal">#ff000000</drawable>
     <drawable name="text_info">#ff000000</drawable>
+    <drawable name="holo_blue_dark">#ff0099cc</drawable>
 </resources>

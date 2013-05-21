@@ -182,7 +182,9 @@ public class SpinnerWidget extends QuestionWidget {
             	}
             } else {
                 tv.setText(items[position]);
-                tv.setTextColor(Color.WHITE);
+                tv.setTextColor((spinner.getSelectedItemPosition() == position) 
+						? Color.CYAN : Color.WHITE);
+                
             	tv.setTypeface(null, (spinner.getSelectedItemPosition() == position) 
             							? Typeface.BOLD : Typeface.NORMAL);
             }
@@ -200,7 +202,7 @@ public class SpinnerWidget extends QuestionWidget {
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
             tv.setText(items[position]);
             tv.setTextSize(textUnit, textSize);
-            tv.setTextColor(Color.WHITE);
+            tv.setTextColor(Color.CYAN);
         	tv.setTypeface(null, Typeface.BOLD);
             if (position == items.length-1) {
             	tv.setTextColor(Color.WHITE);
