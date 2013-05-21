@@ -19,6 +19,7 @@ the License.
     <drawable name="white">#ffffffff</drawable>
     <!-- <drawable name="btn_normal">#4f0044aa</drawable> -->
     <drawable name="btn_normal">#2fffffff</drawable>
+    <drawable name="btn_disabled">#0f0099cc</drawable>
     <drawable name="red">#ffff0000</drawable>
     <drawable name="list_normal">#ff000000</drawable>
     <drawable name="text_info">#ff000000</drawable>

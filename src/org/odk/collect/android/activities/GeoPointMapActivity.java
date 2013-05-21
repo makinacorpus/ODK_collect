@@ -208,7 +208,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             mLocationStatus = (TextView) findViewById(R.id.location_status);
             mRefreshLocation = ((Button) findViewById(R.id.refresh_location));
             mRefreshLocation.setVisibility(View.VISIBLE);
-            mRefreshLocation.setClickable(false);
+            
             mRefreshLocation.setOnClickListener(new OnClickListener() {
 
                 @Override
@@ -218,6 +218,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
                     mMarker.setDraggable(false);
                 }
             });
+            mRefreshLocation.setClickable(false);
             
         } else {
         	// Case where we only show the saved location
