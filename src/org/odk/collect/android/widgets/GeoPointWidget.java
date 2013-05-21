@@ -39,6 +39,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * GeoPointWidget is the widget that allows the user to get GPS readings.
@@ -196,6 +197,25 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		mOkButton.setEnabled(!prompt.isReadOnly());
 		mOkButton.setLayoutParams(params);
 		mOkButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_menu_save, 0, 0, 0);
+		mOkButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(mLongField.getText()!=null && mLatField.getText()!=null) {
+					mAnswerDisplay.setText(getContext().getString(R.string.latitude) + ": "
+							+ formatGps(Double.parseDouble(mLatField.getText().toString()), "lat") + "\n"
+							+ getContext().getString(R.string.longitude) + ": "
+							+ formatGps(Double.parseDouble(mLongField.getText().toString()), "lon") + "\n"
+							+ getContext().getString(R.string.altitude) + ": "
+							+ "0" + "m\n"
+							+ getContext().getString(R.string.accuracy) + ": "
+							+ "0" + "m");
+					mStringAnswer.setText(mLatField.getText().toString() + " " + mLongField.getText().toString() + " "
+		                    + 0 + " " + 0);
+					Collect.getInstance().getFormController().setIndexWaitingForData(null); 
+					mViewButton.setEnabled(true);
+				}
+			}
+		});
 		addView(mOkButton);
 
 		//Display the answer
@@ -403,8 +423,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				} else {
 					mGetLocationButton.setVisibility(View.GONE);
 					mViewButton.setVisibility(View.VISIBLE);
-					mLatField.setVisibility(View.GONE);
-					mLongField.setVisibility(View.GONE);
+					mLatField.setVisibility(View.VISIBLE);
+					mLongField.setVisibility(View.VISIBLE);
 					mOkButton.setVisibility(View.GONE);
 				}
 			}else{
