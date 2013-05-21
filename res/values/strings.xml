@@ -97,6 +97,7 @@
 <string name="main_menu">Main Menu</string>
 <string name="main_menu_details">Data collection made easier&#8230;</string>
 <string name="manage_files">Delete Saved Form</string>
+<string name="marker_draggable">You can move the marker on the map to adjust the position</string>
 <string name="mark_finished">Mark form as finalized</string>
 <string name="noselect_error">Sorry, you have not selected any forms!</string>
 <string name="no_connection">No network connection available</string>
@@ -138,6 +139,8 @@
 <string name="uploading_data">Sending Form</string>
 <string name="url_error">Sorry, invalid URL!</string>
 <string name="username">Username</string>
+<string name="use_gps">Use geolocalisation ?</string>
+<string name="use_maps">Use map ?</string>
 <string name="view_hierarchy">Go To Prompt</string>
 <string name="general_preferences">General Settings</string>
 <string name="click_to_web">Tap to visit http://opendatakit.org</string>

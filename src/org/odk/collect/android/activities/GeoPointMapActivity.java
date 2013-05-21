@@ -104,6 +104,7 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
             	mMarkerOption.position(mLatLng);
                 mMarker = mMap.addMarker(mMarkerOption);
                 mMarker.setDraggable(true);
+                Toast.makeText(getApplicationContext(), R.string.marker_draggable, Toast.LENGTH_LONG).show();
                 
             	mCaptureLocation = false;
             	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
@@ -303,7 +304,8 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 	                
 	                //TODO choose a relevant accuracy
 	                //if (mLocation.getAccuracy() <= mLocationAccuracy) {
-	                if (mLocation.getAccuracy() <= 20) {
+	                if (mLocation.getAccuracy() <= 35) {
+	                	Toast.makeText(getApplicationContext(), R.string.marker_draggable, Toast.LENGTH_LONG).show();
 	                	mLocationManager.removeUpdates(this);
 	                	mRefreshLocation.setClickable(true);
 	                	mMarker.setDraggable(true);

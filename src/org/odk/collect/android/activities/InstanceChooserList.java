@@ -142,6 +142,14 @@ public class InstanceChooserList extends SherlockListActivity {
     	super.onStop();
     }
 
+    
+    /**
+     * Creates a dialog with the given message. Will exit the activity when the user preses "ok" if
+     * shouldExit is set to true.
+     * 
+     * @param errorMsg
+     * @param shouldExit
+     */
 	private void createErrorDialog(String errorMsg, final boolean shouldExit) {
         Collect.getInstance().getActivityLogger().logAction(this, "createErrorDialog", "show");
 

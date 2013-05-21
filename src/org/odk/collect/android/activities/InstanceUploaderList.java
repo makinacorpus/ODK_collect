@@ -23,9 +23,7 @@ import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -33,9 +31,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -53,33 +48,19 @@ import com.actionbarsherlock.view.MenuItem;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderList extends SherlockListActivity implements
-		OnLongClickListener {
+public class InstanceUploaderList extends SherlockListActivity {
 
 	private static final String BUNDLE_SELECTED_ITEMS_KEY = "selected_items";
 	private static final String BUNDLE_TOGGLED_KEY = "toggled";
 
 	private static final int MENU_PREFERENCES = Menu.FIRST;
-	private static final int MENU_SHOW_UNSENT = Menu.FIRST + 1;
 	private static final int INSTANCE_UPLOADER = 0;
 
-	private boolean mShowUnsent = true;
+	//private boolean mShowUnsent = true;
 	private SimpleCursorAdapter mInstances;
 	private ArrayList<Long> mSelected = new ArrayList<Long>();
 	private boolean mRestored = false;
 	private boolean mToggled = false;
-
-	public Cursor getUnsentCursor() {
-		// get all complete or failed submission instances
-		String selection = InstanceColumns.STATUS + "=? or "
-				+ InstanceColumns.STATUS + "=?";
-		String selectionArgs[] = { InstanceProviderAPI.STATUS_COMPLETE,
-				InstanceProviderAPI.STATUS_SUBMISSION_FAILED };
-		String sortOrder = InstanceColumns.DISPLAY_NAME + " ASC";
-		Cursor c = managedQuery(InstanceColumns.CONTENT_URI, null, selection,
-				selectionArgs, sortOrder);
-		return c;
-	}
 
 	public Cursor getAllCursor() {
 		// get all complete or failed submission instances
@@ -103,7 +84,8 @@ public class InstanceUploaderList extends SherlockListActivity implements
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayHomeAsUpEnabled(true);
 
-		Cursor c = mShowUnsent ? getUnsentCursor() : getAllCursor();
+
+		Cursor c = getAllCursor();
 
 		String[] data = new String[] { InstanceColumns.DISPLAY_NAME,
 				InstanceColumns.DISPLAY_SUBTEXT };
@@ -167,13 +149,15 @@ public class InstanceUploaderList extends SherlockListActivity implements
 		Collect.getInstance().getActivityLogger()
 				.logAction(this, "onCreateOptionsMenu", "show");
 		super.onCreateOptionsMenu(menu);
+		
+		//creates the select all and upload buttons on the action bar from xml
 		getSupportMenuInflater().inflate(R.menu.menu_instance_uploader, menu);
+		
+		//creates two entries in the overflow : settings and change display aspect
 		menu.add(0, MENU_PREFERENCES, 0,
 				getString(R.string.general_preferences)).setIcon(
 				android.R.drawable.ic_menu_preferences).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		
-		menu.add(0, MENU_SHOW_UNSENT, 1, getString(R.string.change_view))
-				.setIcon(android.R.drawable.ic_menu_preferences).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		return true;
 	}
 
@@ -185,22 +169,19 @@ public class InstanceUploaderList extends SherlockListActivity implements
 					.logAction(this, "onMenuItemSelected", "MENU_PREFERENCES");
 			createPreferencesMenu();
 			return true;
-		case MENU_SHOW_UNSENT:
-			Collect.getInstance().getActivityLogger()
-					.logAction(this, "onMenuItemSelected", "MENU_SHOW_UNSENT");
-			showSentAndUnsentChoices();
-			
-			return true;
+		
 		case R.id.upload_instance:
 			ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 
 			if (NetworkReceiver.running == true) {
+				//another upload is already running
 				Toast.makeText(
 						InstanceUploaderList.this,
 						"Background send running, please try again shortly",
 						Toast.LENGTH_SHORT).show();
 			} else if (ni == null || !ni.isConnected()) {
+				//no network connection
 				Collect.getInstance().getActivityLogger()
 						.logAction(this, "uploadButton", "noConnection");
 
@@ -225,6 +206,7 @@ public class InstanceUploaderList extends SherlockListActivity implements
 							Toast.LENGTH_SHORT).show();
 				}
 			}
+
 			return true;
 		case R.id.select_all_instance:
 			// toggle selections of items to all or none
@@ -323,96 +305,6 @@ public class InstanceUploaderList extends SherlockListActivity implements
 			break;
 		}
 		super.onActivityResult(requestCode, resultCode, intent);
-	}
-
-	private void showUnsent() {
-		mShowUnsent = true;
-		Cursor c = mShowUnsent ? getUnsentCursor() : getAllCursor();
-		Cursor old = mInstances.getCursor();
-		try {
-			mInstances.changeCursor(c);
-		} finally {
-			if (old != null) {
-				old.close();
-				this.stopManagingCursor(old);
-			}
-		}
-		getListView().invalidate();
-	}
-
-	private void showAll() {
-		mShowUnsent = false;
-		Cursor c = mShowUnsent ? getUnsentCursor() : getAllCursor();
-		Cursor old = mInstances.getCursor();
-		try {
-			mInstances.changeCursor(c);
-		} finally {
-			if (old != null) {
-				old.close();
-				this.stopManagingCursor(old);
-			}
-		}
-		getListView().invalidate();
-	}
-
-	@Override
-	public boolean onLongClick(View v) {
-		Collect.getInstance()
-				.getActivityLogger()
-				.logAction(this, "toggleButton.longClick",
-						Boolean.toString(mToggled));
-		return showSentAndUnsentChoices();
-	}
-
-	private boolean showSentAndUnsentChoices() {
-		/**
-		 * Create a dialog with options to save and exit, save, or quit without
-		 * saving
-		 */
-		String[] items = { getString(R.string.show_unsent_forms),
-				getString(R.string.show_sent_and_unsent_forms) };
-
-		Collect.getInstance().getActivityLogger()
-				.logAction(this, "changeView", "show");
-
-		AlertDialog alertDialog = new AlertDialog.Builder(this)
-				.setIcon(android.R.drawable.ic_dialog_info)
-				.setTitle(getString(R.string.change_view))
-				.setNeutralButton(getString(R.string.cancel),
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
-								Collect.getInstance()
-										.getActivityLogger()
-										.logAction(this, "changeView", "cancel");
-								dialog.cancel();
-							}
-						})
-				.setItems(items, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						switch (which) {
-
-						case 0: // show unsent
-							Collect.getInstance()
-									.getActivityLogger()
-									.logAction(this, "changeView", "showUnsent");
-							InstanceUploaderList.this.showUnsent();
-							break;
-
-						case 1: // show all
-							Collect.getInstance().getActivityLogger()
-									.logAction(this, "changeView", "showAll");
-							InstanceUploaderList.this.showAll();
-							break;
-
-						case 2:// do nothing
-							break;
-						}
-					}
-				}).create();
-		alertDialog.show();
-		return true;
 	}
 
 }

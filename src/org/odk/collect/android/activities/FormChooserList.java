@@ -72,7 +72,7 @@ public class FormChooserList extends SherlockListActivity implements DiskSyncLis
         setContentView(R.layout.chooser_list_layout);
         setTitle(getString(R.string.enter_data));
         
-        //TODO Action Bar
+        //home button leads back to home
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         
         String sortOrder = FormsColumns.DISPLAY_NAME + " ASC, " + FormsColumns.JR_VERSION + " DESC";

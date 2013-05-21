@@ -56,7 +56,7 @@ import com.actionbarsherlock.view.MenuItem;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener, DeleteInstancesListener {
+public class InstanceUploaderActivity extends Activity implements InstanceUploaderListener/*, DeleteInstancesListener*/ {
     private final static String t = "InstanceUploaderActivity";
     private final static int PROGRESS_DIALOG = 1;
     private final static int AUTH_DIALOG = 2;
@@ -73,10 +73,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
     private boolean mAlertShowing;
 
     private InstanceUploaderTask mInstanceUploaderTask;
-    private DeleteInstancesTask mDeleteInstancesTask;
     
-    // list of uploaded instances to delete
-    private List<Long> toDelete;
 
     // maintain a list of what we've yet to send, in case we're interrupted by auth requests
     private Long[] mInstancesToSend;
@@ -225,7 +222,6 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         StringBuilder selection = new StringBuilder();
         Set<String> keys = result.keySet();
         Iterator<String> it = keys.iterator();
-        toDelete = new ArrayList<Long> ();
 
         String[] selectionArgs = new String[keys.size()];
         int i = 0;
@@ -233,14 +229,11 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             String id = it.next();
             selection.append(BaseColumns._ID + "=?");
             selectionArgs[i++] = id;
-            toDelete.add(Long.valueOf(id));
             if (i != keys.size()) {
                 selection.append(" or ");
             }
         }
         
-        deleteSelectedInstances(toDelete);
-
         StringBuilder message = new StringBuilder();
         {
         	Cursor results = null;
@@ -439,42 +432,4 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         mAlertMsg = message;
         mAlertDialog.show();
     }
-    
-    private void deleteSelectedInstances(List<Long> toDelete) {
-		if (mDeleteInstancesTask == null) {
-			mDeleteInstancesTask = new DeleteInstancesTask();
-			mDeleteInstancesTask.setContentResolver(getContentResolver());
-			mDeleteInstancesTask.setDeleteListener(this);
-			mDeleteInstancesTask.execute(toDelete.toArray(new Long[toDelete
-					.size()]));
-		} else {
-			Toast.makeText(this, getString(R.string.file_delete_in_progress),
-					Toast.LENGTH_LONG).show();
-		}
-	}
-
-	@Override
-	public void deleteComplete(int deletedInstances) {
-		Log.i(t, "Delete instances complete");
-        Collect.getInstance().getActivityLogger().logAction(this, "deleteComplete", Integer.toString(deletedInstances));
-		if (deletedInstances == toDelete.size()) {
-			// all deletes were successful
-			Toast.makeText(this,
-					getString(R.string.file_deleted_ok, deletedInstances),
-					Toast.LENGTH_SHORT).show();
-		} else {
-			// had some failures
-			Log.e(t, "Failed to delete "
-					+ (toDelete.size() - deletedInstances) + " instances");
-			Toast.makeText(
-					this,
-					getString(R.string.file_deleted_error, toDelete.size()
-							- deletedInstances, toDelete.size()),
-					Toast.LENGTH_LONG).show();
-		}
-		mDeleteInstancesTask = null;
-		toDelete.clear();
-		
-	}
-
 }
