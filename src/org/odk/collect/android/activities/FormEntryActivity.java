@@ -1064,7 +1064,10 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 				TextView sa = (TextView) endView
 						.findViewById(R.id.save_form_as);
 				sa.setVisibility(View.VISIBLE);
-				saveName = formController.getFormTitle();
+				// TODO if savename != null don"t need to initialize it
+				if (saveName == null || saveName.length() == 0){
+					saveName = formController.getFormTitle();
+				}
 				saveAs.setText(saveName);
 				saveAs.setEnabled(true);
 				saveAs.setVisibility(View.VISIBLE);
