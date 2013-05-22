@@ -29,6 +29,7 @@ License.
 <string name="cancel_loading_form">Annuler</string>
 <string name="cancel_location">Annuler</string>
 <string name="cancel_saving_form">Annuler</string>
+<string name="cannot_edit_completed_form">Ce formulaire ne peut pas être édité une fois marqué complet. Il se peut, qu\'il soit encrypté.</string>
 <string name="capture_audio">Enregistrer de l\'audio</string>
 <string name="capture_image">Prendre une photo</string>
 <string name="capture_video">Enregistrer une vidéo</string>
@@ -41,6 +42,7 @@ License.
 <string name="clear_answer_ask">Enlever cette réponse?</string>
 <string name="clear_answer_no">Annuler</string>
 <string name="completed_data">Complet (%s)</string>
+<string name="create_marker">Vous pouvez désormais créer un marqueur en appuyant longuement sur la carte</string>
 <string name="data">Formulaires sauvegardés</string>
 <string name="data_saved_error">Désolé, la sauvegarde du formulaire a échoué.</string>
 <string name="data_saved_ok">Le formulaire a été enregistré avec succès.</string>
@@ -96,6 +98,7 @@ License.
 <string name="main_menu">Menu Principal</string>
 <string name="main_menu_details">La collecte de données rendue plus facile…</string>
 <string name="manage_files">Supprimer des Formulaires Sauvegardés</string>
+<string name="marker_draggable">Vous pouvez déplacer le marqueur sur la carte en appuyant longuement dessus</string>
 <string name="mark_finished">Marquer le formulaire comme finalisé</string>
 <string name="noselect_error">Désolé, vous n\'avez pas sélectionné un formulaire.</string>
 <string name="no_connection">Connection au réseau non disponible</string>
@@ -133,9 +136,12 @@ License.
 <string name="server_preferences">Serveur</string>
 <string name="toggle_selected">(dé)sélectionner tout</string>
 <string name="trigger">OK. Continuer.</string>
+<string name="two_item_icon">Icône</string>
 <string name="uploading_data">Envoi du formulaire…</string>
 <string name="url_error">URL non valable!</string>
 <string name="username">Nom d\'utilisateur</string>
+<string name="use_gps">Utiliser le GPS/réseau ?</string>
+<string name="use_maps">Utiliser la carte ?</string>
 <string name="view_hierarchy">Aller à la ligne de saisie</string>
 <string name="general_preferences">Modifier les paramètres</string>
 <string name="click_to_web">Sélectionner pour aller à http://opendatakit.org</string>
@@ -180,7 +186,6 @@ License.
 <string name="save_form_as">Nommer le formulaire :</string>
 <string name="save_as_error">Le nom ne peut pas être vide!</string>
 <string name="edit_prompt">Ligne d\'édition</string>
-<string name="cannot_edit_completed_form">Ce formulaire ne peut pas être édité une fois marqué complet. Il se peut, qu\'il soit encrypté.</string>
 <string name="selected_google_account_text">Compte Google</string>
 <string name="server_platform_odk_aggregate">ODK Aggregate</string>
 <string name="server_platform_google_forms">Google Forms</string>
@@ -249,4 +254,5 @@ License.
 <string name="change_url_default">URL</string>
 <string name="launch_printer">Démarrer l\'impression</string>
 <string name="no_printer">L\'imprimante demandée n\'est pas installée. Veuillez installer l\'imprimante</string>
+<string name="advanced_pref">Paramètres avancés</string>
 </resources>
