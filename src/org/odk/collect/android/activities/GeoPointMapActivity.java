@@ -384,6 +384,9 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 	public void onMapLongClick(LatLng point) {
 		mMarkerOption.position(point);
 		mLatLng = point;
+		if (mMarker != null) {
+			mMarker.remove();
+		}
         mMarker = mMap.addMarker(mMarkerOption);
         mMarker.setDraggable(true);
         Toast.makeText(getApplicationContext(), R.string.marker_draggable, Toast.LENGTH_LONG).show();
