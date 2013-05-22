@@ -18,18 +18,23 @@ import java.util.ArrayList;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.DeleteInstancesListener;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.receivers.NetworkReceiver;
+import org.odk.collect.android.tasks.DeleteInstancesTask;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.BaseColumns;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -48,8 +53,10 @@ import com.actionbarsherlock.view.MenuItem;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderList extends SherlockListActivity {
+public class InstanceUploaderList extends SherlockListActivity implements DeleteInstancesListener {
 
+	private static final String t = "InstanceUploaderList";
+	
 	private static final String BUNDLE_SELECTED_ITEMS_KEY = "selected_items";
 	private static final String BUNDLE_TOGGLED_KEY = "toggled";
 
@@ -61,6 +68,8 @@ public class InstanceUploaderList extends SherlockListActivity {
 	private ArrayList<Long> mSelected = new ArrayList<Long>();
 	private boolean mRestored = false;
 	private boolean mToggled = false;
+	private AlertDialog mAlertDialog;
+	DeleteInstancesTask mDeleteInstancesTask = null;
 
 	public Cursor getAllCursor() {
 		// get all complete or failed submission instances
@@ -236,13 +245,68 @@ public class InstanceUploaderList extends SherlockListActivity {
 	         startActivity(parentActivityIntent);
 	         finish();
 	         return true;
-        }
+		case R.id.delete_upload_instance :
+			delete();
+			return true;
+		}
         return super.onOptionsItemSelected(item);
 	}
 
 	private void createPreferencesMenu() {
 		Intent i = new Intent(this, PreferencesActivity.class);
 		startActivity(i);
+	}
+	
+	private void delete () {
+		Collect.getInstance().getActivityLogger().logAction(this, "deleteButton", Integer.toString(mSelected.size()));
+		if (mSelected.size() > 0) {
+			createDeleteInstancesDialog();
+		} else {
+			Toast.makeText(getApplicationContext(),
+					R.string.noselect_error, Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	private void createDeleteInstancesDialog() {
+        Collect.getInstance().getActivityLogger().logAction(this, "createDeleteInstancesDialog", "show");
+
+		mAlertDialog = new AlertDialog.Builder(this).create();
+		mAlertDialog.setTitle(getString(R.string.delete_file));
+		mAlertDialog.setMessage(getString(R.string.delete_confirm,
+				mSelected.size()));
+		DialogInterface.OnClickListener dialogYesNoListener = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int i) {
+				switch (i) {
+				case DialogInterface.BUTTON1: // delete
+			    	Collect.getInstance().getActivityLogger().logAction(this, "createDeleteInstancesDialog", "delete");
+					deleteSelectedInstances();
+					break;
+				case DialogInterface.BUTTON2: // do nothing
+			    	Collect.getInstance().getActivityLogger().logAction(this, "createDeleteInstancesDialog", "cancel");
+					break;
+				}
+			}
+		};
+		mAlertDialog.setCancelable(false);
+		mAlertDialog.setButton(getString(R.string.delete_yes),
+				dialogYesNoListener);
+		mAlertDialog.setButton2(getString(R.string.delete_no),
+				dialogYesNoListener);
+		mAlertDialog.show();
+	}
+	
+	private void deleteSelectedInstances() {
+		if (mDeleteInstancesTask == null) {
+			mDeleteInstancesTask = new DeleteInstancesTask();
+			mDeleteInstancesTask.setContentResolver(getContentResolver());
+			mDeleteInstancesTask.setDeleteListener(this);
+			mDeleteInstancesTask.execute(mSelected.toArray(new Long[mSelected
+					.size()]));
+		} else {
+			Toast.makeText(this, getString(R.string.file_delete_in_progress),
+					Toast.LENGTH_LONG).show();
+		}
 	}
 
 	@Override
@@ -305,6 +369,33 @@ public class InstanceUploaderList extends SherlockListActivity {
 			break;
 		}
 		super.onActivityResult(requestCode, resultCode, intent);
+	}
+
+	@Override
+	public void deleteComplete(int deletedInstances) {
+		Log.i(t, "Delete instances complete");
+        Collect.getInstance().getActivityLogger().logAction(this, "deleteComplete", Integer.toString(deletedInstances));
+		if (deletedInstances == mSelected.size()) {
+			// all deletes were successful
+			Toast.makeText(this,
+					getString(R.string.file_deleted_ok, deletedInstances),
+					Toast.LENGTH_SHORT).show();
+		} else {
+			// had some failures
+			Log.e(t, "Failed to delete "
+					+ (mSelected.size() - deletedInstances) + " instances");
+			Toast.makeText(
+					this,
+					getString(R.string.file_deleted_error, mSelected.size()
+							- deletedInstances, mSelected.size()),
+					Toast.LENGTH_LONG).show();
+		}
+		mDeleteInstancesTask = null;
+		mSelected.clear();
+		getListView().clearChoices(); // doesn't unset the checkboxes
+		for ( int i = 0 ; i < getListView().getCount() ; ++i ) {
+			getListView().setItemChecked(i, false);
+		}
 	}
 
 }

@@ -8,4 +8,8 @@
           android:icon="@android:drawable/ic_menu_upload"
           android:title="@string/send_data"
           android:showAsAction="always|withText"/>
+    <item android:id="@+id/delete_upload_instance"
+          android:icon="@android:drawable/ic_menu_delete"
+          android:title="@string/delete_file"
+          android:showAsAction="always|withText"/>
 </menu>
