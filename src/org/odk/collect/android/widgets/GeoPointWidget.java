@@ -420,6 +420,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 					mGetLocationButton.setVisibility(View.VISIBLE);
 					mViewButton.setVisibility(View.VISIBLE);
 					mLatField.setVisibility(View.GONE);
+					mLatInfo.setVisibility(View.GONE);
+					mLongInfo.setVisibility(View.GONE);
 					mLongField.setVisibility(View.GONE);
 					mOkButton.setVisibility(View.GONE);
 					mViewButton.setText(R.string.show_location);
@@ -427,6 +429,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 					mGetLocationButton.setVisibility(View.GONE);
 					mViewButton.setVisibility(View.VISIBLE);
 					mLatField.setVisibility(View.GONE);
+					mLatInfo.setVisibility(View.GONE);
+					mLongInfo.setVisibility(View.GONE);
 					mLongField.setVisibility(View.GONE);
 					mOkButton.setVisibility(View.GONE);
 					mViewButton.setEnabled(true);
@@ -437,12 +441,16 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 					mGetLocationButton.setVisibility(View.VISIBLE);
 					mViewButton.setVisibility(View.GONE);
 					mLatField.setVisibility(View.GONE);
+					mLatInfo.setVisibility(View.GONE);
+					mLongInfo.setVisibility(View.GONE);
 					mLongField.setVisibility(View.GONE);
 					mOkButton.setVisibility(View.GONE);
 				} else {
 					mGetLocationButton.setVisibility(View.GONE);
 					mViewButton.setVisibility(View.GONE);
 					mLatField.setVisibility(View.VISIBLE);
+					mLatInfo.setVisibility(View.VISIBLE);
+					mLongInfo.setVisibility(View.VISIBLE);
 					mLongField.setVisibility(View.VISIBLE);
 					mOkButton.setVisibility(View.VISIBLE);
 				}
@@ -452,6 +460,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				mGetLocationButton.setVisibility(View.GONE);
 				mViewButton.setVisibility(View.VISIBLE);
 				mLatField.setVisibility(View.GONE);
+				mLatInfo.setVisibility(View.GONE);
+				mLongInfo.setVisibility(View.GONE);
 				mLongField.setVisibility(View.GONE);
 				mOkButton.setVisibility(View.GONE);
 				mViewButton.setText(R.string.show_location);
@@ -459,6 +469,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				mGetLocationButton.setVisibility(View.GONE);
 				mViewButton.setVisibility(View.GONE);
 				mLatField.setVisibility(View.GONE);
+				mLatInfo.setVisibility(View.GONE);
+				mLongInfo.setVisibility(View.GONE);
 				mLongField.setVisibility(View.GONE);
 				mOkButton.setVisibility(View.GONE);
 			}
