@@ -28,6 +28,7 @@ import org.odk.collect.android.application.Collect;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -85,22 +86,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 		params.setMargins(7, 5, 7, 5);
 		
-		//Those two CheckBox allow the user to chose whether to use maps and gps or not
-		CheckBox useMapsinput = new CheckBox(getContext());
-		useMapsinput.setId(QuestionWidget.newUniqueId());
-		useMapsinput.setChecked(true);
-		useMapsinput.setGravity(Gravity.BOTTOM);
-		useMapsinput.setText(R.string.use_maps);
-		useMapsinput.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
-		useMapsinput.setOnClickListener(new OnClickListener() {
-			  @Override
-			  public void onClick(View v) {
-				mUseMaps = ((CheckBox) v).isChecked();
-				refreshWidget ();
-			  }
-			});
-		addView(useMapsinput);
-		useMapsinput.setVisibility(View.VISIBLE);
+		//CheckBox allow the user to chose whether to use gps or not
 		
 		CheckBox useGPSinput = new CheckBox(getContext());
 		useGPSinput.setId(QuestionWidget.newUniqueId());
@@ -252,8 +238,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 			mUseMaps = true;
 		} catch (ClassNotFoundException e) {
 			mUseMaps = false;
-			useMapsinput.setChecked(false);
-			useMapsinput.setClickable(false);
 		}
 
 		// when you press the button
@@ -410,6 +394,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	}
 	
 	private void refreshWidget () {
+		mUseMaps = mUseMaps && PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("key_use_maps", true);
 		if (!mIsReadOnly){
 			if (mUseMaps){
 				if (mUseGPS){

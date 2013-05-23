@@ -142,6 +142,7 @@
 <string name="username">Username</string>
 <string name="use_gps">Use geolocalisation ?</string>
 <string name="use_maps">Use map ?</string>
+<string name="use_maps_summary">Use gMaps in geolocalisation questions ?</string>
 <string name="view_hierarchy">Go To Prompt</string>
 <string name="general_preferences">General Settings</string>
 <string name="click_to_web">Tap to visit http://opendatakit.org</string>

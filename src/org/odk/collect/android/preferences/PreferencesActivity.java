@@ -18,11 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.UrlUtils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -42,12 +44,19 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore.MediaColumns;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.Spanned;
+import android.text.method.PasswordTransformationMethod;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.Toast;
+
 
 public class PreferencesActivity extends PreferenceActivity implements
 		OnPreferenceChangeListener {
-
+	
 	protected static final int IMAGE_CHOOSER = 0;
 
 	public static final String KEY_INFO = "info";
@@ -64,6 +73,8 @@ public class PreferencesActivity extends PreferenceActivity implements
 	public static final String KEY_PASSWORD = "password";
 
 	public static final String KEY_PROTOCOL = "protocol";
+	
+	public static final String KEY_USEMAPS = "use_maps";
 
 	// must match /res/arrays.xml
 	public static final String PROTOCOL_ODK_DEFAULT = "odk_default";
@@ -98,9 +109,14 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 	private CheckBoxPreference mAutosendWifiPreference;
 	private CheckBoxPreference mAutosendNetworkPreference;
+	private CheckBoxPreference mUseMaps;
 	private ListPreference mProtocolPreference;
 	
 	private List<Preference> mPreferences;
+	
+	private SharedPreferences mAdminPreferences;
+	
+	private boolean mAdvancedShown;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,24 +130,24 @@ public class PreferencesActivity extends PreferenceActivity implements
 		// would require code to access it
 		boolean adminMode = getIntent().getBooleanExtra("adminMode", false);
 
-		SharedPreferences adminPreferences = getSharedPreferences(
+		mAdminPreferences = getSharedPreferences(
 				AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
-		boolean serverAvailable = adminPreferences.getBoolean(
+		boolean serverAvailable = mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_SERVER, true);
-		boolean urlAvailable = adminPreferences.getBoolean(
+		boolean urlAvailable = mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_URL, true);
 
 		PreferenceCategory autosendCategory = (PreferenceCategory) findPreference(getString(R.string.autosend));
 		mAutosendWifiPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_WIFI);
-		boolean autosendWifiAvailable = adminPreferences.getBoolean(
+		boolean autosendWifiAvailable = mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_AUTOSEND_WIFI, true);
 		if (!(autosendWifiAvailable || adminMode)) {
 			autosendCategory.removePreference(mAutosendWifiPreference);
 		}
 
 		mAutosendNetworkPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_NETWORK);
-		boolean autosendNetworkAvailable = adminPreferences.getBoolean(
+		boolean autosendNetworkAvailable = mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_AUTOSEND_NETWORK, true);
 		if (!(autosendNetworkAvailable || adminMode)) {
 			autosendCategory.removePreference(mAutosendNetworkPreference);
@@ -233,7 +249,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		mUsernamePreference.getEditText().setFilters(
 				new InputFilter[] { getReturnFilter() });
 
-		boolean usernameAvailable = adminPreferences.getBoolean(
+		boolean usernameAvailable = mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_USERNAME, true);
 		if (!(usernameAvailable || adminMode)) {
 			serverCategory.removePreference(mUsernamePreference);
@@ -262,7 +278,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		mUsernamePreference.getEditText().setFilters(
 				new InputFilter[] { getReturnFilter() });
 
-		boolean passwordAvailable = adminPreferences.getBoolean(
+		boolean passwordAvailable = mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_PASSWORD, true);
 		if (!(passwordAvailable || adminMode)) {
 			serverCategory.removePreference(mPasswordPreference);
@@ -303,7 +319,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		mSelectedGoogleAccountPreference
 				.setSummary(mSelectedGoogleAccountPreference.getValue());
 
-		boolean googleAccountAvailable = adminPreferences.getBoolean(
+		boolean googleAccountAvailable = mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_GOOGLE_ACCOUNT, true);
 		if (!(googleAccountAvailable || adminMode)) {
 			serverCategory.removePreference(mSelectedGoogleAccountPreference);
@@ -332,7 +348,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 		PreferenceCategory clientCategory = (PreferenceCategory) findPreference(getString(R.string.client));
 
-		boolean navigationAvailable = adminPreferences.getBoolean(
+		boolean navigationAvailable = mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_NAVIGATION, true);
 		mNavigationPreference = (ListPreference) findPreference(KEY_NAVIGATION);
 		mNavigationPreference.setSummary(mNavigationPreference.getEntry());
@@ -354,7 +370,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 			clientCategory.removePreference(mNavigationPreference);
 		}
 		
-		boolean fontAvailable = adminPreferences.getBoolean(
+		boolean fontAvailable = mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_CHANGE_FONT_SIZE, true);
 		mFontSizePreference = (ListPreference) findPreference(KEY_FONT_SIZE);
 		mFontSizePreference.setSummary(mFontSizePreference.getEntry());
@@ -376,7 +392,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 			clientCategory.removePreference(mFontSizePreference);
 		}
 
-		boolean defaultAvailable = adminPreferences.getBoolean(
+		boolean defaultAvailable = mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_DEFAULT_TO_FINALIZED, true);
 
 		Preference defaultFinalized = findPreference(KEY_COMPLETED_DEFAULT);
@@ -445,7 +461,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 				.getSharedPreferences().getString(KEY_SPLASH_PATH,
 						getString(R.string.default_splash_path)));
 
-		boolean showSplashAvailable = adminPreferences.getBoolean(
+		boolean showSplashAvailable = mAdminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_SHOW_SPLASH_SCREEN, true);
 
 		CheckBoxPreference showSplashPreference = (CheckBoxPreference) findPreference(KEY_SHOW_SPLASH);
@@ -459,6 +475,10 @@ public class PreferencesActivity extends PreferenceActivity implements
 				|| showSplashAvailable || navigationAvailable || adminMode)) {
 			getPreferenceScreen().removePreference(clientCategory);
 		}
+		
+		//Advanced settings are just useless here
+		PreferenceCategory advancedCategory = (PreferenceCategory)findPreference(getString((R.string.advanced_pref)));
+		getPreferenceScreen().removePreference(advancedCategory);
 
 	}
 
@@ -589,4 +609,106 @@ public class PreferencesActivity extends PreferenceActivity implements
 		return true;
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		Collect.getInstance().getActivityLogger()
+		.logAction(this, "onCreateOptionsMenu", "show");
+		menu.add(0, Menu.FIRST, 0, getString(R.string.admin_preferences))
+		.setIcon(R.drawable.ic_menu_login);
+		
+		//In our case we don't need this menu, it would just confuse the user
+		menu.getItem(0).setVisible(false);
+		
+		return true;
+	}
+	
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case Menu.FIRST:
+			Collect.getInstance().getActivityLogger()
+					.logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
+			String pw = mAdminPreferences.getString(
+					AdminPreferencesActivity.KEY_ADMIN_PW, "");
+			if ("".equalsIgnoreCase(pw)) {
+				Intent i = new Intent(getApplicationContext(),
+						AdminPreferencesActivity.class);
+				startActivity(i);
+			} else {
+				showDialog(1);
+				Collect.getInstance().getActivityLogger()
+						.logAction(this, "createAdminPasswordDialog", "show");
+			}
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case 1:
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			final AlertDialog passwordDialog = builder.create();
+
+			passwordDialog.setTitle(getString(R.string.enter_admin_password));
+			final EditText input = new EditText(this);
+			input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+			input.setTransformationMethod(PasswordTransformationMethod
+					.getInstance());
+			passwordDialog.setView(input, 20, 10, 20, 10);
+
+			passwordDialog.setButton(DialogInterface.BUTTON_POSITIVE,
+					getString(R.string.ok),
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog,
+								int whichButton) {
+							String value = input.getText().toString();
+							String pw = mAdminPreferences.getString(
+									AdminPreferencesActivity.KEY_ADMIN_PW, "");
+							if (pw.compareTo(value) == 0) {
+								Intent i = new Intent(getApplicationContext(),
+										AdminPreferencesActivity.class);
+								startActivity(i);
+								input.setText("");
+								passwordDialog.dismiss();
+							} else {
+								Toast.makeText(
+										PreferencesActivity.this,
+										getString(R.string.admin_password_incorrect),
+										Toast.LENGTH_SHORT).show();
+								Collect.getInstance()
+										.getActivityLogger()
+										.logAction(this, "adminPasswordDialog",
+												"PASSWORD_INCORRECT");
+							}
+						}
+					});
+
+			passwordDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+					getString(R.string.cancel),
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							Collect.getInstance()
+									.getActivityLogger()
+									.logAction(this, "adminPasswordDialog",
+											"cancel");
+							input.setText("");
+							return;
+						}
+					});
+
+			passwordDialog.getWindow().setSoftInputMode(
+					WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+			return passwordDialog;
+
+		}
+		return null;
+	}
+	
 }

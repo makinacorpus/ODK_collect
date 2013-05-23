@@ -317,8 +317,6 @@ public class MainMenuActivity extends SherlockActivity {
 		menu.add(0, MENU_PREFERENCES, 0,
 				getString(R.string.general_preferences)).setIcon(
 				android.R.drawable.ic_menu_preferences).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		menu.add(0, MENU_ADMIN, 0, getString(R.string.admin_preferences))
-				.setIcon(R.drawable.ic_menu_login).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		return true;
 	}
 
@@ -335,21 +333,6 @@ public class MainMenuActivity extends SherlockActivity {
 							"MENU_PREFERENCES");
 			Intent ig = new Intent(this, PreferencesActivity.class);
 			startActivity(ig);
-			return true;
-		case MENU_ADMIN:
-			Collect.getInstance().getActivityLogger()
-					.logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
-			String pw = mAdminPreferences.getString(
-					AdminPreferencesActivity.KEY_ADMIN_PW, "");
-			if ("".equalsIgnoreCase(pw)) {
-				Intent i = new Intent(getApplicationContext(),
-						AdminPreferencesActivity.class);
-				startActivity(i);
-			} else {
-				showDialog(PASSWORD_DIALOG);
-				Collect.getInstance().getActivityLogger()
-						.logAction(this, "createAdminPasswordDialog", "show");
-			}
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -387,75 +370,6 @@ public class MainMenuActivity extends SherlockActivity {
 		mAlertDialog.setCancelable(false);
 		mAlertDialog.setButton(getString(R.string.ok), errorListener);
 		mAlertDialog.show();
-	}
-
-	/*
-	 * Is used to ask for the administrator password when accessing admin settings
-	 */
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-		case PASSWORD_DIALOG:
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			final AlertDialog passwordDialog = builder.create();
-
-			passwordDialog.setTitle(getString(R.string.enter_admin_password));
-			final EditText input = new EditText(this);
-			input.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-			input.setTransformationMethod(PasswordTransformationMethod
-					.getInstance());
-			passwordDialog.setView(input, 20, 10, 20, 10);
-
-			passwordDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-					getString(R.string.ok),
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-							String value = input.getText().toString();
-							String pw = mAdminPreferences.getString(
-									AdminPreferencesActivity.KEY_ADMIN_PW, "");
-							if (pw.compareTo(value) == 0) {
-								Intent i = new Intent(getApplicationContext(),
-										AdminPreferencesActivity.class);
-								startActivity(i);
-								input.setText("");
-								passwordDialog.dismiss();
-							} else {
-								Toast.makeText(
-										MainMenuActivity.this,
-										getString(R.string.admin_password_incorrect),
-										Toast.LENGTH_SHORT).show();
-								Collect.getInstance()
-										.getActivityLogger()
-										.logAction(this, "adminPasswordDialog",
-												"PASSWORD_INCORRECT");
-							}
-						}
-					});
-
-			passwordDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-					getString(R.string.cancel),
-					new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							Collect.getInstance()
-									.getActivityLogger()
-									.logAction(this, "adminPasswordDialog",
-											"cancel");
-							input.setText("");
-							return;
-						}
-					});
-
-			passwordDialog.getWindow().setSoftInputMode(
-					WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-			return passwordDialog;
-
-		}
-		return null;
 	}
 	
 	/*

@@ -1,18 +1,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceScreen
-        android:id="@+id/info"
-        android:key="info"
-        android:summary="@string/click_to_web"
-        android:title="@string/app_name" >
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:data="http://opendatakit.org" />
-    </PreferenceScreen>
-
     <PreferenceCategory
         android:key="@string/server_preferences"
-        android:title="@string/server_preferences" >
+        android:title="@string/server_preferences">
         <EditTextPreference
             android:id="@+id/server_url"
             android:defaultValue="@string/default_server_url"
@@ -71,6 +61,12 @@
             android:key="default_completed"
             android:summary="@string/default_completed_summary"
             android:title="@string/default_completed" />
+        <CheckBoxPreference 
+            android:id="@+id/key_use_maps"
+            android:defaultValue="true"
+            android:key="key_use_maps"
+            android:summary="@string/use_maps_summary"
+            android:title="@string/use_maps" />
     </PreferenceCategory>
     <PreferenceCategory
             android:key="@string/autosend"
@@ -117,7 +113,7 @@
                 android:defaultValue="@string/default_odk_submission"
                 android:dialogTitle="@string/change_submission_url"
                 android:inputType="textNoSuggestions"
-                android:key="submission_url"
+                android:key="submission_url"		
                 android:layout="?android:attr/preferenceLayoutChild"
                 android:title="@string/submission_url" />
         <CheckBoxPreference
@@ -133,5 +129,15 @@
                 android:layout="?android:attr/preferenceLayoutChild"
                 android:title="@string/splash_path" />
     </PreferenceCategory>
+    
+    <PreferenceScreen
+        android:id="@+id/info"
+        android:key="info"
+        android:summary="@string/click_to_web"
+        android:title="@string/app_name" >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://opendatakit.org" />
+    </PreferenceScreen>
 
 </PreferenceScreen>
