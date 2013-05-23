@@ -109,9 +109,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 
 		setTitle(getString(R.string.general_preferences));
 		
-		
-		//mPreferences = 
-
 		// not super safe, but we're just putting in this mode to help
 		// administrate
 		// would require code to access it

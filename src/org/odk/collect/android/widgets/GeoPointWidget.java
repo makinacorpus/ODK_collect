@@ -65,7 +65,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	private boolean mUseMaps;
 	private boolean mUseGPS;
 	private boolean mIsReadOnly;
-	private String mAppearance;
 	private double mAccuracyThreshold;
 
 	public GeoPointWidget(Activity activity, FormEntryPrompt prompt) {
@@ -73,7 +72,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		mUseGPS = true;
 		mUseMaps = true;
 		
-		mAppearance = prompt.getAppearanceHint();
 		String acc = prompt.getQuestion().getAdditionalAttribute(null, ACCURACY_THRESHOLD);
 		if ( acc != null && acc.length() != 0 ) {
 			mAccuracyThreshold = Double.parseDouble(acc);
@@ -93,6 +91,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		useMapsinput.setChecked(true);
 		useMapsinput.setGravity(Gravity.BOTTOM);
 		useMapsinput.setText(R.string.use_maps);
+		useMapsinput.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		useMapsinput.setOnClickListener(new OnClickListener() {
 			  @Override
 			  public void onClick(View v) {
@@ -107,6 +106,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		useGPSinput.setId(QuestionWidget.newUniqueId());
 		useGPSinput.setChecked(true);
 		useGPSinput.setText(R.string.use_gps);
+		useGPSinput.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		useGPSinput.setGravity(Gravity.BOTTOM);
 		useGPSinput.setOnClickListener(new OnClickListener() {
 			  @Override
@@ -150,7 +150,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 				
 				if (mUseMaps && !mUseGPS){
 					i.putExtra("noGPS", true);
-				} else {
+				}
+				if (mStringAnswer != null && mStringAnswer.length() != 0){
 					String s = mStringAnswer.getText().toString();
 					String[] sa = s.split(" ");
 					double gp[] = new double[4];
@@ -174,6 +175,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		mLatInfo = new TextView(getContext());
 		mLatInfo.setId(QuestionWidget.newUniqueId());
 		mLatInfo.setText("Latitude : ");
+		mLatInfo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		addView(mLatInfo);
 		
 		mLatField = new EditText(getContext());
@@ -185,6 +187,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		mLongInfo = new TextView(getContext());
 		mLongInfo.setId(QuestionWidget.newUniqueId());
 		mLongInfo.setText("Longitude : ");
+		mLongInfo.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 		addView(mLongInfo);
 		
 		mLongField = new EditText(getContext());
@@ -263,8 +266,6 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 								mPrompt.getIndex());
 				Intent i = null;
 				
-				//TODO Always use GeoPointMapActivity since it works fine
-				//i = new Intent(getContext(), GeoPointMapActivity.class);
 				
 				if (mUseMaps) {
 					i = new Intent(getContext(), GeoPointMapActivity.class);
@@ -284,12 +285,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 		// retrieve answer from data model and update ui
 
 		addView(mGetLocationButton);
-		
-		//TODO Always use maps
-		//addView(mViewButton);
-		if (mUseMaps) {
-			addView(mViewButton);
-		}
+		addView(mViewButton);
 		addView(mAnswerDisplay);
 
 		refreshWidget ();

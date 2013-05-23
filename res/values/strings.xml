@@ -42,7 +42,6 @@
 <string name="clear_answer_ask">Remove This Response?</string>
 <string name="clear_answer_no">Cancel</string>
 <string name="completed_data">Complete (%s)</string>
-<string name="create_marker">You can now create a marker on the map by long-clicking on it</string>
 <string name="data">Saved Forms</string>
 <string name="data_saved_error">Sorry, form save failed!</string>
 <string name="data_saved_ok">Form successfully saved!</string>
@@ -98,7 +97,8 @@
 <string name="main_menu">Main Menu</string>
 <string name="main_menu_details">Data collection made easier&#8230;</string>
 <string name="manage_files">Delete Saved Form</string>
-<string name="marker_draggable">You can move the marker on the map to adjust the position</string>
+<string name="marker_create">You can create a marker and move it by long pressing where you want it to be and then move it by long pressing it and then drag it. </string>
+<string name="marker_draggable">You can move the marker by long pressing it and then drag it, or long pressing where you want it to be</string>
 <string name="mark_finished">Mark form as finalized</string>
 <string name="noselect_error">Sorry, you have not selected any forms!</string>
 <string name="no_connection">No network connection available</string>

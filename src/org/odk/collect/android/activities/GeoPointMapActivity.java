@@ -99,27 +99,29 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
         mMap.setOnMarkerDragListener(this);
         
         if (intent != null && intent.getExtras() != null) {
-        	// Case where we only show the saved location
+        	
+        	boolean withLoc = true;
+        	if ( intent.hasExtra("noGPS")) {
+        		withLoc = false;
+        		mMap.setOnMapLongClickListener(this);
+        		mCaptureLocation = false;
+        		Toast.makeText(getApplicationContext(), R.string.marker_create, Toast.LENGTH_LONG).show();
+            }
         	if ( intent.hasExtra(GeoPointWidget.LOCATION) ) {
         		double[] location = intent.getDoubleArrayExtra(GeoPointWidget.LOCATION);
         		mLatLng = new LatLng(location[0], location[1]);
             	mMarkerOption.position(mLatLng);
                 mMarker = mMap.addMarker(mMarkerOption);
                 mMarker.setDraggable(true);
-                Toast.makeText(getApplicationContext(), R.string.marker_draggable, Toast.LENGTH_LONG).show();
-                
+                if (withLoc){
+                	Toast.makeText(getApplicationContext(), R.string.marker_draggable, Toast.LENGTH_LONG).show();
+                }
             	mCaptureLocation = false;
             	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
             }
         	
         	if ( intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD) ) {
         		mLocationAccuracy = intent.getDoubleExtra(GeoPointWidget.ACCURACY_THRESHOLD, GeoPointWidget.DEFAULT_LOCATION_ACCURACY);
-        	}
-        	
-        	if ( intent.hasExtra("noGPS")) {
-        		Toast.makeText(getApplicationContext(), R.string.create_marker, Toast.LENGTH_LONG).show();
-        		mMap.setOnMapLongClickListener(this);
-        		mCaptureLocation = false;
         	}
         }
 
@@ -386,10 +388,11 @@ public class GeoPointMapActivity extends FragmentActivity implements LocationLis
 		mLatLng = point;
 		if (mMarker != null) {
 			mMarker.remove();
-		}
+		}else{
+			Toast.makeText(getApplicationContext(), R.string.marker_draggable, Toast.LENGTH_LONG).show();
+	    }
         mMarker = mMap.addMarker(mMarkerOption);
         mMarker.setDraggable(true);
-        Toast.makeText(getApplicationContext(), R.string.marker_draggable, Toast.LENGTH_LONG).show();
         mAcceptLocation.setClickable(true);
         mShowLocation.setClickable(true);
         isDragged = true;
