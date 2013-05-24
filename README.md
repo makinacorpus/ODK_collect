@@ -19,7 +19,7 @@ Technical aspects :
 Main modifications compared to the play store version : 
  - Usage of the action bar in most activities instead of buttons particularly hard to use on tiny screens.
  - The styles are now defined in the /res/values/theme.xml file
- - Usage of the map is now default for geopoint questions. The map uses the Google Maps Android API v2. See : 
+ - Usage of the map is now default for geopoint questions (see settings to use old interface). The map uses the Google Maps Android API v2. See : 
 		src/org/odk/collect/android/activities/GeoPointmapActivity.java
 		src/org/odk/collect/android/widgets/GeoPointWidget.java
 		res/layout/geopoint_layout.xml
@@ -33,8 +33,6 @@ See : https://developers.google.com/maps/documentation/android/
 
 Bugs : 
  - In a form, when several questions are related by a relevance constraint in the same group with a field-list appearance : if you give an answer to a question that should make another question appear, unless you leave the current view and come back on it, the other question won't appear.
- - When an attempt to upload a finalised instance of a form fails, the instance is deleted from the device and cannot be uploaded again.
- - When editing a saved form instance, at the end of the editing process, the default instance name is the form's name, not the saved instance name.
 
 Improvements to add :
  - When in a repeating group, it would be useful to be able to customize the name of each instance of the group.
