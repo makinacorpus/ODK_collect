@@ -73,7 +73,6 @@ public class MainMenuActivity extends SherlockActivity {
 
 	// menu options
 	private static final int MENU_PREFERENCES = Menu.FIRST;
-	private static final int MENU_ADMIN = Menu.FIRST + 1;
 
 	// buttons
 	private Button mEnterDataButton;
