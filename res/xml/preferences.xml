@@ -130,6 +130,7 @@
                 android:title="@string/splash_path" />
     </PreferenceCategory>
     
+    <!-- Useless, should maybe link to a tutorial
     <PreferenceScreen
         android:id="@+id/info"
         android:key="info"
@@ -138,6 +139,6 @@
         <intent
             android:action="android.intent.action.VIEW"
             android:data="http://opendatakit.org" />
-    </PreferenceScreen>
+    </PreferenceScreen> -->
 
 </PreferenceScreen>
