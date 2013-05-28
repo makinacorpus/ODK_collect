@@ -26,6 +26,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
@@ -97,8 +98,8 @@ public class GridMultiWidget extends QuestionWidget {
     int resizeWidth;
 
     @SuppressWarnings("unchecked")
-    public GridMultiWidget(Context context, FormEntryPrompt prompt, int numColumns) {
-        super(context, prompt);
+    public GridMultiWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt, int numColumns) {
+        super(context, widgetAnsweredListener, prompt);
         mItems = prompt.getSelectChoices();
         mPrompt = prompt;
 

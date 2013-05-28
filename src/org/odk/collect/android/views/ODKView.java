@@ -19,11 +19,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.widgets.IBinaryWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.WidgetFactory;
@@ -36,6 +36,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -60,7 +61,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     
     public final static String FIELD_LIST = "field-list";
 
-    public ODKView(Activity activity, FormEntryPrompt[] questionPrompts,
+    public ODKView(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt[] questionPrompts,
             FormEntryCaption[] groups, boolean advancingPage) {
         super(activity);
 
@@ -77,14 +78,14 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         mLayout.setMargins(10, 0, 10, 0);
 
         // display which group you are in as well as the question
-         //TODO 
+        //TODO 
         addGroupText(groups);
         for (FormEntryPrompt p : questionPrompts) {
         	String text = p.getConstraintText();
         	String answer = p.getAnswerText();
         	
         	Log.e(getClass().getName(), "Contrainte :" + text + "Value :" + answer) ;
-       }
+        }
         
         boolean first = true;
         int id = 0;
@@ -100,7 +101,7 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             
             // if question or answer type is not supported, use text widget
             QuestionWidget qw =
-                WidgetFactory.createWidgetFromPrompt(p, activity);
+                WidgetFactory.createWidgetFromPrompt(p, activity, widgetAnsweredListener);
             qw.setLongClickable(true);
             qw.setOnLongClickListener(this);
             qw.setId(VIEW_ID + id++);
@@ -274,7 +275,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         return widgets;
     }
 
-
     @Override
     public void setOnFocusChangeListener(OnFocusChangeListener l) {
         for (int i = 0; i < widgets.size(); i++) {
@@ -297,5 +297,4 @@ public class ODKView extends ScrollView implements OnLongClickListener {
             qw.cancelLongPress();
         }
     }
-
 }

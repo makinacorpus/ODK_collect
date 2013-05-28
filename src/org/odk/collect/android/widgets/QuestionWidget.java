@@ -20,6 +20,7 @@ import java.util.List;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
@@ -27,11 +28,13 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -62,11 +65,13 @@ public abstract class QuestionWidget extends LinearLayout {
     private TextView mQuestionText;
     private MediaLayout mediaLayout;
     private TextView mHelpText;
+    protected WidgetAnsweredListener mAnswerListener;
 
 
-    public QuestionWidget(Context context, FormEntryPrompt p) {
+    public QuestionWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt p) {
         super(context);
-
+        
+        mAnswerListener = widgetAnsweredListener;
         mQuestionFontsize = Collect.getQuestionFontsize();
         mAnswerFontsize = mQuestionFontsize + 2;
 
@@ -228,5 +233,11 @@ public abstract class QuestionWidget extends LinearLayout {
             mHelpText.cancelLongPress();
         }
     }
-
+    
+    protected void updateView () {
+    		
+    	if (mAnswerListener != null){
+    		mAnswerListener.updateView();
+    	}
+    }
 }

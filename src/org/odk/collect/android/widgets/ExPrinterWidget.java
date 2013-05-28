@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.R;
 
 import android.app.Activity;
@@ -116,8 +117,8 @@ public class ExPrinterWidget extends QuestionWidget implements IBinaryWidget {
 
     private Button mLaunchIntentButton;
 
-    public ExPrinterWidget(Activity activity, FormEntryPrompt prompt) {
-        super(activity, prompt);
+    public ExPrinterWidget(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+        super(activity, widgetAnsweredListener, prompt);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);

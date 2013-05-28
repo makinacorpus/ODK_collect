@@ -159,13 +159,8 @@ public class InstanceUploaderList extends SherlockListActivity implements Delete
 				.logAction(this, "onCreateOptionsMenu", "show");
 		super.onCreateOptionsMenu(menu);
 		
-		//creates the select all and upload buttons on the action bar from xml
+		//creates the select all, upload and delete buttons on the action bar from xml preference will be either in action or overflow
 		getSupportMenuInflater().inflate(R.menu.menu_instance_uploader, menu);
-		
-		//creates two entries in the overflow : settings and change display aspect
-		menu.add(0, MENU_PREFERENCES, 0,
-				getString(R.string.general_preferences)).setIcon(
-				android.R.drawable.ic_menu_preferences).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		
 		return true;
 	}
@@ -173,7 +168,7 @@ public class InstanceUploaderList extends SherlockListActivity implements Delete
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case MENU_PREFERENCES:
+		case R.id.preferences_uploader:
 			Collect.getInstance().getActivityLogger()
 					.logAction(this, "onMenuItemSelected", "MENU_PREFERENCES");
 			createPreferencesMenu();

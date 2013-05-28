@@ -17,6 +17,7 @@ package org.odk.collect.android.widgets;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 
 import android.content.Context;
 import android.text.InputFilter;
@@ -47,8 +48,8 @@ public class IntegerWidget extends StringWidget {
         return d;
 	}
 
-    public IntegerWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt, true);
+    public IntegerWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+        super(context, widgetAnsweredListener, prompt, true);
 
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
         mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);

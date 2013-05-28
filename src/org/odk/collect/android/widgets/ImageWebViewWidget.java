@@ -22,6 +22,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.R;
 
@@ -129,8 +130,8 @@ public class ImageWebViewWidget extends QuestionWidget implements IBinaryWidget 
 		return false;
 	}
 
-	public ImageWebViewWidget(Activity activity, FormEntryPrompt prompt) {
-		super(activity, prompt);
+	public ImageWebViewWidget(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+		super(activity, widgetAnsweredListener, prompt);
 
 		mInstanceFolder = Collect.getInstance().getFormController()
 				.getInstancePath().getParent();

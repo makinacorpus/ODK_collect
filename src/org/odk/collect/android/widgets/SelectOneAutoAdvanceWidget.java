@@ -25,6 +25,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.views.MediaLayout;
 import org.odk.collect.android.R;
 
@@ -54,8 +55,8 @@ public class SelectOneAutoAdvanceWidget extends QuestionWidget implements OnChec
     AdvanceToNextListener listener;
 
 
-    public SelectOneAutoAdvanceWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public SelectOneAutoAdvanceWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+        super(context, widgetAnsweredListener, prompt);
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
 

@@ -23,6 +23,7 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.R;
 
@@ -62,8 +63,8 @@ public class LabelWidget extends QuestionWidget {
     private TextView label;
 
 
-    public LabelWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public LabelWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+        super(context, widgetAnsweredListener, prompt);
 
         mItems = prompt.getSelectChoices();
         mPrompt = prompt;

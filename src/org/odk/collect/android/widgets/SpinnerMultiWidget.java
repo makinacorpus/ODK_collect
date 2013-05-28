@@ -22,6 +22,7 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -64,8 +65,8 @@ public class SpinnerMultiWidget extends QuestionWidget {
 
 
     @SuppressWarnings("unchecked")
-    public SpinnerMultiWidget(final Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public SpinnerMultiWidget(final Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+        super(context, widgetAnsweredListener, prompt);
         mItems = prompt.getSelectChoices();
         mPrompt = prompt;
 

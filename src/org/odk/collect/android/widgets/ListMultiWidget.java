@@ -27,6 +27,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.R;
 
@@ -74,8 +75,8 @@ public class ListMultiWidget extends QuestionWidget {
 
 
     @SuppressWarnings("unchecked")
-    public ListMultiWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
-        super(context, prompt);
+    public ListMultiWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt, boolean displayLabel) {
+        super(context, widgetAnsweredListener, prompt);
 
         mItems = prompt.getSelectChoices();
         mCheckboxes = new ArrayList<CheckBox>();

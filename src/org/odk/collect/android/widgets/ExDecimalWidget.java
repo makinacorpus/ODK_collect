@@ -21,6 +21,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -57,8 +58,8 @@ public class ExDecimalWidget extends ExStringWidget {
         return d;
 	}
 
-    public ExDecimalWidget(Activity activity, FormEntryPrompt prompt) {
-        super(activity, prompt);
+    public ExDecimalWidget(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+    	super(activity, widgetAnsweredListener, prompt);
 
         mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
 

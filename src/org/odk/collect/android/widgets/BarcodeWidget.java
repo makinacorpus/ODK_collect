@@ -19,6 +19,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.R;
 
 import android.app.Activity;
@@ -44,8 +45,8 @@ public class BarcodeWidget extends QuestionWidget implements IBinaryWidget {
 	private Button mGetBarcodeButton;
 	private TextView mStringAnswer;
 
-	public BarcodeWidget(Activity activity, FormEntryPrompt prompt) {
-		super(activity, prompt);
+	public BarcodeWidget(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+		super(activity, widgetAnsweredListener, prompt);
 		setOrientation(LinearLayout.VERTICAL);
 
 		TableLayout.LayoutParams params = new TableLayout.LayoutParams();

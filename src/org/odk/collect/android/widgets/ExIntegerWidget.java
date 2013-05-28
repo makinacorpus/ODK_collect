@@ -19,6 +19,7 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -55,8 +56,8 @@ public class ExIntegerWidget extends ExStringWidget {
         return d;
 	}
 
-    public ExIntegerWidget(Activity activity, FormEntryPrompt prompt) {
-        super(activity, prompt);
+    public ExIntegerWidget(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+    	super(activity, widgetAnsweredListener, prompt);
 
         mAnswer.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
 

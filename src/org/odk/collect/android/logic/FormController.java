@@ -305,6 +305,9 @@ public class FormController {
         return mFormEntryController.getModel().getForm().getInstance();
     }
 
+	// TODO When there is a relevance constraint between two questions from the
+	// same field-list group, the view should be refreshed in order to make
+	// widgets appear according to the relevance constraint
 
     /**
      * A convenience method for determining if the current FormIndex is in a group that is/should be
@@ -708,7 +711,8 @@ public class FormController {
 
         // If after we've stepped, we're in a field-list, jump back to the beginning of the group
         //
-
+        
+        // TODO 
         if (indexIsInFieldList()
                 && getEvent() == FormEntryController.EVENT_QUESTION) {
             // caption[0..len-1]

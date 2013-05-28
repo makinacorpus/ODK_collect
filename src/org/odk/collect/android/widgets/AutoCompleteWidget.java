@@ -23,6 +23,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -59,8 +60,8 @@ public class AutoCompleteWidget extends QuestionWidget {
     String match_chars = "chars";
 
 
-    public AutoCompleteWidget(Context context, FormEntryPrompt prompt, String filterType) {
-        super(context, prompt);
+    public AutoCompleteWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt, String filterType) {
+        super(context, widgetAnsweredListener, prompt);
         mItems = prompt.getSelectChoices();
         mPrompt = prompt;
 

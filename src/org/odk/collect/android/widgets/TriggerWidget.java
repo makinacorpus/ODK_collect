@@ -18,6 +18,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.R;
 
 import android.content.Context;
@@ -49,8 +50,8 @@ public class TriggerWidget extends QuestionWidget {
     }
 
 
-    public TriggerWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+    public TriggerWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+        super(context, widgetAnsweredListener, prompt);
         mPrompt = prompt;
 
         this.setOrientation(LinearLayout.VERTICAL);

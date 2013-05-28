@@ -27,6 +27,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.R;
 
@@ -70,8 +71,8 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
     
     ArrayList<RadioButton> buttons;
 
-    public ListWidget(Context context, FormEntryPrompt prompt, boolean displayLabel) {
-        super(context, prompt);
+    public ListWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt, boolean displayLabel) {
+        super(context, widgetAnsweredListener, prompt);
 
         mItems = prompt.getSelectChoices();
         buttons = new ArrayList<RadioButton>();

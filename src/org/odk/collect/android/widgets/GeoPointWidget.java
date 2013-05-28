@@ -24,6 +24,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 
 import android.app.Activity;
 import android.content.Context;
@@ -68,8 +69,8 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	private boolean mIsReadOnly;
 	private double mAccuracyThreshold;
 
-	public GeoPointWidget(Activity activity, FormEntryPrompt prompt) {
-		super(activity, prompt);
+	public GeoPointWidget(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+		super(activity, widgetAnsweredListener, prompt);
 		mUseGPS = true;
 		mUseMaps = true;
 		

@@ -27,6 +27,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.views.AudioButton.AudioHandler;
 import org.odk.collect.android.views.ExpandedHeightGridView;
@@ -98,9 +99,9 @@ public class GridWidget extends QuestionWidget {
 
     int resizeWidth;
 
-    public GridWidget(Context context, FormEntryPrompt prompt, int numColumns,
+    public GridWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt, int numColumns,
             final boolean quickAdvance) {
-        super(context, prompt);
+        super(context, widgetAnsweredListener, prompt);
         mItems = prompt.getSelectChoices();
         mPrompt = prompt;
         listener = (AdvanceToNextListener) context;

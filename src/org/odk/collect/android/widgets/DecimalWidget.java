@@ -19,6 +19,7 @@ import java.text.NumberFormat;
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 
 import android.content.Context;
 import android.text.InputFilter;
@@ -49,8 +50,8 @@ public class DecimalWidget extends StringWidget {
         return d;
 	}
 	
-    public DecimalWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt, true);
+    public DecimalWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+    	super(context, widgetAnsweredListener, prompt, true);
 
         // formatting
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);

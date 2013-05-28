@@ -27,6 +27,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,6 +53,8 @@ public class FormHierarchyActivity extends SherlockListActivity {
 	private static final String mIndent = "     ";
 
 	private Button jumpPreviousButton;
+	
+	private boolean mIsSavedForm;
 
 	List<HierarchyElement> formList;
 	TextView mPath;
@@ -65,12 +68,15 @@ public class FormHierarchyActivity extends SherlockListActivity {
 
 		FormController formController = Collect.getInstance()
 				.getFormController();
+		Intent intent = getIntent();
+		
+		mIsSavedForm = (intent.hasExtra("isSavedForm")&&intent.getBooleanExtra("isSavedForm", false));
 
 		// We use a static FormEntryController to make jumping faster.
 		mStartIndex = formController.getFormIndex();
 
 		setTitle(formController.getFormTitle());
-		getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mPath = (TextView) findViewById(R.id.pathtext);
 
@@ -430,11 +436,21 @@ public class FormHierarchyActivity extends SherlockListActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
-			Collect.getInstance()
-					.getActivityLogger()
-					.logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP",
-							mStartIndex);
-			Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
+				
+			if (mIsSavedForm){
+				Collect.getInstance()
+				.getActivityLogger()
+				.logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP",
+						mStartIndex);
+				Intent i  = new Intent(this, InstanceChooserList.class);
+				startActivity(i);
+			}else{
+				Collect.getInstance()
+				.getActivityLogger()
+				.logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP",
+						mStartIndex);
+				Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
+			}
 		}
 		return super.onKeyDown(keyCode, event);
 	}

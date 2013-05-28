@@ -11,5 +11,9 @@
     <item android:id="@+id/delete_upload_instance"
           android:icon="@android:drawable/ic_menu_delete"
           android:title="@string/delete_file"
-          android:showAsAction="always|withText"/>
+          android:showAsAction="always"/>
+    <item android:id="@+id/preferences_uploader"
+          android:icon="@android:drawable/ic_menu_preferences"
+          android:title="@string/general_preferences"
+          android:showAsAction="ifRoom|withText"/>
 </menu>

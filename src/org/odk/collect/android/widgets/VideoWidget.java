@@ -21,6 +21,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.R;
@@ -61,8 +62,8 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 
 	private String mInstanceFolder;
 
-	public VideoWidget(Activity activity, FormEntryPrompt prompt) {
-		super(activity, prompt);
+	public VideoWidget(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+		super(activity, widgetAnsweredListener, prompt);
 
 		mInstanceFolder = Collect.getInstance().getFormController()
 				.getInstancePath().getParent();

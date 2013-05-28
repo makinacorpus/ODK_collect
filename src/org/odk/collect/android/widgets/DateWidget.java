@@ -23,6 +23,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -48,8 +49,8 @@ public class DateWidget extends QuestionWidget {
 
 
     @SuppressLint("NewApi")
-	public DateWidget(Context context, FormEntryPrompt prompt) {
-        super(context, prompt);
+	public DateWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+        super(context, widgetAnsweredListener, prompt);
 
         mDatePicker = new DatePicker(getContext());
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB){

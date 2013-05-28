@@ -21,6 +21,7 @@ import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 
 import android.content.Context;
 import android.view.Gravity;
@@ -37,8 +38,8 @@ public class TimeWidget extends QuestionWidget {
     private TimePicker mTimePicker;
 
 
-    public TimeWidget(Context context, final FormEntryPrompt prompt) {
-        super(context, prompt);
+    public TimeWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, final FormEntryPrompt prompt) {
+        super(context, widgetAnsweredListener, prompt);
 
         mTimePicker = new TimePicker(getContext());
         mTimePicker.setId(QuestionWidget.newUniqueId());

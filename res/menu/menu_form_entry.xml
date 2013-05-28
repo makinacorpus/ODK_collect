@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >    
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/refresh_view"
+	      android:icon="@drawable/ic_menu_refresh"
+	      android:showAsAction="always" />
 	<item android:id="@+id/hierachy_view"
-	          android:icon="@drawable/ic_menu_goto"
-	          android:title="@string/view_hierarchy"
-	          android:showAsAction="always|withText" />
+	      android:icon="@drawable/ic_menu_goto"
+	      android:title="@string/view_hierarchy"
+	      android:showAsAction="always|withText" />
 	<item android:id="@+id/save_form"
-	          android:icon="@android:drawable/ic_menu_save"
-	          android:title="@string/save_all_answers"
-	          android:showAsAction="always|withText" />
+	      android:icon="@android:drawable/ic_menu_save"
+	      android:title="@string/save_all_answers"
+	      android:showAsAction="always|withText" />
+	<item android:id="@+id/preferences_entry"
+          android:icon="@android:drawable/ic_menu_preferences"
+          android:title="@string/general_preferences"
+          android:showAsAction="ifRoom|withText"/>
 </menu>
 

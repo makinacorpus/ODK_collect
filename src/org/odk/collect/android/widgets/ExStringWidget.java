@@ -19,6 +19,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.R;
 
 import android.app.Activity;
@@ -88,8 +89,8 @@ public class ExStringWidget extends QuestionWidget implements IBinaryWidget {
     
     protected EditText mAnswer;
 
-    public ExStringWidget(Activity activity, FormEntryPrompt prompt) {
-        super(activity, prompt);
+    public ExStringWidget(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+        super(activity, widgetAnsweredListener, prompt);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
         params.setMargins(7, 5, 7, 5);

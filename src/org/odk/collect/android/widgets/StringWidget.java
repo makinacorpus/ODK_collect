@@ -14,10 +14,13 @@
 
 package org.odk.collect.android.widgets;
 
+import java.util.ArrayList;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 
 import android.content.Context;
 import android.text.Editable;
@@ -28,6 +31,8 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TableLayout;
@@ -38,23 +43,32 @@ import android.widget.TableLayout;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class StringWidget extends QuestionWidget {
+public class StringWidget extends QuestionWidget implements OnFocusChangeListener{
 	private static final String ROWS = "rows";
 
     boolean mReadOnly = false;
     protected EditText mAnswer;
+    private boolean textChanged;
+    private boolean isInit;
 
-    public StringWidget(Context context, FormEntryPrompt prompt) {
-    	this(context, prompt, true);
+    public StringWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+    	this(context, widgetAnsweredListener, prompt, true);
     	setupChangeListener();
+    	Log.i("StringWidget", "Constructeur");
     }
 
-    protected StringWidget(Context context, FormEntryPrompt prompt, boolean derived) {
-        super(context, prompt);
+    protected StringWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt, boolean derived) {
+        super(context, widgetAnsweredListener, prompt);
         mAnswer = new EditText(context);
         mAnswer.setId(QuestionWidget.newUniqueId());
         mReadOnly = prompt.isReadOnly();
+        setupChangeListener();
+        mAnswerListener.setAnswerChange(false);
+        Log.i("StringWidget", "textChanged false");
+        textChanged = false;
+        mAnswer.setOnFocusChangeListener(this);
 
+        
         mAnswer.setTextSize(TypedValue.COMPLEX_UNIT_DIP, mAnswerFontsize);
 
         TableLayout.LayoutParams params = new TableLayout.LayoutParams();
@@ -93,7 +107,9 @@ public class StringWidget extends QuestionWidget {
 
         String s = prompt.getAnswerText();
         if (s != null) {
+        	isInit = true;
             mAnswer.setText(s);
+            
         }
 
         if (mReadOnly) {
@@ -111,7 +127,17 @@ public class StringWidget extends QuestionWidget {
 
 			@Override
 			public void afterTextChanged(Editable s) {
+				Log.i("StringWidget", "AfterTextChanged " + s.toString() + " " + oldText);
 				if (!s.toString().equals(oldText)) {
+					Log.i("StringWidget", "AfterTextChanged updateView");
+					if (isInit) {
+						Log.i("StringWidget", "init");
+						isInit = false;
+					} else {
+						textChanged = true;
+						Log.i("StringWidget", "textChanged true");
+						mAnswerListener.setAnswerChange(true);
+					}
 					Collect.getInstance().getActivityLogger()
 						.logInstanceAction(this, "answerTextChanged", s.toString(),	getPrompt().getIndex());
 				}
@@ -120,12 +146,15 @@ public class StringWidget extends QuestionWidget {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
+				Log.i("StringWidget", "beforeTextChanged");
 				oldText = s.toString();
 			}
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
-					int count) { }
+					int count) { 
+				Log.i("StringWidget", "onTextChanged");
+			}
         });
     }
 
@@ -190,5 +219,21 @@ public class StringWidget extends QuestionWidget {
         super.cancelLongPress();
         mAnswer.cancelLongPress();
     }
+
+	@Override
+	public void onFocusChange(View v, boolean hasFocus) {
+		Log.i(getClass().getName(), " v " + v.getId() + " mAnswer "+mAnswer.getId() + " hasfocus " + Boolean.toString(hasFocus) + " textChanged " + Boolean.toString(textChanged));
+		if( textChanged){
+			int id = mAnswer.getId();
+			Log.i(getClass().getName(), "vId " + v.getId() + " id " + id + " focus " + Boolean.toString(hasFocus));
+			if ( (v.getId() == id  && !hasFocus)  || (v.getId() != id  && hasFocus)) {
+				updateView();
+				mAnswerListener.setAnswerChange(false);
+				textChanged = false;
+				Log.i("StringWidget", "textChanged false");
+			}
+		}
+		
+	}
 
 }

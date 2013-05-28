@@ -306,8 +306,6 @@ public class FormDownloadList extends SherlockListActivity implements FormListDo
     public boolean onCreateOptionsMenu(Menu menu) {
         Collect.getInstance().getActivityLogger().logAction(this, "onCreateOptionsMenu", "show");
 
-        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.general_preferences)).setIcon(
-            android.R.drawable.ic_menu_preferences);
         getSupportMenuInflater().inflate(R.menu.menu_form_download, menu);
         return true;
     }
@@ -316,7 +314,7 @@ public class FormDownloadList extends SherlockListActivity implements FormListDo
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_PREFERENCES:
+            case R.id.preferences_download:
                 Collect.getInstance().getActivityLogger().logAction(this, "onMenuItemSelected", "MENU_PREFERENCES");
                 Intent i = new Intent(this, PreferencesActivity.class);
                 startActivity(i);

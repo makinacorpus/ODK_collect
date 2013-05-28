@@ -24,6 +24,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.views.MediaLayout;
 
 import android.content.Context;
@@ -47,8 +48,8 @@ public class SelectOneWidget extends QuestionWidget implements
 	Vector<SelectChoice> mItems; // may take a while to compute
 	ArrayList<RadioButton> buttons;
 
-	public SelectOneWidget(Context context, FormEntryPrompt prompt) {
-		super(context, prompt);
+	public SelectOneWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
+		super(context, widgetAnsweredListener, prompt);
 
 		mItems = prompt.getSelectChoices();
 		buttons = new ArrayList<RadioButton>();

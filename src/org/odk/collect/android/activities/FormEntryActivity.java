@@ -33,6 +33,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.FormSavedListener;
+import org.odk.collect.android.listeners.WidgetAnsweredListener;
 import org.odk.collect.android.logic.FormController;
 import org.odk.collect.android.logic.FormController.FailedConstraint;
 import org.odk.collect.android.logic.PropertyManager;
@@ -108,7 +109,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 public class FormEntryActivity extends SherlockActivity implements AnimationListener,
 		FormLoaderListener, FormSavedListener, AdvanceToNextListener,
-		OnGestureListener {
+		OnGestureListener, WidgetAnsweredListener {
 	private static final String t = "FormEntryActivity";
 
 	// save with every swipe forward or back. Timings indicate this takes .25
@@ -163,7 +164,6 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 	private static final int MENU_LANGUAGES = Menu.FIRST;
 	private static final int MENU_HIERARCHY_VIEW = Menu.FIRST + 1;
 	private static final int MENU_SAVE = Menu.FIRST + 2;
-	private static final int MENU_PREFERENCES = Menu.FIRST + 3;
 
 	private static final int PROGRESS_DIALOG = 1;
 	private static final int SAVING_DIALOG = 2;
@@ -195,6 +195,8 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 
 	private ImageButton mNextButton;
 	private ImageButton mBackButton;
+	
+	private boolean mAnswersChanged;
 
 	enum AnimationType {
 		LEFT, RIGHT, FADE
@@ -732,7 +734,6 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		menu.removeItem(MENU_LANGUAGES);
 		menu.removeItem(MENU_HIERARCHY_VIEW);
 		menu.removeItem(MENU_SAVE);
-		menu.removeItem(MENU_PREFERENCES);
 		
 	
 		if (mAdminPreferences.getBoolean(
@@ -745,12 +746,6 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 					.setIcon(R.drawable.ic_menu_start_conversation)
 					.setEnabled(enabled);
 		}
-		if (mAdminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_ACCESS_SETTINGS, true)) {
-			menu.add(0, MENU_PREFERENCES, 0,
-					getString(R.string.general_preferences)).setIcon(
-					android.R.drawable.ic_menu_preferences);
-		}
 		return true;
 	}
 
@@ -759,6 +754,15 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		FormController formController = Collect.getInstance()
 				.getFormController();
 		switch (item.getItemId()) {
+		case R.id.refresh_view:
+			Collect.getInstance()
+			.getActivityLogger()
+			.logInstanceAction(this, "onOptionsItemSelected",
+					"Refresh ODKView");
+			if (mCurrentView != null){
+				updateView();
+			}
+			return true;
 		case MENU_LANGUAGES:
 			Collect.getInstance()
 					.getActivityLogger()
@@ -785,7 +789,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			Intent i = new Intent(this, FormHierarchyActivity.class);
 			startActivityForResult(i, HIERARCHY_ACTIVITY);
 			return true;
-		case MENU_PREFERENCES:
+		case R.id.preferences_entry:
 			Collect.getInstance()
 					.getActivityLogger()
 					.logInstanceAction(this, "onOptionsItemSelected",
@@ -1136,7 +1140,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 				FormEntryPrompt[] prompts = formController.getQuestionPrompts();
 				FormEntryCaption[] groups = formController
 						.getGroupsForCurrentIndex();
-				odkv = new ODKView(this, formController.getQuestionPrompts(),
+				odkv = new ODKView(this, this, formController.getQuestionPrompts(),
 						groups, advancingPage);
 				Log.i(t,
 						"created view for group "
@@ -1229,6 +1233,51 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			Log.w(t,
 					"JavaRosa added a new EVENT type and didn't tell us... shame on them.");
 			break;
+		}
+	}
+	
+	@Override
+	public void updateView() {
+		Log.i(getClass().getName(), "UpdateView " + Boolean.toString(mAnswersChanged));
+		FormController formController = Collect.getInstance()
+				.getFormController();
+		if (formController.indexIsInFieldList()&&mAnswersChanged){
+			if (formController.currentPromptIsQuestion()) {
+				if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
+					// A constraint was violated so a dialog should be showing.
+					return;
+				}
+			}
+			View newView;
+			int event = formController.getEvent();
+			switch (event) {
+			case FormEntryController.EVENT_QUESTION:
+			case FormEntryController.EVENT_GROUP:
+				// create a savepoint
+				if ((++viewCount) % SAVEPOINT_INTERVAL == 0) {
+					SaveToDiskTask.blockingExportTempData();
+				}
+				newView = createView(event, true);
+				showView(newView, AnimationType.RIGHT);
+				break;
+			case FormEntryController.EVENT_END_OF_FORM:
+			case FormEntryController.EVENT_REPEAT:
+				newView = createView(event, true);
+				showView(newView, AnimationType.RIGHT);
+				break;
+			case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
+				createRepeatDialog();
+				break;
+			case FormEntryController.EVENT_REPEAT_JUNCTURE:
+				Log.i(t, "repeat juncture: "
+						+ formController.getFormIndex().getReference());
+				// skip repeat junctures until we implement them
+				break;
+			default:
+				Log.w(t,
+						"JavaRosa added a new EVENT type and didn't tell us... shame on them.");
+				break;
+			}
 		}
 	}
 
@@ -2262,6 +2311,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 				// we've just loaded a saved form, so start in the hierarchy
 				// view
 				Intent i = new Intent(this, FormHierarchyActivity.class);
+				i.putExtra("isSavedForm", true);
 				startActivity(i);
 				return; // so we don't show the intro screen before jumping to
 						// the hierarchy
@@ -2550,6 +2600,12 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		Intent i = new Intent();
 		i.setAction("org.odk.collect.android.FormSaved");
 		this.sendBroadcast(i);
+	}
+
+	@Override
+	public void setAnswerChange(boolean hasChanged) {
+		Log.i(getClass().getName(), "setAnswerChange " + Boolean.toString(hasChanged));
+		mAnswersChanged = hasChanged;
 	}
 
 }
