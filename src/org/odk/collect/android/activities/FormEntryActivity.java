@@ -105,7 +105,7 @@ import com.actionbarsherlock.view.MenuItem;
  * transitions between questions, and allowing the user to enter data.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
- */
+ */ 
 
 public class FormEntryActivity extends SherlockActivity implements AnimationListener,
 		FormLoaderListener, FormSavedListener, AdvanceToNextListener,
@@ -184,6 +184,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 	private AlertDialog mAlertDialog;
 	private ProgressDialog mProgressDialog;
 	private String mErrorMessage;
+	private Menu menu;
 
 	// used to limit forward/backward swipes to one per question
 	private boolean mBeenSwiped = false;
@@ -199,7 +200,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 	private boolean mAnswersChanged;
 
 	enum AnimationType {
-		LEFT, RIGHT, FADE
+		LEFT, RIGHT, FADE, NONE
 	}
 
 	private SharedPreferences mAdminPreferences;
@@ -718,6 +719,12 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 	public boolean onCreateOptionsMenu(Menu menu) {
 		System.out.println("FormEntryActivity : onCreateOptionsMenu");
 		getSupportMenuInflater().inflate(R.menu.menu_form_entry, menu);
+		
+		menu.add(0, 0, 0,
+				getString(R.string.refresh)).setIcon(
+				R.drawable.ic_menu_refresh).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		
+		this.menu = menu;
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -754,7 +761,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		FormController formController = Collect.getInstance()
 				.getFormController();
 		switch (item.getItemId()) {
-		case R.id.refresh_view:
+		case 0:
 			Collect.getInstance()
 			.getActivityLogger()
 			.logInstanceAction(this, "onOptionsItemSelected",
@@ -925,7 +932,6 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 				.getFormController();
 		setTitle(getString(R.string.app_name) + " > "
 				+ formController.getFormTitle());
-
 		switch (event) {
 		case FormEntryController.EVENT_BEGINNING_OF_FORM:
 			View startView = View
@@ -1258,7 +1264,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 					SaveToDiskTask.blockingExportTempData();
 				}
 				newView = createView(event, true);
-				showView(newView, AnimationType.RIGHT);
+				showView(newView, AnimationType.NONE);
 				break;
 			case FormEntryController.EVENT_END_OF_FORM:
 			case FormEntryController.EVENT_REPEAT:
@@ -1319,39 +1325,40 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 	 * the progress bar.
 	 */
 	public void showView(View next, AnimationType from) {
-
-		// disable notifications...
-		if (mInAnimation != null) {
-			mInAnimation.setAnimationListener(null);
+		if (from != AnimationType.NONE){
+			// disable notifications...
+			if (mInAnimation != null) {
+				mInAnimation.setAnimationListener(null);
+			}
+			if (mOutAnimation != null) {
+				mOutAnimation.setAnimationListener(null);
+			}
+	
+			// logging of the view being shown is already done, as this was handled
+			// by createView()
+			switch (from) {
+			case RIGHT:
+				mInAnimation = AnimationUtils.loadAnimation(this,
+						R.anim.push_left_in);
+				mOutAnimation = AnimationUtils.loadAnimation(this,
+						R.anim.push_left_out);
+				break;
+			case LEFT:
+				mInAnimation = AnimationUtils.loadAnimation(this,
+						R.anim.push_right_in);
+				mOutAnimation = AnimationUtils.loadAnimation(this,
+						R.anim.push_right_out);
+				break;
+			case FADE:
+				mInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+				mOutAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+				break;
+			}
+	
+			// complete setup for animations...
+			mInAnimation.setAnimationListener(this);
+			mOutAnimation.setAnimationListener(this);
 		}
-		if (mOutAnimation != null) {
-			mOutAnimation.setAnimationListener(null);
-		}
-
-		// logging of the view being shown is already done, as this was handled
-		// by createView()
-		switch (from) {
-		case RIGHT:
-			mInAnimation = AnimationUtils.loadAnimation(this,
-					R.anim.push_left_in);
-			mOutAnimation = AnimationUtils.loadAnimation(this,
-					R.anim.push_left_out);
-			break;
-		case LEFT:
-			mInAnimation = AnimationUtils.loadAnimation(this,
-					R.anim.push_right_in);
-			mOutAnimation = AnimationUtils.loadAnimation(this,
-					R.anim.push_right_out);
-			break;
-		case FADE:
-			mInAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-			mOutAnimation = AnimationUtils.loadAnimation(this, R.anim.fade_out);
-			break;
-		}
-
-		// complete setup for animations...
-		mInAnimation.setAnimationListener(this);
-		mOutAnimation.setAnimationListener(this);
 
 		// drop keyboard before transition...
 		if (mCurrentView != null) {
@@ -1378,7 +1385,9 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			mAnimationCompletionSet = 2;
 		}
 		// start InAnimation for transition...
-		mCurrentView.startAnimation(mInAnimation);
+		if (from != AnimationType.NONE){
+			mCurrentView.startAnimation(mInAnimation);
+		}
 
 		String logString = "";
 		switch (from) {

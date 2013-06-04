@@ -54,7 +54,6 @@ public class StringWidget extends QuestionWidget implements OnFocusChangeListene
     public StringWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
     	this(context, widgetAnsweredListener, prompt, true);
     	setupChangeListener();
-    	Log.i("StringWidget", "Constructeur");
     }
 
     protected StringWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt, boolean derived) {
@@ -64,7 +63,6 @@ public class StringWidget extends QuestionWidget implements OnFocusChangeListene
         mReadOnly = prompt.isReadOnly();
         setupChangeListener();
         mAnswerListener.setAnswerChange(false);
-        Log.i("StringWidget", "textChanged false");
         textChanged = false;
         mAnswer.setOnFocusChangeListener(this);
 
@@ -127,15 +125,13 @@ public class StringWidget extends QuestionWidget implements OnFocusChangeListene
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				Log.i("StringWidget", "AfterTextChanged " + s.toString() + " " + oldText);
+				Log.i("StringWidget", "AfterTextChanged " + s.toString() + " , oldText " + oldText);
 				if (!s.toString().equals(oldText)) {
-					Log.i("StringWidget", "AfterTextChanged updateView");
 					if (isInit) {
-						Log.i("StringWidget", "init");
 						isInit = false;
 					} else {
 						textChanged = true;
-						Log.i("StringWidget", "textChanged true");
+						Log.i("StringWidget", "textChanged : true");
 						mAnswerListener.setAnswerChange(true);
 					}
 					Collect.getInstance().getActivityLogger()
@@ -146,14 +142,12 @@ public class StringWidget extends QuestionWidget implements OnFocusChangeListene
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
-				Log.i("StringWidget", "beforeTextChanged");
 				oldText = s.toString();
 			}
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) { 
-				Log.i("StringWidget", "onTextChanged");
 			}
         });
     }
@@ -222,15 +216,12 @@ public class StringWidget extends QuestionWidget implements OnFocusChangeListene
 
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
-		Log.i(getClass().getName(), " v " + v.getId() + " mAnswer "+mAnswer.getId() + " hasfocus " + Boolean.toString(hasFocus) + " textChanged " + Boolean.toString(textChanged));
 		if( textChanged){
 			int id = mAnswer.getId();
-			Log.i(getClass().getName(), "vId " + v.getId() + " id " + id + " focus " + Boolean.toString(hasFocus));
 			if ( (v.getId() == id  && !hasFocus)  || (v.getId() != id  && hasFocus)) {
 				updateView();
 				mAnswerListener.setAnswerChange(false);
 				textChanged = false;
-				Log.i("StringWidget", "textChanged false");
 			}
 		}
 		

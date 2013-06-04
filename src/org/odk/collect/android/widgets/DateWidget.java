@@ -29,6 +29,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 
@@ -40,18 +41,22 @@ import android.widget.DatePicker;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class DateWidget extends QuestionWidget {
+public class DateWidget extends QuestionWidget implements OnFocusChangeListener{
 
     private DatePicker mDatePicker;
     private DatePicker.OnDateChangedListener mDateListener;
     private boolean hideDay = false;
     private boolean hideMonth = false;
+    private boolean mDateChanged;
 
 
     @SuppressLint("NewApi")
 	public DateWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
         super(context, widgetAnsweredListener, prompt);
 
+        mDateChanged = false;
+        mAnswerListener.setAnswerChange(false);
+        
         mDatePicker = new DatePicker(getContext());
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB){
         	mDatePicker.setCalendarViewShown(false);
@@ -86,12 +91,16 @@ public class DateWidget extends QuestionWidget {
                         	Collect.getInstance().getActivityLogger().logInstanceAction(DateWidget.this, "onDateChanged", 
                         			String.format("%1$04d-%2$02d-%3$02d",year, month, max), mPrompt.getIndex());
                             mDatePicker.updateDate(year, month, max);
+                            mDateChanged = true;
+                            mAnswerListener.setAnswerChange(true);
                         }
                     } else {
                         if (! (mDatePicker.getDayOfMonth()==day && mDatePicker.getMonth()==month && mDatePicker.getYear()==year) ) {
                         	Collect.getInstance().getActivityLogger().logInstanceAction(DateWidget.this, "onDateChanged", 
                         			String.format("%1$04d-%2$02d-%3$02d",year, month, day), mPrompt.getIndex());
                             mDatePicker.updateDate(year, month, day);
+                            mDateChanged = true;
+                            mAnswerListener.setAnswerChange(true);
                         }
                     }
                 }
@@ -198,5 +207,15 @@ public class DateWidget extends QuestionWidget {
         super.cancelLongPress();
         mDatePicker.cancelLongPress();
     }
+    
+    @Override
+	public void onFocusChange(View v, boolean hasFocus) {
+		if( mDateChanged){
+			updateView();
+			mAnswerListener.setAnswerChange(false);
+			mDateChanged = false;
+		}
+		
+	}
 
 }

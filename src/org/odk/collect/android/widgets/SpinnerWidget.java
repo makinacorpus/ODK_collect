@@ -28,10 +28,12 @@ import org.odk.collect.android.R;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -46,15 +48,19 @@ import android.widget.TextView;
  * 
  * @author Jeff Beorse (jeff@beorse.net)
  */
-public class SpinnerWidget extends QuestionWidget {
+public class SpinnerWidget extends QuestionWidget implements OnFocusChangeListener{
     Vector<SelectChoice> mItems;
     Spinner spinner;
     String[] choices;
+    private boolean mAnswerChanged;
+    private boolean mInit;
 
 
     public SpinnerWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
         super(context, widgetAnsweredListener, prompt);
-
+        mAnswerChanged = false;
+        mInit = true;
+        mAnswerListener.setAnswerChange(false);
         mItems = prompt.getSelectChoices();
         spinner = new Spinner(context);
         choices = new String[mItems.size()+1];
@@ -97,9 +103,23 @@ public class SpinnerWidget extends QuestionWidget {
 				if ( position == mItems.size() ) {
 					Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged.clearValue", 
 		    			"", mPrompt.getIndex());
+					if (!mInit){
+						mAnswerListener.setAnswerChange(true);
+						Log.i(getClass().getName(), "clearValue : answer changed : true");
+						updateView();
+						mAnswerListener.setAnswerChange(false);
+					}
+					mInit = false;
 				} else {
 					Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
 			    			mItems.get(position).getValue(), mPrompt.getIndex());
+					if (!mInit){
+						mAnswerListener.setAnswerChange(true);
+						Log.i(getClass().getName(), "clearValue : answer changed : true");
+						updateView();
+						mAnswerListener.setAnswerChange(false);
+					}
+					mInit = false;
 				}
 			}
 
@@ -226,5 +246,13 @@ public class SpinnerWidget extends QuestionWidget {
         super.cancelLongPress();
         spinner.cancelLongPress();
     }
-
+    
+    @Override
+	public void onFocusChange(View v, boolean hasFocus) {
+    	Log.i(getClass().getName(), "hasFocus "+hasFocus+" mAnswerChanged "+mAnswerChanged);
+		if( mAnswerChanged){
+			
+		}
+		
+	}
 }
