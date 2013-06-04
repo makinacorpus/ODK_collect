@@ -32,7 +32,7 @@ See : http://actionbarsherlock.com/
 See : https://developers.google.com/maps/documentation/android/
 
 Bugs : 
- - In a form, when several questions are related by a relevance constraint in the same group with a field-list appearance : if you give an answer to a question that should make another question appear, unless you leave the current view and come back on it, the other question won't appear.
+ - In a form, when several questions are related by a relevance constraint in the same group with a field-list appearance : if you give an answer to a question that should make another question appear, unless you leave the current view and come back on it, the other question won't appear. Partially fixed, but so far only working for string widgets and it's derivates (integer, decimal...), refresh the whole view each time a value is changed.
 
 Improvements to add :
  - When in a repeating group, it would be useful to be able to customize the name of each instance of the group.
