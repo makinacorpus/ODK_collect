@@ -299,6 +299,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
                 button.setChecked(false);
             }
         }
+        
        	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
     			mItems.get((Integer)buttonView.getTag()).getValue(), mPrompt.getIndex());
     }

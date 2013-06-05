@@ -61,10 +61,13 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
 	private String mBinaryName;
 	private String mInstanceFolder;
+	private WidgetAnsweredListener mWidgetAnsweredListener;
 
 	public AudioWidget(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
 		super(activity, widgetAnsweredListener, prompt);
 
+		mWidgetAnsweredListener = widgetAnsweredListener;
+		mWidgetAnsweredListener.setAnswerChange(false);
 		mInstanceFolder = Collect.getInstance().getFormController()
 				.getInstancePath().getParent();
 
@@ -101,6 +104,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 				try {
 					Collect.getInstance().getFormController()
 							.setIndexWaitingForData(mPrompt.getIndex());
+					mWidgetAnsweredListener.setAnswerChange(true);
 					((Activity) getContext()).startActivityForResult(i,
 							FormEntryActivity.AUDIO_CAPTURE);
 				} catch (ActivityNotFoundException e) {
@@ -139,6 +143,7 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 				try {
 					Collect.getInstance().getFormController()
 							.setIndexWaitingForData(mPrompt.getIndex());
+					mWidgetAnsweredListener.setAnswerChange(true);
 					((Activity) getContext()).startActivityForResult(i,
 							FormEntryActivity.AUDIO_CHOOSER);
 				} catch (ActivityNotFoundException e) {

@@ -68,10 +68,13 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
     
     private TextView mErrorTextView;
 
+	private WidgetAnsweredListener mWidgetAnsweredListener;
 
     public ImageWidget(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
         super(activity, widgetAnsweredListener, prompt);
 
+		mWidgetAnsweredListener = widgetAnsweredListener;
+		mWidgetAnsweredListener.setAnswerChange(false);
         mInstanceFolder =
                 Collect.getInstance().getFormController().getInstancePath().getParent();
 
@@ -117,7 +120,8 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                     Uri.fromFile(new File(Collect.TMPFILE_PATH)));
                 try {
                 	Collect.getInstance().getFormController().setIndexWaitingForData(mPrompt.getIndex());
-                    ((Activity) getContext()).startActivityForResult(i,
+            		mWidgetAnsweredListener.setAnswerChange(true);
+                	((Activity) getContext()).startActivityForResult(i,
                         FormEntryActivity.IMAGE_CAPTURE);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(getContext(),
@@ -152,6 +156,7 @@ public class ImageWidget extends QuestionWidget implements IBinaryWidget {
                 try {
 					Collect.getInstance().getFormController()
 							.setIndexWaitingForData(mPrompt.getIndex());
+					mWidgetAnsweredListener.setAnswerChange(true);
                     ((Activity) getContext()).startActivityForResult(i,
                         FormEntryActivity.IMAGE_CHOOSER);
                 } catch (ActivityNotFoundException e) {

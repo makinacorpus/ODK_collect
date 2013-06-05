@@ -656,6 +656,9 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 
 			((ODKView) mCurrentView).setBinaryData(newImage);
 			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+			if (formController.indexIsInFieldList()){
+				updateView();
+			}
 			break;
 		case AUDIO_CAPTURE:
 		case VIDEO_CAPTURE:
@@ -668,6 +671,9 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			Uri media = intent.getData();
 			((ODKView) mCurrentView).setBinaryData(media);
 			saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+			if (formController.indexIsInFieldList()){
+				updateView();
+			}
 			break;
 		case LOCATION_CAPTURE:
 			String sl = intent.getStringExtra(LOCATION_RESULT);

@@ -61,10 +61,16 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 	private String mBinaryName;
 
 	private String mInstanceFolder;
+	
+
+	private WidgetAnsweredListener mWidgetAnsweredListener;
 
 	public VideoWidget(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
 		super(activity, widgetAnsweredListener, prompt);
 
+		mWidgetAnsweredListener = widgetAnsweredListener;
+		mWidgetAnsweredListener.setAnswerChange(false);
+		
 		mInstanceFolder = Collect.getInstance().getFormController()
 				.getInstancePath().getParent();
 
@@ -98,6 +104,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 				try {
 					Collect.getInstance().getFormController()
 							.setIndexWaitingForData(mPrompt.getIndex());
+					mWidgetAnsweredListener.setAnswerChange(true);
 					((Activity) getContext()).startActivityForResult(i,
 							FormEntryActivity.VIDEO_CAPTURE);
 				} catch (ActivityNotFoundException e) {
@@ -139,6 +146,7 @@ public class VideoWidget extends QuestionWidget implements IBinaryWidget {
 				try {
 					Collect.getInstance().getFormController()
 							.setIndexWaitingForData(mPrompt.getIndex());
+					mWidgetAnsweredListener.setAnswerChange(true);
 					((Activity) getContext()).startActivityForResult(i,
 							FormEntryActivity.VIDEO_CHOOSER);
 				} catch (ActivityNotFoundException e) {
