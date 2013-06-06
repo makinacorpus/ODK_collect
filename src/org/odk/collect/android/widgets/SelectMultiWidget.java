@@ -46,7 +46,7 @@ public class SelectMultiWidget extends QuestionWidget {
     Vector<SelectChoice> mItems;
 
     private ArrayList<CheckBox> mCheckboxes;
-
+    private WidgetAnsweredListener mAnsListener;
 
     @SuppressWarnings("unchecked")
     public SelectMultiWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
@@ -54,7 +54,7 @@ public class SelectMultiWidget extends QuestionWidget {
         mPrompt = prompt;
         mCheckboxes = new ArrayList<CheckBox>();
         mItems = prompt.getSelectChoices();
-
+        mAnsListener = widgetAnsweredListener;
         setOrientation(LinearLayout.VERTICAL);
 
         Vector<Selection> ve = new Vector<Selection>();
@@ -96,6 +96,9 @@ public class SelectMultiWidget extends QuestionWidget {
                                	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onItemClick.select", 
                             			mItems.get((Integer)buttonView.getTag()).getValue(), mPrompt.getIndex());
                             }
+                            mAnsListener.setAnswerChange(true);
+                    		mAnsListener.updateView();
+                    		mAnsListener.setAnswerChange(false);
                         }
                     }
                 });

@@ -192,7 +192,7 @@ public class SpinnerWidget extends QuestionWidget implements OnFocusChangeListen
 
             TextView tv = (TextView) convertView.findViewById(android.R.id.text1);
             tv.setTextSize(textUnit, textSize);
-            tv.setBackgroundColor(Color.BLACK);
+            tv.setBackgroundColor(Color.DKGRAY);
         	tv.setPadding(10, 10, 10, 10); // Are these values OK?
             if (position == items.length-1) {
             	tv.setText(parent.getContext().getString(R.string.clear_answer));

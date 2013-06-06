@@ -49,6 +49,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * ListWidget handles select-one fields using radio buttons. The radio buttons are aligned
@@ -73,7 +74,7 @@ public class ListWidget extends QuestionWidget implements OnCheckedChangeListene
 
     public ListWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt, boolean displayLabel) {
         super(context, widgetAnsweredListener, prompt);
-
+        
         mItems = prompt.getSelectChoices();
         buttons = new ArrayList<RadioButton>();
 

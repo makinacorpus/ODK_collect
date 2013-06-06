@@ -93,6 +93,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -176,15 +177,16 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 
 	private Animation mInAnimation;
 	private Animation mOutAnimation;
-	private View mStaleView = null;
+	private ScrollView mStaleView = null;
 
 	private LinearLayout mQuestionHolder;
-	private View mCurrentView;
+	private ScrollView mCurrentView;
 
 	private AlertDialog mAlertDialog;
 	private ProgressDialog mProgressDialog;
 	private String mErrorMessage;
 	private Menu menu;
+	private int mY;
 
 	// used to limit forward/backward swipes to one per question
 	private boolean mBeenSwiped = false;
@@ -198,7 +200,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 	private ImageButton mBackButton;
 	
 	private boolean mAnswersChanged;
-
+	
 	enum AnimationType {
 		LEFT, RIGHT, FADE, NONE
 	}
@@ -209,7 +211,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		Log.i("FormEntryActivity", "onCreate");
 		// must be at the beginning of any activity that can be called from an
 		// external intent
 		try {
@@ -223,7 +225,6 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		setTitle(getString(R.string.loading_form));
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
-
 		mBeenSwiped = false;
 		mAlertDialog = null;
 		mCurrentView = null;
@@ -712,7 +713,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		if (event == FormEntryController.EVENT_PROMPT_NEW_REPEAT) {
 			createRepeatDialog();
 		} else {
-			View current = createView(event, false);
+			ScrollView current = createView(event, false);
 			showView(current, AnimationType.FADE);
 		}
 		//update menu cause of sherlock bar
@@ -933,14 +934,14 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 	 *            -- true if this results from advancing through the form
 	 * @return newly created View
 	 */
-	private View createView(int event, boolean advancingPage) {
+	private ScrollView createView(int event, boolean advancingPage) {
 		FormController formController = Collect.getInstance()
 				.getFormController();
 		setTitle(getString(R.string.app_name) + " > "
 				+ formController.getFormTitle());
 		switch (event) {
 		case FormEntryController.EVENT_BEGINNING_OF_FORM:
-			View startView = View
+			ScrollView startView = (ScrollView) View
 					.inflate(this, R.layout.form_entry_start, null);
 			setTitle(getString(R.string.app_name) + " > "
 					+ formController.getFormTitle());
@@ -1016,7 +1017,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 
 			return startView;
 		case FormEntryController.EVENT_END_OF_FORM:
-			View endView = View.inflate(this, R.layout.form_entry_end, null);
+			ScrollView endView = (ScrollView) View.inflate(this, R.layout.form_entry_end, null);
 			((TextView) endView.findViewById(R.id.description))
 					.setText(getString(R.string.save_enter_data_description,
 							formController.getFormTitle()));
@@ -1216,7 +1217,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			}
 		}
 
-		View next;
+		ScrollView next;
 		int event = formController.stepToNextScreenEvent();
 		switch (event) {
 		case FormEntryController.EVENT_QUESTION:
@@ -1260,7 +1261,9 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 					return;
 				}
 			}
-			View newView;
+			ScrollView view = mCurrentView;
+			mY = view.getScrollY();
+			ScrollView newView;
 			int event = formController.getEvent();
 			switch (event) {
 			case FormEntryController.EVENT_QUESTION:
@@ -1275,7 +1278,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			case FormEntryController.EVENT_END_OF_FORM:
 			case FormEntryController.EVENT_REPEAT:
 				newView = createView(event, true);
-				showView(newView, AnimationType.RIGHT);
+				showView(newView, AnimationType.NONE);
 				break;
 			case FormEntryController.EVENT_PROMPT_NEW_REPEAT:
 				createRepeatDialog();
@@ -1318,7 +1321,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 					SaveToDiskTask.blockingExportTempData();
 				}
 			}
-			View next = createView(event, false);
+			ScrollView next = createView(event, false);
 			showView(next, AnimationType.LEFT);
 		} else {
 			mBeenSwiped = false;
@@ -1330,7 +1333,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 	 * current view and next appropriately given the AnimationType. Also updates
 	 * the progress bar.
 	 */
-	public void showView(View next, AnimationType from) {
+	public void showView(ScrollView next, AnimationType from) {
 		if (from != AnimationType.NONE){
 			// disable notifications...
 			if (mInAnimation != null) {
@@ -1364,6 +1367,9 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			// complete setup for animations...
 			mInAnimation.setAnimationListener(this);
 			mOutAnimation.setAnimationListener(this);
+		}else{
+			mInAnimation = null;
+			mOutAnimation = null;
 		}
 
 		// drop keyboard before transition...
@@ -1383,8 +1389,10 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		mAnimationCompletionSet = 0;
 
 		if (mStaleView != null) {
-			// start OutAnimation for transition...
-			mStaleView.startAnimation(mOutAnimation);
+			if (from != AnimationType.NONE){
+				// start OutAnimation for transition...
+				mStaleView.startAnimation(mOutAnimation);
+			}
 			// and remove the old view (MUST occur after start of animation!!!)
 			mQuestionHolder.removeView(mStaleView);
 		} else {
@@ -1394,7 +1402,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		if (from != AnimationType.NONE){
 			mCurrentView.startAnimation(mInAnimation);
 		}
-
+		
 		String logString = "";
 		switch (from) {
 		case RIGHT:
@@ -1406,8 +1414,16 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		case FADE:
 			logString = "refresh";
 			break;
+		case NONE:
+			logString = "update";
+			break;
 		}
-
+		Log.e("FormEntryActivity", "scroll y : "+mY);
+		mCurrentView.post(new Runnable() { 
+	        public void run() { 
+	             mCurrentView.scrollTo(0, mY);
+	        } 
+		});
 		Collect.getInstance().getActivityLogger()
 				.logInstanceAction(this, "showView", logString);
 	}

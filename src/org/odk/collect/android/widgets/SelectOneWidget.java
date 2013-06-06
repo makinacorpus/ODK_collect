@@ -35,6 +35,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -47,6 +48,8 @@ public class SelectOneWidget extends QuestionWidget implements
 
 	Vector<SelectChoice> mItems; // may take a while to compute
 	ArrayList<RadioButton> buttons;
+	
+	private WidgetAnsweredListener mAnsListener;
 
 	public SelectOneWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
 		super(context, widgetAnsweredListener, prompt);
@@ -54,6 +57,8 @@ public class SelectOneWidget extends QuestionWidget implements
 		mItems = prompt.getSelectChoices();
 		buttons = new ArrayList<RadioButton>();
 
+		mAnsListener = widgetAnsweredListener;
+		
 		// Layout holds the vertical list of buttons
 		LinearLayout buttonLayout = new LinearLayout(context);
 
@@ -169,7 +174,9 @@ public class SelectOneWidget extends QuestionWidget implements
 				button.setChecked(false);
 			}
 		}
-		
+		mAnsListener.setAnswerChange(true);
+		mAnsListener.updateView();
+		mAnsListener.setAnswerChange(false);
        	Collect.getInstance().getActivityLogger().logInstanceAction(this, "onCheckedChanged", 
     			mItems.get((Integer)buttonView.getTag()).getValue(), mPrompt.getIndex());
 	}

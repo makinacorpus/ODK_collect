@@ -58,13 +58,13 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     private LinearLayout.LayoutParams mLayout;
     private ArrayList<QuestionWidget> widgets;
     private Handler h = null;
+    private int mY;
     
     public final static String FIELD_LIST = "field-list";
 
     public ODKView(Activity activity, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt[] questionPrompts,
             FormEntryCaption[] groups, boolean advancingPage) {
         super(activity);
-
         widgets = new ArrayList<QuestionWidget>();
 
         mView = new LinearLayout(getContext());
@@ -84,7 +84,6 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         	String text = p.getConstraintText();
         	String answer = p.getAnswerText();
         	
-        	Log.e(getClass().getName(), "Contrainte :" + text + "Value :" + answer) ;
         }
         
         boolean first = true;
@@ -134,6 +133,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
         }
     }
     
+    
+    
     /**
      * http://code.google.com/p/android/issues/detail?id=8488
      */
@@ -147,6 +148,8 @@ public class ODKView extends ScrollView implements OnLongClickListener {
     
     @Override
 	protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+    	mY = t;
+    	//Log.e("ODKView", "Y "+mY+" oldY "+oldt);
     	Collect.getInstance().getActivityLogger().logScrollAction(this, t - oldt);
     }
 
