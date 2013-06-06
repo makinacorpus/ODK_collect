@@ -372,9 +372,9 @@ int id change_username 0x7f060082
 int id checkbox 0x7f06007b
 int id default_completed 0x7f060096
 int id default_to_finalized 0x7f06008a
-int id delete 0x7f0600a4
+int id delete 0x7f0600a5
 int id delete_saved 0x7f060080
-int id delete_upload_instance 0x7f0600a7
+int id delete_upload_instance 0x7f0600a8
 int id description 0x7f060043
 int id disableHome 0x7f06000d
 int id drawViewLayout 0x7f06003a
@@ -387,7 +387,7 @@ int id form_back_button 0x7f060041
 int id form_forward_button 0x7f060042
 int id form_start_bling 0x7f060048
 int id formlist_url 0x7f06009a
-int id forms_get 0x7f0600a1
+int id forms_get 0x7f0600a0
 int id get_blank 0x7f06007f
 int id get_forms 0x7f060061
 int id get_forms_spacer 0x7f060062
@@ -397,7 +397,6 @@ int id homeAsUp 0x7f06000a
 int id hybrid 0x7f060004
 int id image_advance 0x7f06004b
 int id image_backup 0x7f060049
-int id info 0x7f06009e
 int id jumpBeginningButton 0x7f060059
 int id jumpEndButton 0x7f06005a
 int id jumpPreviousButton 0x7f060058
@@ -424,6 +423,9 @@ int id password_edit 0x7f060070
 int id password_view 0x7f06006f
 int id pathtext 0x7f060057
 int id positive_button 0x7f060068
+int id preferences_download 0x7f0600a1
+int id preferences_entry 0x7f0600a4
+int id preferences_uploader 0x7f0600a9
 int id protocol 0x7f060099
 int id pwd_field 0x7f060065
 int id pwd_label 0x7f060064
@@ -432,7 +434,7 @@ int id quick_select 0x7f06006a
 int id quick_select_question 0x7f06006b
 int id quick_select_right_arrow 0x7f06006c
 int id realtabcontent 0x01010000
-int id refresh_forms 0x7f06009f
+int id refresh_forms 0x7f06009e
 int id refresh_location 0x7f060054
 int id review_data 0x7f06005e
 int id review_spacer 0x7f06005f
@@ -444,8 +446,8 @@ int id save_form 0x7f0600a3
 int id save_form_as 0x7f060044
 int id save_mid 0x7f06008f
 int id save_name 0x7f060045
-int id select_all 0x7f0600a0
-int id select_all_instance 0x7f0600a5
+int id select_all 0x7f06009f
+int id select_all_instance 0x7f0600a6
 int id selected_google_account 0x7f060098
 int id send_data 0x7f060060
 int id send_finalized 0x7f06007e
@@ -470,7 +472,7 @@ int id text2 0x7f06007a
 int id text3 0x7f060079
 int id text_advance 0x7f06004c
 int id text_backup 0x7f06004a
-int id upload_instance 0x7f0600a6
+int id upload_instance 0x7f0600a7
 int id url 0x7f060076
 int id useLogo 0x7f060008
 int id username 0x7f060093
