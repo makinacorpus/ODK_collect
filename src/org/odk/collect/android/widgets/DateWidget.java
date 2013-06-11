@@ -41,20 +41,19 @@ import android.widget.DatePicker;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class DateWidget extends QuestionWidget implements OnFocusChangeListener{
+public class DateWidget extends QuestionWidget{
 
     private DatePicker mDatePicker;
     private DatePicker.OnDateChangedListener mDateListener;
     private boolean hideDay = false;
     private boolean hideMonth = false;
-    private boolean mDateChanged;
+
 
 
     @SuppressLint("NewApi")
 	public DateWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
         super(context, widgetAnsweredListener, prompt);
 
-        mDateChanged = false;
         mAnswerListener.setAnswerChange(false);
         
         mDatePicker = new DatePicker(getContext());
@@ -91,7 +90,6 @@ public class DateWidget extends QuestionWidget implements OnFocusChangeListener{
                         	Collect.getInstance().getActivityLogger().logInstanceAction(DateWidget.this, "onDateChanged", 
                         			String.format("%1$04d-%2$02d-%3$02d",year, month, max), mPrompt.getIndex());
                             mDatePicker.updateDate(year, month, max);
-                            mDateChanged = true;
                             mAnswerListener.setAnswerChange(true);
                         }
                     } else {
@@ -99,7 +97,6 @@ public class DateWidget extends QuestionWidget implements OnFocusChangeListener{
                         	Collect.getInstance().getActivityLogger().logInstanceAction(DateWidget.this, "onDateChanged", 
                         			String.format("%1$04d-%2$02d-%3$02d",year, month, day), mPrompt.getIndex());
                             mDatePicker.updateDate(year, month, day);
-                            mDateChanged = true;
                             mAnswerListener.setAnswerChange(true);
                         }
                     }
@@ -207,15 +204,5 @@ public class DateWidget extends QuestionWidget implements OnFocusChangeListener{
         super.cancelLongPress();
         mDatePicker.cancelLongPress();
     }
-    
-    @Override
-	public void onFocusChange(View v, boolean hasFocus) {
-		if( mDateChanged){
-			updateView();
-			mAnswerListener.setAnswerChange(false);
-			mDateChanged = false;
-		}
-		
-	}
 
 }

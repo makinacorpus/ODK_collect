@@ -45,7 +45,6 @@ public class DateTimeWidget extends QuestionWidget {
     private TimePicker mTimePicker;
     private DatePicker.OnDateChangedListener mDateListener;
 
-
     public DateTimeWidget(Context context, WidgetAnsweredListener widgetAnsweredListener, FormEntryPrompt prompt) {
         super(context, widgetAnsweredListener, prompt);
 
@@ -53,6 +52,7 @@ public class DateTimeWidget extends QuestionWidget {
         mDatePicker.setId(QuestionWidget.newUniqueId());
         mDatePicker.setFocusable(!prompt.isReadOnly());
         mDatePicker.setEnabled(!prompt.isReadOnly());
+        mAnswerListener.setAnswerChange(false);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB){
         	mDatePicker.setCalendarViewShown(false);
         }
