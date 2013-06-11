@@ -27,6 +27,8 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -79,10 +81,7 @@ public class GeoPointMapActivity extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Log.i(getClass().getName(), "onCreate()");
-
 		if (savedInstanceState != null) {
-			Log.i(getClass().getName(), "onCreate() : savedInstance not null");
 			mLocationCount = savedInstanceState.getInt(LOCATION_COUNT);
 		}
 
@@ -109,7 +108,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 
 			// No geolocation
 			if (intent.hasExtra("noGPS")) {
-				Log.i(getClass().getName(), "onCreate() : noGPS");
 				withLoc = false;
 				mMap.setOnMapLongClickListener(this);
 				mCaptureLocation = false;
@@ -119,8 +117,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 
 			// Show previous location
 			if (intent.hasExtra(GeoPointWidget.LOCATION)) {
-				Log.i(getClass().getName(),
-						"onCreate() : previous location saved");
 				double[] location = intent
 						.getDoubleArrayExtra(GeoPointWidget.LOCATION);
 				mLatLng = new LatLng(location[0], location[1]);
@@ -128,8 +124,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 				mMarker = mMap.addMarker(mMarkerOption);
 				mMarker.setDraggable(true);
 				if (withLoc) {
-					Log.i(getClass().getName(),
-							"onCreate() : previous location saved and geoloc allowed");
 					Toast.makeText(getApplicationContext(),
 							R.string.marker_draggable, Toast.LENGTH_LONG)
 							.show();
@@ -148,21 +142,25 @@ public class GeoPointMapActivity extends FragmentActivity implements
 
 		// Use providers only if we want geolocation
 		if (mCaptureLocation || withLoc) {
-			Log.i(getClass().getName(), "onCreate() : finding providers");
-
 			// make sure we have a good location provider before continuing
 
 			mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			
+			ConnectivityManager connectivityMgr = (ConnectivityManager)
+			getSystemService(Context.CONNECTIVITY_SERVICE);
 
+			NetworkInfo[] nwInfos = connectivityMgr.getAllNetworkInfo();
+			mNetworkOn = false;
+			for (NetworkInfo nwInfo : nwInfos) {
+				if(nwInfo.getType() == ConnectivityManager.TYPE_MOBILE){
+					mNetworkOn = nwInfo.isAvailable();
+				}
+			} 
+			
 			List<String> providers = mLocationManager.getProviders(true);
 			for (String provider : providers) {
 				if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
 					mGPSOn = true;
-					Log.i(getClass().getName(), "onCreate() : useGPS");
-				}
-				if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
-					mNetworkOn = true;
-					Log.i(getClass().getName(), "onCreate() : useNetwork");
 				}
 			}
 			if (!mGPSOn && !mNetworkOn) {
@@ -243,7 +241,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 
 		if (mCaptureLocation) {
 			// Case where we show the current location according to the provider
-			Log.i(getClass().getName(), "onCreate() : refresh button added");
 			mLocationStatus = (TextView) findViewById(R.id.location_status);
 			mRefreshLocation = ((Button) findViewById(R.id.refresh_location));
 			mRefreshLocation.setVisibility(View.VISIBLE);
@@ -264,8 +261,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 
 		} else {
 			// Case where we only show the saved location
-			Log.i(getClass().getName(),
-					"onCreate() : show location without geolocation");
 			((TextView) findViewById(R.id.location_status))
 					.setVisibility(View.GONE);
 			mAcceptLocation.setClickable(false);
@@ -325,13 +320,11 @@ public class GeoPointMapActivity extends FragmentActivity implements
 		if(mLocationManager != null){
 			mLocationManager.removeUpdates(this);
 		}
-		Log.i(getClass().getName(), "onPause()");
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		Log.i(getClass().getName(), "onResume()");
 		if (mGPSOn) {
 			mLocationManager.requestLocationUpdates(
 					LocationManager.GPS_PROVIDER, 0, 0, this);
@@ -359,7 +352,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 						+ " long: " + mLocation.getLongitude() + " acc: "
 						+ mLocation.getAccuracy());
 				if (mLocationCount > 1) {
-					Log.i(getClass().getName(), "onLocationChanged mLocationCount : "+mLocationCount+" lat : "+mLocation.getLatitude()+ "long : "+mLocation.getLongitude());
 					mLocationStatus.setText(getString(
 							R.string.location_provider_accuracy,
 							mLocation.getProvider(),
@@ -371,7 +363,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 					// TODO choose a relevant accuracy
 					// if (mLocation.getAccuracy() <= mLocationAccuracy) {
 					if (mLocation.getAccuracy() <= 35) {
-						Log.i(getClass().getName(), "onLocationChanged accuracy <= 35");
 						Toast.makeText(getApplicationContext(),
 								R.string.marker_draggable, Toast.LENGTH_LONG)
 								.show();
@@ -385,12 +376,10 @@ public class GeoPointMapActivity extends FragmentActivity implements
 				mLatLng = new LatLng(mLocation.getLatitude(),
 						mLocation.getLongitude());
 				if (mMarker == null) {
-					Log.i(getClass().getName(), "onLocationChanged : init marker on map");
 					mMarkerOption.position(mLatLng);
 					mMarker = mMap.addMarker(mMarkerOption);
 					mShowLocation.setClickable(true);
 				} else {
-					Log.i(getClass().getName(), "onLocationChanged : update marker on map");
 					mMarker.setPosition(mLatLng);
 				}
 				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng,
@@ -411,11 +400,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		Log.i(getClass().getName(), "Provider : " + provider);
-		if ((provider != LocationManager.GPS_PROVIDER)
-				&& (provider != LocationManager.NETWORK_PROVIDER)) {
-			Log.i(getClass().getName(), "Provider (neither GPS or network : " + provider);
-		}
 	}
 
 	@Override
@@ -429,7 +413,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 
 	@Override
 	public void onMarkerDragEnd(Marker marker) {
-		Log.i(getClass().getName(), "onMarkerDragEnd()");
 		mLatLng = marker.getPosition();
 		mAcceptLocation.setClickable(true);
 		isDragged = true;
@@ -442,7 +425,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 	}
 
 	private void returnResult() {
-		Log.i(getClass().getName(), "returnResult()");
 		if (isDragged) {
 			returnDragLocation();
 		} else {
@@ -452,7 +434,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 
 	@Override
 	public void onMapLongClick(LatLng point) {
-		Log.i(getClass().getName(), "onMapLongClick");
 		mMarkerOption.position(point);
 		mLatLng = point;
 		if (mMarker != null) {
