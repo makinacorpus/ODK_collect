@@ -101,6 +101,9 @@ public class GeoPointMapActivity extends FragmentActivity implements
 		mMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
 		mMap.setOnMarkerDragListener(this);
+		
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(43.2551, 5.4681),
+				10));
 
 		if (intent != null && intent.getExtras() != null) {
 
