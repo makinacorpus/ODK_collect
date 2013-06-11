@@ -180,7 +180,7 @@
         </receiver>
 
         <uses-library
-            android:name="com.google.android.maps"
+            android:name="com.google.android.gms.maps"
             android:required="false" />
         
         <meta-data
