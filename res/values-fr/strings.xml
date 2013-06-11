@@ -97,7 +97,7 @@ License.
 <string name="main_menu">Menu Principal</string>
 <string name="main_menu_details">La collecte de données rendue plus facile…</string>
 <string name="manage_files">Supprimer des Formulaires Sauvegardés</string>
-<string name="marker_create">Vou pouvez créer et déplacer un marqueur en appuyant longuement là où vous voulez le placer, puis le déplacer en appuyant longuement dessus</string>
+<string name="marker_create">Vous pouvez créer et déplacer un marqueur en appuyant longuement là où vous voulez le placer, puis le déplacer en appuyant longuement dessus</string>
 <string name="marker_draggable">Vous pouvez déplacer le marqueur sur la carte soit en appuyant longuement dessus et en le déplacant, soit en appuyant longuement là où vous voulez le placer</string>
 <string name="mark_finished">Marquer le formulaire comme finalisé</string>
 <string name="noselect_error">Désolé, vous n\'avez pas sélectionné un formulaire.</string>
