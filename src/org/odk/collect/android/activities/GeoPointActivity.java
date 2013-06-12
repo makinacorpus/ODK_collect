@@ -31,6 +31,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -71,13 +73,22 @@ public class GeoPointActivity extends Activity implements LocationListener {
         // make sure we have a good location provider before continuing
         List<String> providers = mLocationManager.getProviders(true);
         for (String provider : providers) {
-            if (provider.equalsIgnoreCase(LocationManager.GPS_PROVIDER)) {
-                mGPSOn = true;
-            }
             if (provider.equalsIgnoreCase(LocationManager.NETWORK_PROVIDER)) {
                 mNetworkOn = true;
             }
         }
+        
+        ConnectivityManager connectivityMgr = (ConnectivityManager)
+    	getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    	NetworkInfo[] nwInfos = connectivityMgr.getAllNetworkInfo();
+    	mNetworkOn = false;
+    	for (NetworkInfo nwInfo : nwInfos) {
+    		if(nwInfo.getType() == ConnectivityManager.TYPE_MOBILE){
+    			mNetworkOn = nwInfo.isAvailable();
+    		}
+    	}
+    	
         if (!mGPSOn && !mNetworkOn) {
             Toast.makeText(getBaseContext(), getString(R.string.provider_disabled_error),
                 Toast.LENGTH_SHORT).show();

@@ -111,8 +111,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 				withLoc = false;
 				mMap.setOnMapLongClickListener(this);
 				mCaptureLocation = false;
-				Toast.makeText(getApplicationContext(), R.string.marker_create,
-						Toast.LENGTH_LONG).show();
 			}
 
 			// Show previous location
@@ -123,11 +121,6 @@ public class GeoPointMapActivity extends FragmentActivity implements
 				mMarkerOption.position(mLatLng);
 				mMarker = mMap.addMarker(mMarkerOption);
 				mMarker.setDraggable(true);
-				if (withLoc) {
-					Toast.makeText(getApplicationContext(),
-							R.string.marker_draggable, Toast.LENGTH_LONG)
-							.show();
-				}
 				mCaptureLocation = false;
 				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng,
 						16));
@@ -170,10 +163,21 @@ public class GeoPointMapActivity extends FragmentActivity implements
 				finish();
 			}
 		}
+		
+		//Handles toasts to display when showing the map
+		if (!mCaptureLocation && withLoc) {
+			Toast.makeText(getApplicationContext(),
+					R.string.marker_draggable, Toast.LENGTH_LONG)
+					.show();
+		}
+		if (!mCaptureLocation && !withLoc){
+			Toast.makeText(getApplicationContext(), R.string.marker_create,
+					Toast.LENGTH_LONG).show();
+		}
 
+		
 		mCancelLocation = (Button) findViewById(R.id.cancel_location);
 		mCancelLocation.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				Collect.getInstance().getActivityLogger()
