@@ -6,6 +6,8 @@
 	    <item name="android:scrollbarSize">1dp</item>
 	    <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
 	    <item name="android:textColor">@drawable/white</item>
+	    <item name="actionBarStyle">@style/Widget.Collect.ActionBar</item>
+	    <item name="android:actionBarStyle">@style/Widget.Collect.ActionBar</item>
 	    <!-- <item name="android:fadeScrollbars">false</item> -->
 	</style>
 	<style name="Collect.MainLayout">
@@ -41,4 +43,9 @@
 	    <item name="android:layout_height">fill_parent</item>
 		<item name="android:divider">@drawable/h_divider</item>
 	</style>
+	<style name="Widget.Collect.ActionBar" parent="Widget.Sherlock.ActionBar">
+    	<item name="android:background">@drawable/action_bar_gradient</item>
+	</style>
 </resources>
+
+

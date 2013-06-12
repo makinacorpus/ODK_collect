@@ -37,6 +37,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -110,6 +112,7 @@ public class MainMenuActivity extends SherlockActivity {
 		setContentView(R.layout.main_menu);
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayShowHomeEnabled(true);
+		//bar.setBackgroundDrawable(getResources().getDrawable(R.drawable.action_bar_gradient));
 
 		{
 			// dynamically construct the "'Application name' vA.B" string
