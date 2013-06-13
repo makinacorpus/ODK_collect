@@ -39,6 +39,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 public class FormHierarchyActivity extends SherlockListActivity {
@@ -55,6 +56,7 @@ public class FormHierarchyActivity extends SherlockListActivity {
 	private Button jumpPreviousButton;
 	
 	private boolean mIsSavedForm;
+	private boolean mToFormChooser;
 
 	List<HierarchyElement> formList;
 	TextView mPath;
@@ -71,7 +73,7 @@ public class FormHierarchyActivity extends SherlockListActivity {
 		Intent intent = getIntent();
 		
 		mIsSavedForm = (intent.hasExtra("isSavedForm")&&intent.getBooleanExtra("isSavedForm", false));
-
+		mToFormChooser = intent.hasExtra("toFormChooser");
 		// We use a static FormEntryController to make jumping faster.
 		mStartIndex = formController.getFormIndex();
 
@@ -152,11 +154,24 @@ public class FormHierarchyActivity extends SherlockListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			Collect.getInstance()
-					.getActivityLogger()
-					.logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP",
-							mStartIndex);
-			Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
+			if (mIsSavedForm){
+				Log.e(getClass().getName(), "Back to List");
+				Intent i;
+				if (mToFormChooser){
+					i  = new Intent(this, FormChooserList.class);
+				}else{
+					i  = new Intent(this, InstanceChooserList.class);
+				}
+				startActivity(i);
+			}else{
+				//TODO Not Working
+				Log.e(getClass().getName(), "Back to Form");
+				Collect.getInstance()
+				.getActivityLogger()
+				.logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP",
+						mStartIndex);
+				Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
+			}
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -164,7 +179,6 @@ public class FormHierarchyActivity extends SherlockListActivity {
 
 	private void goUpLevel() {
 		Collect.getInstance().getFormController().stepToOuterScreenEvent();
-
 		refreshView();
 	}
 
@@ -436,20 +450,27 @@ public class FormHierarchyActivity extends SherlockListActivity {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_BACK:
-				
 			if (mIsSavedForm){
+				Log.e(getClass().getName(), "Back to List");
 				Collect.getInstance()
 				.getActivityLogger()
 				.logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP",
 						mStartIndex);
-				Intent i  = new Intent(this, InstanceChooserList.class);
+				Intent i;
+				if (mToFormChooser){
+					i  = new Intent(this, FormChooserList.class);
+				}else{
+					i  = new Intent(this, InstanceChooserList.class);
+				}
 				startActivity(i);
 			}else{
+				Log.e(getClass().getName(), "Back to Form");
 				Collect.getInstance()
 				.getActivityLogger()
 				.logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP",
 						mStartIndex);
 				Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
+				
 			}
 		}
 		return super.onKeyDown(keyCode, event);

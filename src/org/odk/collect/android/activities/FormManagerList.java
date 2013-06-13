@@ -119,6 +119,8 @@ public class FormManagerList extends SherlockListFragment implements DiskSyncLis
 		}
 	}
 
+	
+	
 	@Override
 	public void onViewStateRestored(Bundle savedInstanceState) {
 		super.onViewStateRestored(savedInstanceState);

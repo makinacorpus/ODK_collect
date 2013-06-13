@@ -200,6 +200,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 	private ImageButton mBackButton;
 	
 	private boolean mAnswersChanged;
+	private boolean mToFormChooser;
 	
 	enum AnimationType {
 		LEFT, RIGHT, FADE, NONE
@@ -224,6 +225,18 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 		setContentView(R.layout.form_entry);
 		setTitle(getString(R.string.loading_form));
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		
+		
+		
+		Intent intent = getIntent();
+		
+		if (intent != null && intent.getExtras() != null) {
+			if (intent.hasExtra("newForm")){
+				mToFormChooser = true;
+			}
+		}else{
+			mToFormChooser = false;
+		}
 		
 		mBeenSwiped = false;
 		mAlertDialog = null;
@@ -306,7 +319,6 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			mSaveToDiskTask = (SaveToDiskTask) data;
 		} else if (data == null) {
 			if (!newForm) {
-				System.out.println("!newform");
 				if (Collect.getInstance().getFormController() != null) {
 					refreshCurrentView();
 				} else {
@@ -328,7 +340,7 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			// Not a restart from a screen orientation change (or other).
 			Collect.getInstance().setFormController(null);
 
-			Intent intent = getIntent();
+			
 			if (intent != null) {
 				Uri uri = intent.getData();
 
@@ -2343,6 +2355,9 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 				// view
 				Intent i = new Intent(this, FormHierarchyActivity.class);
 				i.putExtra("isSavedForm", true);
+				if (mToFormChooser){
+					i.putExtra("toFormChooser", true);
+				}
 				startActivity(i);
 				return; // so we don't show the intro screen before jumping to
 						// the hierarchy

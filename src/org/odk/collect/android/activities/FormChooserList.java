@@ -29,7 +29,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -179,7 +178,7 @@ public class FormChooserList extends SherlockListActivity implements DiskSyncLis
         super.onPause();
     }
 
-	
+
     @Override
     protected void onStart() {
     	super.onStart();
