@@ -14,11 +14,14 @@
 
 package org.odk.collect.android.activities;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.provider.CustomTileProvider;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
@@ -34,7 +37,6 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
@@ -48,6 +50,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Tile;
+import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.google.android.gms.maps.model.TileProvider;
 
 public class GeoPointMapActivity extends FragmentActivity implements
 		LocationListener, OnMarkerDragListener, OnMapLongClickListener {
@@ -99,6 +104,19 @@ public class GeoPointMapActivity extends FragmentActivity implements
 
 		mMap = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.map)).getMap();
+		
+		// Test : 
+		
+		mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
+		
+		TileOverlayOptions options = new TileOverlayOptions();
+
+		options.tileProvider(new CustomTileProvider(getAssets()));
+
+		mMap.addTileOverlay(options);
+		
+		// Fin du test
+		
 		mMap.setOnMarkerDragListener(this);
 		
 		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(43.2551, 5.4681),
@@ -123,7 +141,7 @@ public class GeoPointMapActivity extends FragmentActivity implements
 				mMarker.setDraggable(true);
 				mCaptureLocation = false;
 				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng,
-						16));
+						10));
 			}
 
 			if (intent.hasExtra(GeoPointWidget.ACCURACY_THRESHOLD)) {
@@ -420,7 +438,8 @@ public class GeoPointMapActivity extends FragmentActivity implements
 		mLatLng = marker.getPosition();
 		mAcceptLocation.setClickable(true);
 		isDragged = true;
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
+		Log.i(getClass().getName(), "x = "+mLatLng.latitude+" y = "+mLatLng.longitude);
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 10));
 	}
 
 	@Override
@@ -451,7 +470,8 @@ public class GeoPointMapActivity extends FragmentActivity implements
 		mAcceptLocation.setClickable(true);
 		mShowLocation.setClickable(true);
 		isDragged = true;
-		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 16));
+		Log.i(getClass().getName(), "x = "+mLatLng.latitude+" y = "+mLatLng.longitude);
+		mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, 10));
 	}
 
 }
