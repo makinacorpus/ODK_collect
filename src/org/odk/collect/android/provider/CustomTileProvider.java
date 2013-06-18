@@ -58,6 +58,8 @@ public class CustomTileProvider implements TileProvider {
 
     private String getTileFilename(int x, int y, int zoom) {
     	Log.e(getClass().getName(), "x : "+x+" y : "+y+" Zoom : "+zoom);
-        return "Zoom"+zoom+","+x+","+y+".png";
+    	int ymax = 1 << zoom;
+    	y = ymax - y - 1;
+        return "Tiles/"+zoom+"/"+x+"/"+y+".png";
     }
 }
