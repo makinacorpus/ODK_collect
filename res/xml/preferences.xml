@@ -67,6 +67,12 @@
             android:key="key_use_maps"
             android:summary="@string/use_maps_summary"
             android:title="@string/use_maps" />
+        <CheckBoxPreference 
+            android:id="@+id/key_offline_mode"
+            android:defaultValue="true"
+            android:key="key_offline_mode"
+            android:summary="@string/offline_mode_summary"
+            android:title="@string/offline_mode" />
     </PreferenceCategory>
     <PreferenceCategory
             android:key="@string/autosend"
