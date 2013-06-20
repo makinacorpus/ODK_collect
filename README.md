@@ -8,8 +8,7 @@ This application is based on ODK_Collect but it's not the version you can find i
 
 User aspects : 
 
-You can find the installation file at /bin/ODKCollect_Modifie.apk
-If you cannot install it, check that you have not the version from the play store installed on your phone, and if so, uninstall it. If it still doesn't work, go in System Settings -> Security -> Device Administration and if unchecked, check "Unknown sources".
+The apk is no longer available on this repo. We now use offline maps which makes the apk about 200Mo, so we cannot upload it on github. We haven't put it somewhere else yet.
 
 Forms can be defined in xls using a syntax documented here : http://formhub.org/syntax/ and then uploaded on a server that supports it, like http://formhub.org/
 
@@ -31,11 +30,6 @@ See : http://actionbarsherlock.com/
  - For the map in geopoint widgets : google-play-services_lib
 See : https://developers.google.com/maps/documentation/android/
 
-Bugs : 
- - In a form, when several questions are related by a relevance constraint in the same group with a field-list appearance : if you give an answer to a question that should make another question appear, unless you leave the current view and come back on it, the other question won't appear. Partially fixed, but so far only working for string widgets and it's derivates (integer, decimal...), refresh the whole view each time a value is changed.
 
-Improvements to add :
- - When in a repeating group, it would be useful to be able to customize the name of each instance of the group.
- - Have a widget to enter a time without a date.
 
 
