@@ -991,9 +991,6 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 			Boolean useSwipe = false;
 			Boolean useButtons = false;
 			ImageView ia = ((ImageView) startView.findViewById(R.id.image_advance));
-			ImageView ib = ((ImageView) startView.findViewById(R.id.image_backup));
-			TextView ta = ((TextView) startView.findViewById(R.id.text_advance));
-			TextView tb = ((TextView) startView.findViewById(R.id.text_backup));
 			TextView d = ((TextView) startView.findViewById(R.id.description));
 
 			if (navigationChoice != null) {
@@ -1009,9 +1006,6 @@ public class FormEntryActivity extends SherlockActivity implements AnimationList
 						formController.getFormTitle()));
 			} else if (useButtons && !useSwipe) {
 				ia.setVisibility(View.GONE);
-				ib.setVisibility(View.GONE);
-				ta.setVisibility(View.GONE);
-				tb.setVisibility(View.GONE);
 				d.setText(getString(R.string.buttons_instructions,
 						formController.getFormTitle()));
 			} else {

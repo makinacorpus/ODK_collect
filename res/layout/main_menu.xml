@@ -73,7 +73,7 @@
             <Button
                 android:id="@+id/get_forms"
                 style="@style/Collect.Button1"
-                android:drawableLeft="@drawable/stat_sys_download_anim0_dark"/>
+                android:drawableLeft="@drawable/stat_sys_download_anim0"/>
 
             <View
                 android:layout_width="fill_parent"

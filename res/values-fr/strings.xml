@@ -249,9 +249,9 @@ License.
 <string name="swipe_navigation">Utiliser des swipes horizontaux</string>
 <string name="buttons_navigation">Utiliser des boutons prochain/précédent</string>
 <string name="swipe_buttons_navigation">Utiliser des swipes et des boutons</string>
-<string name="swipe_instructions">Vous êtes au début de %s. Faites des swipes à l\'écran pour avancer et revenir.</string>
-<string name="buttons_instructions">Vous êtes au début de %s. Appuyez sur les flêches pour avancer et revenir.</string>
-<string name="swipe_buttons_instructions">Vous êtes au début de %s. Faites des swipes à l\'écran ou appuyez sur les flêches pour avancer et revenir.</string>
+<string name="swipe_instructions">Vous êtes au début de %s.\nPour naviguer d\'une page à l\'autre dans le formulaire glissez votre doigt sur l\'écran.</string>
+<string name="buttons_instructions">Vous êtes au début de %s.\nPour naviguer d\'une page à l\'autre dans le formulaire appuyez sur les flèches en bas de l\'écran</string>
+<string name="swipe_buttons_instructions">Vous êtes au début de %s.\nPour naviguer d\'une page à l\'autre dans le formulaire glissez votre doigt sur l\'écran ou appuyez sur les flèches en bas de l\'écran</string>
 <string name="change_url_default">URL</string>
 <string name="launch_printer">Démarrer l\'impression</string>
 <string name="no_printer">L\'imprimante demandée n\'est pas installée. Veuillez installer l\'imprimante</string>

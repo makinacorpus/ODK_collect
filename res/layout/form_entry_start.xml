@@ -46,44 +46,16 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/image_backup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/description"
-            android:contentDescription="@+string/backup"
-            android:gravity="left"
-            android:src="@+drawable/backup" />
-
-        <TextView
-            android:id="@+id/text_backup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/image_backup"
-            android:gravity="left"
-            android:text="@+string/backup"
-            android:textSize="21sp" />
-
-        <ImageView
             android:id="@+id/image_advance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
             android:layout_below="@+id/description"
             android:contentDescription="@+string/advance"
-            android:gravity="right"
-            android:src="@+drawable/advance" />
+            android:gravity="center"
+            android:src="@+drawable/beginform" />
 
-        <TextView
-            android:id="@+id/text_advance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/image_advance"
-            android:gravity="right"
-            android:text="@+string/advance"
-            android:textSize="21sp" />
+
     </RelativeLayout>
 
 </ScrollView>

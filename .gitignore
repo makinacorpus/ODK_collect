@@ -13,6 +13,10 @@
 
 # generated files
 gen/
+bin/
+
+# heavy resources
+assets/
 
 # Local configuration file (sdk path, etc)
 local.properties

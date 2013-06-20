@@ -9,7 +9,7 @@
           android:title="@string/toggle_selected"
           android:showAsAction="always|withText" />
     <item android:id="@+id/forms_get"
-          android:icon="@drawable/stat_sys_download_anim0_dark"
+          android:icon="@drawable/stat_sys_download_anim0"
           android:title="@string/download"
           android:showAsAction="always|withText"/>
     <item android:id="@+id/preferences_download"
