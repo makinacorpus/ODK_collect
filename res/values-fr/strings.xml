@@ -105,6 +105,8 @@ License.
 <string name="no_items_display">Rien à afficher.</string>
 <string name="no_items_display_forms">Rien à afficher.\n\nEssayez d\'obtenir et remplir un formulaire.</string>
 <string name="no_items_display_instances">Rien à afficher.\n\nEssayez de finaliser vos formulaires avant de les envoyer.</string>
+<string name="offline_mode">Cartes hors-ligne ?</string>
+<string name="offline_mode_summary">Utiliser ou non les cartes hors-line.</string>
 <string name="ok">OK</string>
 <string name="parse_error">Désolé. Impossible d\'analyser le formulaire.</string>
 <string name="parse_legacy_formlist_failed">Le serveur n\'a pas pu produire un document de formulaire compatible avec Aggregate 0.9.x. : %s</string>
