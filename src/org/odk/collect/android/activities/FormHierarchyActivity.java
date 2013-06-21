@@ -164,13 +164,13 @@ public class FormHierarchyActivity extends SherlockListActivity {
 				}
 				startActivity(i);
 			}else{
-				//TODO Not Working
 				Log.e(getClass().getName(), "Back to Form");
 				Collect.getInstance()
 				.getActivityLogger()
-				.logInstanceAction(this, "onKeyDown", "KEYCODE_BACK.JUMP",
+				.logInstanceAction(this, "onOptionsItemSelected", "HOME",
 						mStartIndex);
 				Collect.getInstance().getFormController().jumpToIndex(mStartIndex);
+				finish();
 			}
 			return true;
 		}
