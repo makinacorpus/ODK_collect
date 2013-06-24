@@ -14,8 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -50,9 +48,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Tile;
 import com.google.android.gms.maps.model.TileOverlayOptions;
-import com.google.android.gms.maps.model.TileProvider;
 
 public class GeoPointMapActivity extends FragmentActivity implements
 		LocationListener, OnMarkerDragListener, OnMapLongClickListener {
