@@ -8,7 +8,7 @@ This application is based on ODK_Collect but it's not the version you can find i
 
 User aspects : 
 
-The apk is no longer available on this repo. We now use offline maps which makes the apk about 200Mo, so we cannot upload it on github. We haven't put it somewhere else yet.
+Apk for this branch is available in bin/ODKCollect_makina.apk.
 
 Forms can be defined in xls using a syntax documented here : http://formhub.org/syntax/ and then uploaded on a server that supports it, like http://formhub.org/
 
