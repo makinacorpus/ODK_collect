@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.provider.CustomTileProvider;
+import org.odk.collect.android.provider.MapBoxOfflineTileProvider;
 import org.odk.collect.android.utilities.InfoLogger;
 import org.odk.collect.android.widgets.GeoPointWidget;
 
@@ -31,6 +31,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -134,7 +135,8 @@ public class GeoPointMapActivity extends FragmentActivity implements
 			if (intent.hasExtra("offLine")){
 				mMap.setMapType(GoogleMap.MAP_TYPE_NONE);
 				TileOverlayOptions options = new TileOverlayOptions();
-				options.tileProvider(new CustomTileProvider(getAssets()));
+				String filePath = Environment.getExternalStorageDirectory().toString()+"/Android/data/com.makina.collect/Tiles8bits.mbtiles";
+				options.tileProvider(new MapBoxOfflineTileProvider(filePath));
 				mMap.addTileOverlay(options);
 			}
 
