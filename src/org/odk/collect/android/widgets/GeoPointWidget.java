@@ -52,7 +52,7 @@ public class GeoPointWidget extends QuestionWidget implements IBinaryWidget {
 	public static final String LOCATION = "gp";
 	public static final String ACCURACY_THRESHOLD = "accuracyThreshold";
 
-	public static final double DEFAULT_LOCATION_ACCURACY = 5.0;
+	public static final double DEFAULT_LOCATION_ACCURACY = 35.0;
 
 	private Button mGetLocationButton;
 	private Button mViewButton;
